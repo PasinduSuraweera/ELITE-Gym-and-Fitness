@@ -1,0 +1,194 @@
+"use client";
+
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+
+const Navbar = () => {
+  const { isSignedIn, user } = useUser();
+  const pathname = usePathname();
+  const userRole = useQuery(api.users.getCurrentUserRole);
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800/50 py-2">
+      <div className="container mx-auto flex items-center justify-between px-4">
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+            <Image 
+              src="/logo.png" 
+              alt="Elite Gym Logo" 
+              width={48} 
+              height={48} 
+              className="object-contain"
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold text-white leading-tight">
+              ELITE GYM
+            </span>
+            <span className="text-xs text-gray-400 uppercase tracking-wider">
+              FITNESS & WELLNESS
+            </span>
+          </div>
+        </Link>
+
+        {/* NAVIGATION */}
+        <nav className="hidden lg:flex items-center gap-8">
+          <Link
+            href="/"
+            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+              pathname === "/" ? "" : ""
+            }`}
+          >
+            <span>Home</span>
+            {pathname === "/" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+            )}
+          </Link>
+          <Link
+            href="/generate-program"
+            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+              pathname === "/generate-program" ? "" : ""
+            }`}
+          >
+            <span>AI Plan Generator</span>
+            {pathname === "/generate-program" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+            )}
+          </Link>
+          <Link
+            href="/recipes"
+            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+              pathname === "/recipes" ? "" : ""
+            }`}
+          >
+            <span>Recipes</span>
+            {pathname === "/recipes" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+            )}
+          </Link>
+          <Link
+            href="/trainer-booking"
+            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+              pathname === "/trainer-booking" ? "" : ""
+            }`}
+          >
+            <span>Trainer Booking</span>
+            {pathname === "/trainer-booking" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+            )}
+          </Link>
+          <Link
+            href="/blog"
+            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+              pathname === "/blog" ? "" : ""
+            }`}
+          >
+            <span>Blog</span>
+            {pathname === "/blog" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+            )}
+          </Link>
+          <Link
+            href="/marketplace"
+            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+              pathname === "/marketplace" ? "" : ""
+            }`}
+          >
+            <span>Marketplace</span>
+            {pathname === "/marketplace" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+            )}
+          </Link>
+
+          {/* ROLE-BASED NAVIGATION */}
+          {userRole === "admin" && (
+            <Link
+              href="/admin"
+              className={`text-yellow-400 hover:text-yellow-300 transition-colors text-sm font-medium relative pb-2 ${
+                pathname.startsWith("/admin") ? "" : ""
+              }`}
+            >
+              <span>Admin Panel</span>
+              {pathname.startsWith("/admin") && (
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-400"></div>
+              )}
+            </Link>
+          )}
+
+          {(userRole === "trainer" || userRole === "admin") && (
+            <Link
+              href="/trainer"
+              className={`text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium relative pb-2 ${
+                pathname.startsWith("/trainer") ? "" : ""
+              }`}
+            >
+              <span>Trainer Panel</span>
+              {pathname.startsWith("/trainer") && (
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400"></div>
+              )}
+            </Link>
+          )}
+
+          {userRole === "user" && (
+            <Link
+              href="/become-trainer"
+              className={`text-green-400 hover:text-green-300 transition-colors text-sm font-medium relative pb-2 ${
+                pathname === "/become-trainer" ? "" : ""
+              }`}
+            >
+              <span>Become Trainer</span>
+              {pathname === "/become-trainer" && (
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-400"></div>
+              )}
+            </Link>
+          )}
+        </nav>
+
+        {/* AUTH BUTTONS */}
+        <div className="flex items-center gap-4">
+          {isSignedIn ? (
+            <>
+              <Link
+                href="/profile"
+                className="hidden md:block text-white hover:text-red-500 transition-colors text-sm font-medium"
+              >
+                Profile
+              </Link>
+              <UserButton 
+                appearance={{
+                  elements: {
+                    avatarBox: "h-10 w-10"
+                  }
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <SignInButton mode="modal">
+                <Button
+                  variant="ghost"
+                  className="text-white hover:text-red-500 border border-orange-500/50 hover:border-orange-500 rounded-full px-6 py-2 transition-all duration-300 bg-transparent hover:bg-transparent"
+                >
+                  Login
+                </Button>
+              </SignInButton>
+
+              <SignUpButton mode="modal">
+                <Button className="bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-red-500/25">
+                  Sign Up
+                </Button>
+              </SignUpButton>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+};
+export default Navbar;
