@@ -81,4 +81,44 @@ export default defineSchema({
   })
     .index("by_user_id", ["userId"])
     .index("by_active", ["isActive"]),
+
+  recipes: defineTable({
+    title: v.string(),
+    description: v.string(),
+    imageUrl: v.optional(v.string()),
+    category: v.union(
+      v.literal("breakfast"),
+      v.literal("lunch"),
+      v.literal("dinner"),
+      v.literal("snack"),
+      v.literal("pre-workout"),
+      v.literal("post-workout"),
+      v.literal("protein"),
+      v.literal("healthy")
+    ),
+    cookingTime: v.number(), // in minutes
+    servings: v.number(),
+    difficulty: v.union(v.literal("easy"), v.literal("medium"), v.literal("hard")),
+    calories: v.number(),
+    protein: v.number(), // in grams
+    carbs: v.number(), // in grams
+    fats: v.number(), // in grams
+    ingredients: v.array(
+      v.object({
+        name: v.string(),
+        amount: v.string(),
+        unit: v.optional(v.string()),
+      })
+    ),
+    instructions: v.array(v.string()),
+    tags: v.array(v.string()),
+    isRecommended: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    createdBy: v.id("users"),
+  })
+    .index("by_category", ["category"])
+    .index("by_recommended", ["isRecommended"])
+    .index("by_difficulty", ["difficulty"])
+    .index("by_created_at", ["createdAt"]),
 });

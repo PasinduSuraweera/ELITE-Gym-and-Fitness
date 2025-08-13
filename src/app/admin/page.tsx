@@ -4,12 +4,17 @@ import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import Link from "next/link";
-import { Users, UserCheck, Clock, Shield, ShoppingBag, TrendingUp } from "lucide-react";
+import { Users, UserCheck, Clock, Shield, ShoppingBag, TrendingUp, ChefHat } from "lucide-react";
+import { sampleRecipes, getRecipeStats } from "@/data/recipes";
 
 export default function AdminDashboard() {
   const users = useQuery(api.users.getAllUsers);
   const applications = useQuery(api.trainers.getTrainerApplications);
   const marketplaceStats = useQuery(api.marketplace.getMarketplaceStats);
+
+  // Get recipe data from Convex
+  const allRecipes = useQuery(api.recipes.getRecipes, {});
+  const recommendedRecipesList = useQuery(api.recipes.getRecommendedRecipes, {});
 
   const totalUsers = users?.length || 0;
   const adminCount = users?.filter(u => u.role === "admin").length || 0;
@@ -17,13 +22,17 @@ export default function AdminDashboard() {
   const userCount = users?.filter(u => u.role === "user").length || 0;
   const pendingApplications = applications?.filter(a => a.status === "pending").length || 0;
 
+  // Calculate recipe statistics
+  const totalRecipes = allRecipes?.length || 0;
+  const recommendedRecipesCount = recommendedRecipesList?.length || 0;
+
   return (
     <AdminLayout 
       title="Welcome back, Admin" 
       subtitle="Here's what's happening at Elite Gym today"
     >
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -42,6 +51,17 @@ export default function AdminDashboard() {
               <p className="text-blue-400 text-sm">{pendingApplications} pending</p>
             </div>
             <UserCheck className="h-8 w-8 text-blue-400" />
+          </div>
+        </div>
+
+        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Healthy Recipes</p>
+              <p className="text-3xl font-bold text-white">{totalRecipes}</p>
+              <p className="text-orange-400 text-sm">{recommendedRecipesCount} recommended</p>
+            </div>
+            <ChefHat className="h-8 w-8 text-orange-400" />
           </div>
         </div>
 
@@ -69,7 +89,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick Actions Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Link 
           href="/admin/users"
           className="group bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-red-500/50 transition-all duration-300"
@@ -95,6 +115,20 @@ export default function AdminDashboard() {
           <p className="text-gray-400 mb-4">Review and approve trainer applications</p>
           <div className="text-yellow-500 text-sm font-medium">
             {pendingApplications} pending →
+          </div>
+        </Link>
+
+        <Link 
+          href="/admin/recipes"
+          className="group bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-orange-500/50 transition-all duration-300"
+        >
+          <div className="flex items-center mb-4">
+            <ChefHat className="h-6 w-6 text-orange-500 mr-3" />
+            <h3 className="text-xl font-semibold text-white group-hover:text-orange-500">Healthy Recipes</h3>
+          </div>
+          <p className="text-gray-400 mb-4">Manage nutrition recipes for gym members</p>
+          <div className="text-orange-500 text-sm font-medium">
+            {totalRecipes} recipes ({recommendedRecipesCount} recommended) →
           </div>
         </Link>
 

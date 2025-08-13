@@ -4,219 +4,272 @@ import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useState } from "react";
+import { UserLayout } from "@/components/UserLayout";
 import ProfileHeader from "@/components/ProfileHeader";
 import NoFitnessPlan from "@/components/NoFitnessPlan";
-import CornerElements from "@/components/CornerElements";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AppleIcon, CalendarIcon, DumbbellIcon } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { User, Mail, Calendar, Shield, Activity, Target, Clock } from "lucide-react";
 
 const ProfilePage = () => {
   const { user } = useUser();
   const userId = user?.id as string;
 
   const allPlans = useQuery(api.plans.getUserPlans, { userId });
-  const [selectedPlanId, setSelectedPlanId] = useState<null | string>(null);
+  const userRole = useQuery(api.users.getCurrentUserRole);
 
   const activePlan = allPlans?.find((plan) => plan.isActive);
 
-  const currentPlan = selectedPlanId
-    ? allPlans?.find((plan) => plan._id === selectedPlanId)
-    : activePlan;
-
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
-      
-      <section className="relative z-10 pt-32 pb-16 flex-grow container mx-auto px-4">
+    <UserLayout 
+      title="Profile Overview" 
+      subtitle="Manage your account and view your fitness journey"
+    >
+      <div className="space-y-6">
+        {/* Original Profile Header with Picture */}
         <ProfileHeader user={user} />
 
-        {allPlans && allPlans?.length > 0 ? (
-          <div className="space-y-8">
-            {/* PLAN SELECTOR */}
-            <div className="relative bg-black/90 backdrop-blur-sm border border-red-500/30 p-6 rounded-xl shadow-2xl">
-              <CornerElements />
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold tracking-tight">
-                  <span className="text-red-500">Your</span>{" "}
-                  <span className="text-white">Fitness Plans</span>
-                </h2>
-                <div className="font-mono text-sm text-gray-400 bg-gray-900/50 px-3 py-1 rounded-full border border-gray-700">
-                  TOTAL: {allPlans.length}
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {allPlans.map((plan) => (
-                  <Button
-                    key={plan._id}
-                    onClick={() => setSelectedPlanId(plan._id)}
-                    className={`text-white border transition-all duration-300 rounded-lg ${
-                      selectedPlanId === plan._id
-                        ? "bg-red-600/20 text-red-400 border-red-500 shadow-red-500/25"
-                        : "bg-gray-900/50 border-gray-700 hover:border-red-500/50 hover:bg-red-900/20"
-                    }`}
-                  >
-                    {plan.name}
-                    {plan.isActive && (
-                      <span className="ml-2 bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full border border-green-500/30">
-                        ACTIVE
-                      </span>
-                    )}
-                  </Button>
-                ))}
-              </div>
+        {allPlans && allPlans.length > 0 ? (
+          <>
+            {/* User Profile Card - Simplified since we have ProfileHeader */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3">
+                    <Shield className="h-8 w-8 text-red-500" />
+                    <div>
+                      <p className="text-sm text-gray-400">Role</p>
+                      <p className="text-white font-semibold capitalize">{userRole || 'User'}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-8 w-8 text-blue-500" />
+                    <div>
+                      <p className="text-sm text-gray-400">Member Since</p>
+                      <p className="text-white font-semibold">
+                        {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-3">
+                    <Activity className="h-8 w-8 text-green-500" />
+                    <div>
+                      <p className="text-sm text-gray-400">Active Plans</p>
+                      <p className="text-white font-semibold">{allPlans?.filter(plan => plan.isActive).length || 0}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
-            {/* PLAN DETAILS */}
-            {currentPlan && (
-              <div className="relative bg-black/90 backdrop-blur-sm border border-orange-500/30 rounded-xl p-6 shadow-2xl">
-                <CornerElements />
-
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                  <h3 className="text-xl font-bold">
-                    PLAN: <span className="text-red-500">{currentPlan.name}</span>
-                  </h3>
-                </div>
-
-                <Tabs defaultValue="workout" className="w-full">
-                  <TabsList className="mb-6 w-full grid grid-cols-2 bg-gray-900/80 border border-gray-700 rounded-lg">
-                    <TabsTrigger
-                      value="workout"
-                      className="data-[state=active]:bg-red-600/20 data-[state=active]:text-red-400 data-[state=active]:border-red-500/50 text-white"
-                    >
-                      <DumbbellIcon className="mr-2 size-4" />
-                      Workout Plan
-                    </TabsTrigger>
-
-                    <TabsTrigger
-                      value="diet"
-                      className="data-[state=active]:bg-red-600/20 data-[state=active]:text-red-400 data-[state=active]:border-red-500/50 text-white"
-                    >
-                      <AppleIcon className="mr-2 h-4 w-4" />
-                      Diet Plan
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="workout">
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-2 mb-6">
-                        <CalendarIcon className="h-5 w-5 text-red-500" />
-                        <span className="font-mono text-sm text-gray-300 bg-gray-900/50 px-3 py-1 rounded-full border border-gray-700">
-                          SCHEDULE: {currentPlan.workoutPlan.schedule.join(", ")}
-                        </span>
-                      </div>
-
-                      <Accordion type="multiple" className="space-y-4">
-                        {currentPlan.workoutPlan.exercises.map((exerciseDay, index) => (
-                          <AccordionItem
-                            key={index}
-                            value={exerciseDay.day}
-                            className="border border-gray-700 rounded-lg overflow-hidden bg-gray-900/30"
-                          >
-                            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-red-600/10 font-mono text-white">
-                              <div className="flex justify-between w-full items-center">
-                                <span className="text-red-500 font-bold">{exerciseDay.day}</span>
-                                <div className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded">
-                                  {exerciseDay.routines.length} EXERCISES
-                                </div>
-                              </div>
-                            </AccordionTrigger>
-
-                            <AccordionContent className="pb-6 px-6">
-                              <div className="space-y-4 mt-4">
-                                {exerciseDay.routines.map((routine, routineIndex) => (
-                                  <div
-                                    key={routineIndex}
-                                    className="border border-gray-700 rounded-lg p-4 bg-black/50 shadow-lg"
-                                  >
-                                    <div className="flex justify-between items-start mb-3">
-                                      <h4 className="font-semibold text-white text-lg">
-                                        {routine.name}
-                                      </h4>
-                                      <div className="flex items-center gap-3">
-                                        <div className="px-3 py-1 rounded-full bg-red-600/20 text-red-400 text-sm font-mono border border-red-500/30">
-                                          {routine.sets} SETS
-                                        </div>
-                                        <div className="px-3 py-1 rounded-full bg-orange-600/20 text-orange-400 text-sm font-mono border border-orange-500/30">
-                                          {routine.reps} REPS
-                                        </div>
-                                      </div>
-                                    </div>
-                                    {routine.description && (
-                                      <p className="text-sm text-gray-300 mt-2 bg-gray-900/30 p-3 rounded border border-gray-700">
-                                        {routine.description}
-                                      </p>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </AccordionContent>
-                          </AccordionItem>
-                        ))}
-                      </Accordion>
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-400">Total Plans</p>
+                      <p className="text-2xl font-bold text-white">{allPlans?.length || 0}</p>
                     </div>
-                  </TabsContent>
+                    <Target className="h-8 w-8 text-red-500" />
+                  </div>
+                </CardContent>
+              </Card>
 
-                  <TabsContent value="diet">
-                    <div className="space-y-6">
-                      <div className="flex justify-between items-center mb-6 bg-gray-900/50 p-4 rounded-lg border border-gray-700">
-                        <span className="font-mono text-sm text-gray-300">
-                          DAILY CALORIE TARGET
-                        </span>
-                        <div className="font-mono text-2xl text-red-500 font-bold">
-                          {currentPlan.dietPlan.dailyCalories} KCAL
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-400">Active Plans</p>
+                      <p className="text-2xl font-bold text-white">{allPlans?.filter(plan => plan.isActive).length || 0}</p>
+                    </div>
+                    <Activity className="h-8 w-8 text-green-500" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-400">Member Since</p>
+                      <p className="text-lg font-bold text-white">
+                        {user?.createdAt ? new Date(user.createdAt).getFullYear() : 'N/A'}
+                      </p>
+                    </div>
+                    <Clock className="h-8 w-8 text-blue-500" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-400">Role</p>
+                      <p className="text-lg font-bold text-white capitalize">{userRole || 'User'}</p>
+                    </div>
+                    <Target className="h-8 w-8 text-orange-500" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Active Plan Preview */}
+            {activePlan ? (
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-green-500" />
+                    Active Fitness Plan
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Your current active fitness program
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-black/50 rounded-lg border border-gray-700">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">{activePlan.name}</h3>
+                        <p className="text-sm text-gray-400">
+                          Schedule: {activePlan.workoutPlan.schedule.join(", ")}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-400">Daily Calories</p>
+                        <p className="text-xl font-bold text-red-500">{activePlan.dietPlan.dailyCalories}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <Button 
+                        asChild 
+                        className="bg-red-600 hover:bg-red-700"
+                      >
+                        <a href="/profile/fitness-plans">View Workout Plan</a>
+                      </Button>
+                      <Button 
+                        asChild 
+                        variant="outline" 
+                        className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                      >
+                        <a href="/profile/diet-plans">View Diet Plan</a>
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardContent className="p-8 text-center">
+                  <Target className="h-16 w-16 text-gray-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">No Active Plan</h3>
+                  <p className="text-gray-400 mb-6">
+                    Get started with a personalized fitness and diet plan tailored to your goals.
+                  </p>
+                  <Button 
+                    asChild 
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    <a href="/generate-program">Generate Your Plan</a>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* All Plans Preview */}
+            {allPlans && allPlans.length > 0 && (
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white">All Your Plans</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Quick access to all your generated fitness and diet plans
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {allPlans.map((plan) => (
+                      <div
+                        key={plan._id}
+                        className={`p-4 rounded-lg border transition-colors ${
+                          plan.isActive
+                            ? 'bg-green-600/10 border-green-500/30'
+                            : 'bg-gray-800/50 border-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="text-white font-medium">{plan.name}</h4>
+                          {plan.isActive && (
+                            <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full border border-green-500/30">
+                              ACTIVE
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-400 mb-3">
+                          {plan.workoutPlan.schedule.length} workout days • {plan.dietPlan.dailyCalories} cal/day
+                        </p>
+                        <div className="flex gap-2">
+                          <Button 
+                            asChild 
+                            size="sm"
+                            variant="outline"
+                            className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                          >
+                            <a href="/profile/fitness-plans">Workout</a>
+                          </Button>
+                          <Button 
+                            asChild 
+                            size="sm"
+                            variant="outline"
+                            className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                          >
+                            <a href="/profile/diet-plans">Diet</a>
+                          </Button>
                         </div>
                       </div>
-
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-red-500/50 to-transparent my-6"></div>
-
-                      <div className="space-y-4">
-                        {currentPlan.dietPlan.meals.map((meal, index) => (
-                          <div
-                            key={index}
-                            className="border border-gray-700 rounded-lg overflow-hidden p-6 bg-black/50 shadow-lg"
-                          >
-                            <div className="flex items-center gap-3 mb-4">
-                              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                              <h4 className="font-mono text-red-500 text-lg font-bold">{meal.name}</h4>
-                            </div>
-                            <ul className="space-y-3">
-                              {meal.foods.map((food, foodIndex) => (
-                                <li
-                                  key={foodIndex}
-                                  className="flex items-center gap-3 text-sm text-gray-300 bg-gray-900/30 p-3 rounded border border-gray-700"
-                                >
-                                  <span className="text-xs text-red-500 font-mono bg-red-900/20 px-2 py-1 rounded border border-red-500/30">
-                                    {String(foodIndex + 1).padStart(2, "0")}
-                                  </span>
-                                  {food}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             )}
-          </div>
+
+            {/* Plan Status - Real Data Only */}
+            {activePlan && (
+              <Card className="bg-gray-900/50 border-gray-700">
+                <CardHeader>
+                  <CardTitle className="text-white">Current Activity</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Your active fitness plan
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-4 p-4 bg-black/50 rounded-lg border border-gray-700">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">Following: {activePlan.name}</p>
+                      <p className="text-sm text-gray-400">
+                        {activePlan.workoutPlan?.exercises?.length || 0} workout days • Active plan
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </>
         ) : (
+          /* Show NoFitnessPlan when user has no plans */
           <NoFitnessPlan />
         )}
-      </section>
-    </div>
+      </div>
+    </UserLayout>
   );
 };
 export default ProfilePage;
