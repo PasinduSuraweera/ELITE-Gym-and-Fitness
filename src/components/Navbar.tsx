@@ -52,10 +52,10 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800/50 py-2">
-      <div className="container mx-auto flex items-center justify-between px-4">
+      <div className="container mx-auto flex items-center justify-between px-4" suppressHydrationWarning>
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+          <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg overflow-hidden" suppressHydrationWarning>
             <Image 
               src="/logo.png" 
               alt="Elite Gym Logo" 
@@ -64,7 +64,7 @@ const Navbar = () => {
               className="object-contain"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col" suppressHydrationWarning>
             <span className="text-lg font-bold text-white leading-tight">
               ELITE GYM
             </span>
@@ -188,7 +188,7 @@ const Navbar = () => {
         </nav>
 
         {/* AUTH BUTTONS */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4" suppressHydrationWarning>
           {isSignedIn ? (
             <>
               <Link

@@ -147,14 +147,14 @@ const GenerateProgramPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
+    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
       
-      <div className="container mx-auto px-4 h-full max-w-5xl relative z-10 py-16 pt-32">
+      <div className="container mx-auto px-4 h-full max-w-5xl relative z-10 py-16 pt-32" suppressHydrationWarning>
         {/* Title */}
-        <div className="text-center mb-12 space-y-6">
+        <div className="text-center mb-12 space-y-6" suppressHydrationWarning>
           <div className="space-y-4">
             <h2 className="text-xl md:text-2xl font-normal text-gray-300">
               AI-Powered Fitness Solutions

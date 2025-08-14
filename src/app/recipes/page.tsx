@@ -103,14 +103,14 @@ const RecipesPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
+    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
       
-      <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
+      <div className="container mx-auto px-4 py-32 relative z-10 flex-1" suppressHydrationWarning>
         {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-12">
+        <div className="max-w-4xl mx-auto text-center mb-12" suppressHydrationWarning>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             <span className="text-red-500">Healthy</span> Recipes
           </h1>

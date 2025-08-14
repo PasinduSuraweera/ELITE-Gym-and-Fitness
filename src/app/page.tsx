@@ -5,18 +5,18 @@ import Image from "next/image";
 
 const HomePage = () => {
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
+    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
       
       {/* Hero Section */}
       <section className="relative z-10 py-24 flex-grow pt-32">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative min-h-[600px]">
+        <div className="container mx-auto px-4" suppressHydrationWarning>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative min-h-[600px]" suppressHydrationWarning>
             {/* LEFT SIDE CONTENT */}
-            <div className="lg:col-span-7 space-y-8 relative">
-              <div className="space-y-6">
+            <div className="lg:col-span-7 space-y-8 relative" suppressHydrationWarning>
+              <div className="space-y-6" suppressHydrationWarning>
                 <h2 className="text-3xl md:text-4xl font-normal text-white">
                   Your Goals,
                 </h2>
