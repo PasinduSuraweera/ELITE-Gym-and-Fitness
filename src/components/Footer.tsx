@@ -1,8 +1,21 @@
+"use client";
+
 import { ZapIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 const Footer = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const getCurrentYear = () => {
+    if (!mounted) return '2025'; // fallback year for SSR
+    return new Date().getFullYear().toString();
+  };
   return (
     <footer className="border-t border-gray-800 bg-black/80 backdrop-blur-sm">
       {/* Top border glow */}
@@ -27,7 +40,7 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-sm text-gray-400">
-              © {new Date().getFullYear()} EliteGym - All rights reserved
+              © {getCurrentYear()} EliteGym - All rights reserved
             </p>
           </div>
 

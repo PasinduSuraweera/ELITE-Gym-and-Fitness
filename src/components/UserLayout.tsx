@@ -38,9 +38,8 @@ export function UserLayout({
     { href: "/profile", icon: User, label: "Profile", active: pathname === "/profile" },
     { href: "/profile/fitness-plans", icon: Dumbbell, label: "Workout Plans", active: pathname === "/profile/fitness-plans" },
     { href: "/profile/diet-plans", icon: Apple, label: "Diet Plans", active: pathname === "/profile/diet-plans" },
-    { href: "/profile/progress", icon: Activity, label: "Progress", active: pathname === "/profile/progress" },
-    { href: "/generate-program", icon: Target, label: "Generate Program", active: pathname === "/generate-program" },
     { href: "/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/recipes" },
+    { href: "/generate-program", icon: Target, label: "Generate Program", active: pathname === "/generate-program" },
     { href: "/marketplace", icon: ShoppingBag, label: "Marketplace", active: pathname === "/marketplace" },
     { href: "/trainer-booking", icon: Calendar, label: "Book Trainer", active: pathname === "/trainer-booking" },
   ];
@@ -67,7 +66,7 @@ export function UserLayout({
                   Dashboard
                 </h3>
                 <nav className="space-y-2">
-                  {sidebarItems.slice(0, 4).map((item) => (
+                  {sidebarItems.slice(0, 3).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -87,7 +86,7 @@ export function UserLayout({
                   Services
                 </h3>
                 <nav className="space-y-2">
-                  {sidebarItems.slice(4).map((item) => (
+                  {sidebarItems.slice(3).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}

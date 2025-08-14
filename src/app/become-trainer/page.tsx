@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
@@ -9,12 +9,30 @@ import { CheckCircle, Clock, XCircle, Dumbbell } from "lucide-react";
 
 export default function BecomeTrainerPage() {
   const { user } = useUser();
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     experience: "",
     certifications: "",
     motivation: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const formatDate = (date: number | Date | null | undefined) => {
+    if (!mounted || !date) return 'N/A';
+    try {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
+  };
   
   const submitApplication = useMutation(api.trainers.submitTrainerApplication);
   const existingApplication = useQuery(api.trainers.getUserTrainerApplication);
@@ -109,7 +127,7 @@ export default function BecomeTrainerPage() {
               
               <div className="bg-black/30 rounded-lg p-4 mb-6">
                 <p className="text-sm text-gray-400 mb-2">Application submitted on:</p>
-                <p className="text-white font-medium">{new Date(existingApplication.submittedAt).toLocaleDateString()}</p>
+                <p className="text-white font-medium">{formatDate(existingApplication.submittedAt)}</p>
               </div>
 
               {existingApplication.notes && (

@@ -4,13 +4,31 @@ import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import Link from "next/link";
-import { Users, UserCheck, Clock, Shield, ShoppingBag, TrendingUp, ChefHat } from "lucide-react";
-import { sampleRecipes, getRecipeStats } from "@/data/recipes";
+import { Users, UserCheck, Shield, ShoppingBag, TrendingUp, ChefHat } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function AdminDashboard() {
   const users = useQuery(api.users.getAllUsers);
   const applications = useQuery(api.trainers.getTrainerApplications);
   const marketplaceStats = useQuery(api.marketplace.getMarketplaceStats);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const formatDate = (date: number | Date | null | undefined) => {
+    if (!mounted || !date) return 'N/A';
+    try {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
+  };
 
   // Get recipe data from Convex
   const allRecipes = useQuery(api.recipes.getRecipes, {});
@@ -171,7 +189,7 @@ export default function AdminDashboard() {
                   {app.status}
                 </span>
                 <p className="text-gray-500 text-xs mt-1">
-                  {new Date(app.submittedAt).toLocaleDateString()}
+                  {formatDate(app.submittedAt)}
                 </p>
               </div>
             </div>

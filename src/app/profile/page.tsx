@@ -3,22 +3,67 @@
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserLayout } from "@/components/UserLayout";
 import ProfileHeader from "@/components/ProfileHeader";
 import NoFitnessPlan from "@/components/NoFitnessPlan";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Mail, Calendar, Shield, Activity, Target, Clock } from "lucide-react";
+import { Calendar, Shield, Activity, Target, Clock } from "lucide-react";
 
 const ProfilePage = () => {
   const { user } = useUser();
   const userId = user?.id as string;
+  const [mounted, setMounted] = useState(false);
 
   const allPlans = useQuery(api.plans.getUserPlans, { userId });
   const userRole = useQuery(api.users.getCurrentUserRole);
 
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Format date consistently on client side only
+  const formatDate = (date: number | Date | null | undefined) => {
+    if (!mounted || !date) return 'N/A';
+    try {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
+  };
+
+  const formatYear = (date: number | Date | null | undefined) => {
+    if (!mounted || !date) return 'N/A';
+    try {
+      return new Date(date).getFullYear().toString();
+    } catch {
+      return 'N/A';
+    }
+  };
+
   const activePlan = allPlans?.find((plan) => plan.isActive);
+
+  // Show loading state during hydration
+  if (!mounted) {
+    return (
+      <UserLayout 
+        title="Profile Overview" 
+        subtitle="Manage your account and view your fitness journey"
+      >
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-32 bg-gray-800 rounded-lg"></div>
+          </div>
+        </div>
+      </UserLayout>
+    );
+  }
 
   return (
     <UserLayout 
@@ -51,7 +96,7 @@ const ProfilePage = () => {
                     <div>
                       <p className="text-sm text-gray-400">Member Since</p>
                       <p className="text-white font-semibold">
-                        {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
+                        {formatDate(user?.createdAt)}
                       </p>
                     </div>
                   </div>
@@ -102,7 +147,7 @@ const ProfilePage = () => {
                     <div>
                       <p className="text-sm text-gray-400">Member Since</p>
                       <p className="text-lg font-bold text-white">
-                        {user?.createdAt ? new Date(user.createdAt).getFullYear() : 'N/A'}
+                        {formatYear(user?.createdAt)}
                       </p>
                     </div>
                     <Clock className="h-8 w-8 text-blue-500" />

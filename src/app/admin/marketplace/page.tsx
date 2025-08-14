@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
@@ -28,6 +28,23 @@ export default function MarketplaceAdminPage() {
     stock: 0,
     featured: false,
   });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const formatPrice = (price: number | undefined) => {
+    if (!mounted || price === undefined) return '$0';
+    try {
+      return price.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      });
+    } catch {
+      return '$0';
+    }
+  };
 
   const items = useQuery(api.marketplace.getAllMarketplaceItems);
   const stats = useQuery(api.marketplace.getMarketplaceStats);
@@ -151,7 +168,7 @@ export default function MarketplaceAdminPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-400 text-sm">Total Value</p>
-              <p className="text-2xl font-bold text-red-400">${stats?.totalValue?.toLocaleString() || 0}</p>
+              <p className="text-2xl font-bold text-red-400">{formatPrice(stats?.totalValue)}</p>
             </div>
             <DollarSign className="h-8 w-8 text-red-400" />
           </div>

@@ -26,9 +26,6 @@ const DietPlansPage = () => {
     <UserLayout 
       title="Diet Plans" 
       subtitle="Manage your nutrition plans and meal schedules"
-      showAddButton={true}
-      addButtonText="Generate New Plan"
-      onAddClick={() => window.location.href = '/generate-program'}
     >
       <div className="space-y-6">
         {allPlans && allPlans?.length > 0 ? (
@@ -191,17 +188,10 @@ const DietPlansPage = () => {
                     {/* Quick Actions */}
                     <div className="flex gap-4">
                       <Button 
-                        asChild 
+                        onClick={() => window.location.href = '/recipes'}
                         className="bg-red-600 hover:bg-red-700"
                       >
-                        <a href="/recipes">Browse Recipes</a>
-                      </Button>
-                      <Button 
-                        asChild 
-                        variant="outline" 
-                        className="border-gray-600 text-gray-300 hover:bg-gray-800"
-                      >
-                        <a href="/profile/progress">Track Progress</a>
+                        Browse Recipes
                       </Button>
                     </div>
                   </div>
@@ -218,10 +208,10 @@ const DietPlansPage = () => {
                 Get started with a personalized nutrition plan tailored to your dietary goals.
               </p>
               <Button 
-                asChild 
+                onClick={() => window.location.href = '/generate-program'}
                 className="bg-red-600 hover:bg-red-700"
               >
-                <a href="/generate-program">Generate Your First Plan</a>
+                Generate Your First Plan
               </Button>
             </CardContent>
           </Card>

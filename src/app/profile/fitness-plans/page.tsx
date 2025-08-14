@@ -7,7 +7,6 @@ import { useState } from "react";
 import { UserLayout } from "@/components/UserLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DumbbellIcon, CalendarIcon, Clock, Target, Activity, Calendar } from "lucide-react";
 import {
   Accordion,
@@ -33,9 +32,6 @@ const FitnessPlansPage = () => {
     <UserLayout 
       title="Fitness Plans" 
       subtitle="Manage your workout routines and track your progress"
-      showAddButton={true}
-      addButtonText="Generate New Plan"
-      onAddClick={() => window.location.href = '/generate-program'}
     >
       <div className="space-y-6">
         {allPlans && allPlans?.length > 0 ? (
@@ -216,10 +212,10 @@ const FitnessPlansPage = () => {
                 Get started with a personalized workout plan tailored to your fitness goals.
               </p>
               <Button 
-                asChild 
+                onClick={() => window.location.href = '/generate-program'}
                 className="bg-red-600 hover:bg-red-700"
               >
-                <a href="/generate-program">Generate Your First Plan</a>
+                Generate Your First Plan
               </Button>
             </CardContent>
           </Card>

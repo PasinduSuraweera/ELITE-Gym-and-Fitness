@@ -3,7 +3,7 @@
 import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Clock, CheckCircle, XCircle, Eye } from "lucide-react";
 
 export default function TrainerApplicationsPage() {
@@ -12,6 +12,24 @@ export default function TrainerApplicationsPage() {
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [selectedApp, setSelectedApp] = useState<any>(null);
   const [notes, setNotes] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const formatDate = (date: number | Date | null | undefined) => {
+    if (!mounted || !date) return 'N/A';
+    try {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
+  };
 
   const handleReview = async (applicationId: string, status: "approved" | "rejected") => {
     try {
@@ -101,7 +119,7 @@ export default function TrainerApplicationsPage() {
                   </div>
                   <div>
                     <p className="text-gray-400 text-sm mb-1">Submitted</p>
-                    <p className="text-white text-sm">{new Date(app.submittedAt).toLocaleDateString()}</p>
+                    <p className="text-white text-sm">{formatDate(app.submittedAt)}</p>
                   </div>
                 </div>
 
@@ -127,7 +145,7 @@ export default function TrainerApplicationsPage() {
                 {app.status !== "pending" && app.reviewedAt && (
                   <div className="pt-4 border-t border-gray-800">
                     <p className="text-gray-400 text-sm">
-                      Reviewed on {new Date(app.reviewedAt).toLocaleDateString()}
+                      Reviewed on {formatDate(app.reviewedAt)}
                       {app.notes && (
                         <span className="block mt-1 text-white">Notes: {app.notes}</span>
                       )}

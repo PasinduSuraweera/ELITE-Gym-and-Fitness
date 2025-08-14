@@ -3,13 +3,31 @@
 import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Crown, Shield, User } from "lucide-react";
 
 export default function AdminUsersPage() {
   const users = useQuery(api.users.getAllUsers);
   const updateRole = useMutation(api.users.updateUserRole);
   const [updatingUser, setUpdatingUser] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const formatDate = (date: number | Date | null | undefined) => {
+    if (!mounted || !date) return 'N/A';
+    try {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return 'N/A';
+    }
+  };
 
   const handleRoleChange = async (userId: string, newRole: "admin" | "trainer" | "user") => {
     try {
@@ -98,7 +116,7 @@ export default function AdminUsersPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                    {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
+                    {formatDate(user.createdAt)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <select
