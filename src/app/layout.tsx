@@ -21,6 +21,36 @@ export const metadata: Metadata = {
   description: "A modern fitness AI platform to get jacked for free.",
 };
 
+// Client component to handle browser extension detection
+const BrowserExtensionHandler = () => {
+  if (typeof window !== 'undefined') {
+    // Suppress hydration warnings for common browser extension attributes
+    const script = `
+      if (typeof window !== 'undefined') {
+        // Suppress React hydration warnings for browser extensions
+        const originalConsoleError = console.error;
+        console.error = (...args) => {
+          if (args[0] && typeof args[0] === 'string' && 
+              (args[0].includes('bis_register') || 
+               args[0].includes('bis_skin_checked') ||
+               args[0].includes('Hydration failed'))) {
+            return; // Suppress browser extension hydration warnings
+          }
+          originalConsoleError.apply(console, args);
+        };
+      }
+    `;
+    
+    return (
+      <script 
+        dangerouslySetInnerHTML={{ __html: script }}
+        suppressHydrationWarning
+      />
+    );
+  }
+  return null;
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,7 +59,10 @@ export default function RootLayout({
   return (
     <ConvexClerkProvider>
       <html lang="en" className="dark">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white min-h-screen flex flex-col`}>
+        <body 
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white min-h-screen flex flex-col`}
+          suppressHydrationWarning={true}
+        >
           <Navbar />
 
           {/* DARK BACKGROUND WITH SUBTLE PATTERNS */}
@@ -45,6 +78,7 @@ export default function RootLayout({
 
           <main className="flex-1 relative z-10">{children}</main>
           <Footer />
+          <BrowserExtensionHandler />
         </body>
       </html>
     </ConvexClerkProvider>

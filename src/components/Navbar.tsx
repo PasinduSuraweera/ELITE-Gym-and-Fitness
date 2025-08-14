@@ -7,11 +7,48 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { useState, useEffect } from "react";
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
   const pathname = usePathname();
   const userRole = useQuery(api.users.getCurrentUserRole);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by not rendering dynamic content until mounted
+  if (!mounted) {
+    return (
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800/50 py-2">
+        <div className="container mx-auto flex items-center justify-between px-4">
+          {/* LOGO */}
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+              <Image 
+                src="/logo.png" 
+                alt="Elite Gym Logo" 
+                width={48} 
+                height={48} 
+                className="object-contain"
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-white">ELITE GYM</span>
+              <span className="text-xs text-gray-400 font-mono tracking-wider">FITNESS & WELLNESS</span>
+            </div>
+          </Link>
+
+          {/* Loading state for auth section */}
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 rounded-full bg-gray-700 animate-pulse"></div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800/50 py-2">
