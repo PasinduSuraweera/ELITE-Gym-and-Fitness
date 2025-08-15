@@ -319,124 +319,156 @@ http.route({
       console.log("🔄 Processing event:", event.type);
       switch (event.type) {
         case "customer.subscription.created":
-        case "customer.subscription.updated":
-          console.log("💳 Processing subscription event");
-          const subscription = event.data.object;
-          const customerId = subscription.customer;
-          console.log("👤 Customer ID:", customerId);
-          console.log("📋 Subscription ID:", subscription.id);
+          console.log("💳 Processing subscription creation event");
+          const createdSubscription = event.data.object;
+          const createdCustomerId = createdSubscription.customer;
+          console.log("👤 Customer ID:", createdCustomerId);
+          console.log("📋 Subscription ID:", createdSubscription.id);
           
           // Get the checkout session that created this subscription
-          const checkoutSessions = await stripe.checkout.sessions.list({
-            customer: customerId,
+          const createdCheckoutSessions = await stripe.checkout.sessions.list({
+            customer: createdCustomerId,
             limit: 10, // Get more sessions to find the right one
           });
-          console.log("🛒 Found checkout sessions:", checkoutSessions.data.length);
+          console.log("🛒 Found checkout sessions:", createdCheckoutSessions.data.length);
           
-          let clerkId;
-          let sessionMembershipType;
+          let createdClerkId;
+          let createdSessionMembershipType;
           
           // Find the session with metadata
-          for (const session of checkoutSessions.data) {
+          for (const session of createdCheckoutSessions.data) {
             if (session.metadata?.clerkId) {
-              clerkId = session.metadata.clerkId;
-              sessionMembershipType = session.metadata.membershipType;
-              console.log("✅ Found metadata - ClerkId:", clerkId, "Type:", sessionMembershipType);
+              createdClerkId = session.metadata.clerkId;
+              createdSessionMembershipType = session.metadata.membershipType;
+              console.log("✅ Found metadata - ClerkId:", createdClerkId, "Type:", createdSessionMembershipType);
               break;
             }
           }
           
-          if (!clerkId) {
-            console.log("❌ No clerkId found in checkout session metadata for customer:", customerId);
-            console.log("📋 Available sessions:", checkoutSessions.data.map((s: any) => ({ id: s.id, metadata: s.metadata })));
+          if (!createdClerkId) {
+            console.log("❌ No clerkId found in checkout session metadata for customer:", createdCustomerId);
+            console.log("📋 Available sessions:", createdCheckoutSessions.data.map((s: any) => ({ id: s.id, metadata: s.metadata })));
             break;
           }
 
           // Update customer with metadata for future reference
-          await stripe.customers.update(customerId, {
-            metadata: { clerkId: clerkId }
+          await stripe.customers.update(createdCustomerId, {
+            metadata: { clerkId: createdClerkId }
           });
 
           // Get user from database
-          const user = await ctx.runQuery(api.users.getUserByClerkId, { clerkId });
-          if (!user) {
-            console.log("User not found for clerkId:", clerkId);
+          const createdUser = await ctx.runQuery(api.users.getUserByClerkId, { clerkId: createdClerkId });
+          if (!createdUser) {
+            console.log("User not found for clerkId:", createdClerkId);
             break;
           }
 
           // Determine membership type from price ID or product ID
-          const priceId = subscription.items.data[0].price.id;
-          const productId = subscription.items.data[0].price.product;
-          let membershipType: "basic" | "premium" | "couple" | "beginner" = "basic";
+          const createdPriceId = createdSubscription.items.data[0].price.id;
+          const createdProductId = createdSubscription.items.data[0].price.product;
+          let createdMembershipType: "basic" | "premium" | "couple" | "beginner" = "basic";
           
           // First try to get from session metadata if available
-          if (sessionMembershipType) {
+          if (createdSessionMembershipType) {
             const validTypes = ["basic", "premium", "couple", "beginner"];
-            if (validTypes.includes(sessionMembershipType)) {
-              membershipType = sessionMembershipType as "basic" | "premium" | "couple" | "beginner";
+            if (validTypes.includes(createdSessionMembershipType)) {
+              createdMembershipType = createdSessionMembershipType as "basic" | "premium" | "couple" | "beginner";
             }
           } else {
             // Fallback to mapping product IDs to membership types
-            switch (productId) {
+            switch (createdProductId) {
               case "prod_SrnY1NkNy0wzY9":
-                membershipType = "beginner";
+                createdMembershipType = "beginner";
                 break;
               case "prod_SrnVL6NvWMhBm6":
-                membershipType = "basic";
+                createdMembershipType = "basic";
                 break;
               case "prod_SrnXKx7Lu5TgR8":
-                membershipType = "couple";
+                createdMembershipType = "couple";
                 break;
               case "prod_SrnZGVhLm7A6oW":
-                membershipType = "premium";
+                createdMembershipType = "premium";
                 break;
               default:
-                console.log("Unknown product ID:", productId);
-                membershipType = "basic";
+                console.log("Unknown product ID:", createdProductId);
+                createdMembershipType = "basic";
                 break;
             }
           }
 
-          console.log("🎯 Creating membership with type:", membershipType);
-          console.log("👤 User ClerkId:", clerkId);
-          console.log("💳 Stripe details:", { customerId, subscriptionId: subscription.id, priceId });
+          console.log("🎯 Creating membership with type:", createdMembershipType);
+          console.log("👤 User ClerkId:", createdClerkId);
+          console.log("💳 Stripe details:", { customerId: createdCustomerId, subscriptionId: createdSubscription.id, priceId: createdPriceId });
           console.log("📅 Subscription periods:", {
-            current_period_start: subscription.current_period_start,
-            current_period_end: subscription.current_period_end,
-            start_date: subscription.start_date,
-            created: subscription.created
+            current_period_start: createdSubscription.current_period_start,
+            current_period_end: createdSubscription.current_period_end,
+            start_date: createdSubscription.start_date,
+            created: createdSubscription.created
           });
 
           // Calculate periods dynamically if not available
-          let currentPeriodStart = subscription.current_period_start;
-          let currentPeriodEnd = subscription.current_period_end;
+          let createdCurrentPeriodStart = createdSubscription.current_period_start;
+          let createdCurrentPeriodEnd = createdSubscription.current_period_end;
           
-          if (!currentPeriodStart || !currentPeriodEnd) {
+          if (!createdCurrentPeriodStart || !createdCurrentPeriodEnd) {
             // Use subscription start date if current period not available
             const now = Math.floor(Date.now() / 1000);
-            currentPeriodStart = subscription.start_date || subscription.created || now;
+            createdCurrentPeriodStart = createdSubscription.start_date || createdSubscription.created || now;
             
             // Calculate end date based on plan (assuming monthly billing)
-            currentPeriodEnd = currentPeriodStart + (30 * 24 * 60 * 60); // 30 days in seconds
+            createdCurrentPeriodEnd = createdCurrentPeriodStart + (30 * 24 * 60 * 60); // 30 days in seconds
             
             console.log("⚠️ Using calculated periods:", {
-              calculatedStart: currentPeriodStart,
-              calculatedEnd: currentPeriodEnd
+              calculatedStart: createdCurrentPeriodStart,
+              calculatedEnd: createdCurrentPeriodEnd
             });
           }
 
           await ctx.runMutation(api.memberships.upsertMembership, {
-            userId: user._id,
-            clerkId: clerkId,
-            membershipType: membershipType,
-            stripeCustomerId: customerId,
-            stripeSubscriptionId: subscription.id,
-            stripePriceId: priceId,
-            currentPeriodStart: currentPeriodStart * 1000,
-            currentPeriodEnd: currentPeriodEnd * 1000,
+            userId: createdUser._id,
+            clerkId: createdClerkId,
+            membershipType: createdMembershipType,
+            stripeCustomerId: createdCustomerId,
+            stripeSubscriptionId: createdSubscription.id,
+            stripePriceId: createdPriceId,
+            currentPeriodStart: createdCurrentPeriodStart * 1000,
+            currentPeriodEnd: createdCurrentPeriodEnd * 1000,
           });
           
           console.log("✅ Membership created successfully!");
+          break;
+
+        case "customer.subscription.updated":
+          console.log("🔄 Processing subscription update event");
+          const updatedSubscription = event.data.object;
+          console.log("📋 Updated Subscription ID:", updatedSubscription.id);
+          console.log("🚫 Cancel at period end:", updatedSubscription.cancel_at_period_end);
+          console.log("📊 Subscription status:", updatedSubscription.status);
+          console.log("📅 Period start:", updatedSubscription.current_period_start);
+          console.log("📅 Period end:", updatedSubscription.current_period_end);
+          
+          // Only include period dates if they exist and are valid
+          const updateData: any = {
+            stripeSubscriptionId: updatedSubscription.id,
+            status: updatedSubscription.status === "active" ? "active" : "cancelled",
+            cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end || false,
+          };
+          
+          if (updatedSubscription.current_period_start && updatedSubscription.current_period_end) {
+            updateData.currentPeriodStart = updatedSubscription.current_period_start * 1000;
+            updateData.currentPeriodEnd = updatedSubscription.current_period_end * 1000;
+            console.log("📅 Including period updates:", {
+              start: updateData.currentPeriodStart,
+              end: updateData.currentPeriodEnd
+            });
+          } else {
+            console.log("⚠️ Skipping period updates - no valid period data");
+          }
+          
+          // Update the existing membership with the new subscription details
+          await ctx.runMutation(api.memberships.updateMembershipStatus, updateData);
+          
+          console.log("✅ Membership updated successfully from webhook!");
           break;
 
         case "customer.subscription.deleted":

@@ -36,16 +36,21 @@ const ProfilePage = () => {
   const handleCancelMembership = async () => {
     if (!user?.id) return;
     
-    if (!confirm('Are you sure you want to cancel your membership? This action cannot be undone and your membership will remain active until the end of your current billing period.')) {
+    console.log("🔍 Cancel button clicked for user:", user.id);
+    console.log("🔍 Current membership before cancel:", currentMembership);
+    
+    if (!confirm('Are you sure you want to cancel your membership?\n\nThis will:\n• Cancel your Stripe subscription\n• Stop future billing\n• You\'ll keep access until your current billing period ends\n\nThis action cannot be undone.')) {
       return;
     }
     
     try {
-      await cancelMembership({ clerkId: user.id });
-      alert('Your membership has been cancelled successfully. It will remain active until the end of your current billing period.');
+      console.log("🚫 User cancelling their own membership:", user.id);
+      const result = await cancelMembership({ clerkId: user.id });
+      console.log("✅ Cancel membership result:", result);
+      alert('✅ Your membership has been cancelled successfully.\n\nYour membership will remain active until the end of your current billing period. No further charges will be made.');
     } catch (error) {
-      console.error("Error cancelling membership:", error);
-      alert("Error cancelling membership. Please contact support.");
+      console.error("❌ Error cancelling membership:", error);
+      alert("❌ Error cancelling membership. Please contact support if this issue persists.");
     }
   };
 

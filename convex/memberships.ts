@@ -345,7 +345,7 @@ export const fixAllDuplicateMemberships = mutation({
 // Cancel Stripe subscription (action)
 export const cancelStripeSubscription = action({
   args: { stripeSubscriptionId: v.string() },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{ success: boolean; subscription?: any; error?: string; dbUpdate?: any }> => {
     try {
       const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
       
@@ -360,13 +360,20 @@ export const cancelStripeSubscription = action({
       
       // The webhook should automatically update our database when this change occurs
       // But let's also update it directly to ensure consistency
-      await ctx.runMutation(api.memberships.updateMembershipStatus, {
-        stripeSubscriptionId: args.stripeSubscriptionId,
-        status: "cancelled",
-        cancelAtPeriodEnd: true,
-      });
+      try {
+        const updateResult = await ctx.runMutation(api.memberships.updateMembershipStatus, {
+          stripeSubscriptionId: args.stripeSubscriptionId,
+          status: "active", // Keep as active until period ends
+          cancelAtPeriodEnd: true,
+        });
+        
+        console.log("🔄 Direct database update result:", updateResult);
+        return { success: true, subscription: updatedSubscription, dbUpdate: updateResult };
+      } catch (dbError) {
+        console.log("⚠️ Database update failed, but Stripe cancellation succeeded:", dbError);
+        return { success: true, subscription: updatedSubscription, dbUpdate: null };
+      }
       
-      return { success: true, subscription: updatedSubscription };
     } catch (error: any) {
       console.error("❌ Error cancelling Stripe subscription:", error);
       return { success: false, error: error?.message || "Unknown error" };
@@ -378,6 +385,22 @@ export const cancelStripeSubscription = action({
 export const cancelMembership = mutation({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {
+    console.log("🔍 Looking for active membership for user:", args.clerkId);
+    
+    // First, let's see all memberships for this user
+    const allUserMemberships = await ctx.db
+      .query("memberships")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .collect();
+    
+    console.log("📊 All memberships for user:", allUserMemberships.map(m => ({
+      id: m._id,
+      status: m.status,
+      type: m.membershipType,
+      cancelAtPeriodEnd: m.cancelAtPeriodEnd,
+      subscriptionId: m.stripeSubscriptionId
+    })));
+    
     const membership = await ctx.db
       .query("memberships")
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
@@ -385,24 +408,65 @@ export const cancelMembership = mutation({
       .first();
 
     if (!membership) {
+      console.log("❌ No active membership found for user:", args.clerkId);
       throw new Error("No active membership found");
     }
 
+    console.log("🚫 Cancelling membership for user:", args.clerkId);
+    console.log("📋 Membership details:", {
+      membershipId: membership._id,
+      type: membership.membershipType,
+      subscriptionId: membership.stripeSubscriptionId,
+      currentStatus: membership.status,
+      cancelAtPeriodEnd: membership.cancelAtPeriodEnd
+    });
+
+    // Update the membership immediately in the database
+    console.log("🔄 Updating membership in database...");
+    console.log("🔍 Before update - membership data:", {
+      id: membership._id,
+      status: membership.status,
+      cancelAtPeriodEnd: membership.cancelAtPeriodEnd,
+      updatedAt: membership.updatedAt
+    });
+    
+    const patchResult = await ctx.db.patch(membership._id, {
+      cancelAtPeriodEnd: true,
+      updatedAt: Date.now(),
+    });
+    console.log("✅ Patch operation result:", patchResult);
+    
+    // Verify the update by reading the membership again
+    const verifyMembership = await ctx.db.get(membership._id);
+    console.log("🔍 After update - membership data:", {
+      id: verifyMembership?._id,
+      status: verifyMembership?.status,
+      cancelAtPeriodEnd: verifyMembership?.cancelAtPeriodEnd,
+      updatedAt: verifyMembership?.updatedAt
+    });
+    
+    if (verifyMembership?.cancelAtPeriodEnd !== true) {
+      console.error("❌ Database update failed! cancelAtPeriodEnd is still:", verifyMembership?.cancelAtPeriodEnd);
+      throw new Error("Failed to update membership in database");
+    }
+    
+    console.log("✅ Database successfully updated with cancelAtPeriodEnd: true");
+
     // Schedule Stripe cancellation if subscription ID exists
     if (membership.stripeSubscriptionId) {
+      console.log("🔄 Scheduling Stripe subscription cancellation...");
       await ctx.scheduler.runAfter(0, api.memberships.cancelStripeSubscription, {
         stripeSubscriptionId: membership.stripeSubscriptionId,
       });
     } else {
-      // If no Stripe subscription, just update the database directly
-      await ctx.db.patch(membership._id, {
-        status: "cancelled",
-        cancelAtPeriodEnd: true,
-        updatedAt: Date.now(),
-      });
+      console.log("⚠️ No Stripe subscription found");
     }
 
-    return membership;
+    console.log("✅ Membership cancellation initiated successfully");
+    
+    // Return the updated membership
+    const updatedMembership = await ctx.db.get(membership._id);
+    return updatedMembership;
   },
 });
 

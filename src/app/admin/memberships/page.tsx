@@ -6,7 +6,7 @@ import { api } from "../../../../convex/_generated/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Crown, DollarSign } from "lucide-react";
+import { Users, Crown, DollarSign, AlertTriangle } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function AdminMembershipsPage() {
@@ -66,11 +66,12 @@ export default function AdminMembershipsPage() {
   };
 
   const getMembershipStats = () => {
-    if (!allMemberships) return { total: 0, active: 0, expired: 0, cancelled: 0 };
+    if (!allMemberships) return { total: 0, active: 0, expired: 0, cancelled: 0, cancelling: 0 };
     
     const stats = {
       total: allMemberships.length,
-      active: allMemberships.filter(m => m.status === 'active').length,
+      active: allMemberships.filter(m => m.status === 'active' && !m.cancelAtPeriodEnd).length,
+      cancelling: allMemberships.filter(m => m.status === 'active' && m.cancelAtPeriodEnd).length,
       expired: allMemberships.filter(m => m.status === 'expired').length,
       cancelled: allMemberships.filter(m => m.status === 'cancelled').length,
     };
@@ -78,9 +79,12 @@ export default function AdminMembershipsPage() {
     return stats;
   };
 
-  const getStatusColor = (status: string, endDate: number) => {
+  const getStatusColor = (status: string, endDate: number, cancelAtPeriodEnd: boolean) => {
     if (status === 'cancelled') return 'bg-gray-500';
     if (status === 'expired') return 'bg-red-500';
+    
+    // If membership is set to cancel at period end, show orange/warning color
+    if (cancelAtPeriodEnd) return 'bg-orange-500';
     
     const now = Date.now();
     const daysRemaining = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
@@ -88,6 +92,16 @@ export default function AdminMembershipsPage() {
     if (daysRemaining < 0) return 'bg-red-500';
     if (daysRemaining <= 7) return 'bg-yellow-500';
     return 'bg-green-500';
+  };
+
+  const getStatusText = (status: string, cancelAtPeriodEnd: boolean) => {
+    if (status === 'cancelled') return 'Cancelled';
+    if (status === 'expired') return 'Expired';
+    
+    // If membership is active but set to cancel, show "Cancelling"
+    if (status === 'active' && cancelAtPeriodEnd) return 'Cancelling';
+    
+    return status;
   };
 
   const handleFixDuplicates = async () => {
@@ -101,16 +115,25 @@ export default function AdminMembershipsPage() {
   };
 
   const handleCancelMembership = async (clerkId: string, memberName: string) => {
-    if (!confirm(`Are you sure you want to cancel ${memberName}'s membership? This action cannot be undone.`)) {
+    console.log("🔍 Admin cancel button clicked for:", memberName, "ClerkID:", clerkId);
+    
+    if (!confirm(`Are you sure you want to cancel ${memberName}'s membership?\n\nThis will:\n• Cancel their Stripe subscription\n• Set membership to cancel at period end\n• They'll keep access until the current billing period ends\n\nThis action cannot be undone.`)) {
       return;
     }
     
     try {
-      await cancelMembership({ clerkId });
-      alert(`${memberName}'s membership has been cancelled successfully.`);
+      console.log("🚫 Admin cancelling membership for:", memberName, "ClerkID:", clerkId);
+      const result = await cancelMembership({ clerkId });
+      console.log("✅ Admin cancel membership result:", result);
+      
+      // Give immediate feedback and suggest refresh
+      alert(`✅ ${memberName}'s membership has been cancelled successfully!\n\nTheir membership will remain active until the end of their current billing period.\n\nNote: The page may take a moment to update the status. You can refresh to see the latest status.`);
+      
+      console.log("🔄 Membership data should update automatically. If not visible, check in a few seconds or refresh the page.");
+      
     } catch (error) {
-      console.error("Error cancelling membership:", error);
-      alert("Error cancelling membership");
+      console.error("❌ Error cancelling membership:", error);
+      alert(`❌ Error cancelling ${memberName}'s membership. Please try again or contact support.`);
     }
   };
 
@@ -166,6 +189,16 @@ export default function AdminMembershipsPage() {
               <p className="text-3xl font-bold text-white">{membershipStats.active}</p>
             </div>
             <Crown className="h-8 w-8 text-green-500" />
+          </div>
+        </div>
+
+        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Cancelling Soon</p>
+              <p className="text-3xl font-bold text-white">{membershipStats.cancelling}</p>
+            </div>
+            <AlertTriangle className="h-8 w-8 text-orange-500" />
           </div>
         </div>
 
@@ -261,9 +294,9 @@ export default function AdminMembershipsPage() {
                         </td>
                         <td className="py-3 px-4">
                           <Badge 
-                            className={`${getStatusColor(membership.status, membership.currentPeriodEnd)} text-white`}
+                            className={`${getStatusColor(membership.status, membership.currentPeriodEnd, membership.cancelAtPeriodEnd)} text-white`}
                           >
-                            {membership.status}
+                            {getStatusText(membership.status, membership.cancelAtPeriodEnd)}
                           </Badge>
                         </td>
                         <td className="py-3 px-4 text-gray-300">
@@ -282,7 +315,7 @@ export default function AdminMembershipsPage() {
                           </span>
                         </td>
                         <td className="py-3 px-4">
-                          {membership.status === 'active' && (
+                          {membership.status === 'active' && !membership.cancelAtPeriodEnd && (
                             <Button
                               size="sm"
                               variant="destructive"
@@ -291,6 +324,11 @@ export default function AdminMembershipsPage() {
                             >
                               Cancel
                             </Button>
+                          )}
+                          {membership.status === 'active' && membership.cancelAtPeriodEnd && (
+                            <Badge className="bg-orange-500 text-white text-xs">
+                              Cancelled
+                            </Badge>
                           )}
                           {membership.status !== 'active' && (
                             <span className="text-gray-500 text-xs">-</span>
