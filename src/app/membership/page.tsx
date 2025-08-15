@@ -169,7 +169,7 @@ const MembershipPage = () => {
             return (
               <Card
                 key={plan._id}
-                className={`relative bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-all duration-300 group ${
+                className={`relative bg-gray-900/50 border border-gray-800 hover:border-red-500/50 transition-all duration-300 group flex flex-col h-full ${
                   plan.type === "premium" ? "border-yellow-500/50" : ""
                 } ${isCurrentPlan ? "border-green-500/50" : ""}`}
               >
@@ -205,7 +205,7 @@ const MembershipPage = () => {
                   </p>
                 </CardHeader>
 
-                <CardContent className="pt-0">
+                <CardContent className="pt-0 flex-1 flex flex-col">
                   {/* Price */}
                   <div className="text-center mb-6">
                     <div className="text-4xl font-bold text-white mb-1">
@@ -215,7 +215,7 @@ const MembershipPage = () => {
                   </div>
 
                   {/* Features */}
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-3 mb-6 flex-1">
                     {plan.features.map((feature: string, index: number) => (
                       <li key={index} className="flex items-start gap-3">
                         <Check className={`h-5 w-5 mt-0.5 ${config.color} flex-shrink-0`} />
@@ -224,23 +224,25 @@ const MembershipPage = () => {
                     ))}
                   </ul>
 
-                  {/* Button */}
-                  <Button
-                    className={`w-full ${config.button} text-white font-semibold py-3 transition-all duration-300`}
-                    onClick={() => handleSubscribe(plan)}
-                    disabled={loading === plan.type || isCurrentPlan}
-                  >
-                    {loading === plan.type ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        Processing...
-                      </div>
-                    ) : isCurrentPlan ? (
-                      "Current Plan"
-                    ) : (
-                      "Choose Plan"
-                    )}
-                  </Button>
+                  {/* Button - This will be pushed to bottom */}
+                  <div className="mt-auto">
+                    <Button
+                      className={`w-full ${config.button} text-white font-semibold py-3 transition-all duration-300`}
+                      onClick={() => handleSubscribe(plan)}
+                      disabled={loading === plan.type || isCurrentPlan}
+                    >
+                      {loading === plan.type ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          Processing...
+                        </div>
+                      ) : isCurrentPlan ? (
+                        "Current Plan"
+                      ) : (
+                        "Choose Plan"
+                      )}
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             );
