@@ -315,71 +315,18 @@ http.route({
       return new Response(`Webhook Error: ${err.message}`, { status: 400 });
     }
 
-      try {
-        console.log("🔄 Processing event:", event.type);
-        switch (event.type) {
-          case "customer.subscription.created":
-          case "customer.subscription.updated":
-            console.log("💳 Processing subscription event");
-            const subscription = event.data.object;
-            const customerId = subscription.customer;
-            console.log("👤 Customer ID:", customerId);
-            console.log("📋 Subscription ID:", subscription.id);
-            console.log("🔄 Subscription status:", subscription.status);
-            console.log("🚫 Cancel at period end:", subscription.cancel_at_period_end);
-            
-            // For subscription.updated events, only handle specific cases
-            if (event.type === "customer.subscription.updated") {
-              // Check if membership exists first
-              const existingMembership = await ctx.runQuery(api.memberships.getMembershipBySubscription, {
-                subscriptionId: subscription.id
-              });
-              
-              if (!existingMembership) {
-                console.log("⏭️ Skipping update - membership not found for subscription:", subscription.id);
-                break;
-              }
-              
-              // Handle cancellation updates
-              if (subscription.cancel_at_period_end === true) {
-                console.log("🚫 Subscription marked for cancellation at period end");
-                try {
-                  await ctx.runMutation(api.memberships.updateMembershipStatus, {
-                    stripeSubscriptionId: subscription.id,
-                    status: "active", // Keep active until period ends
-                    cancelAtPeriodEnd: true,
-                    currentPeriodStart: subscription.current_period_start * 1000,
-                    currentPeriodEnd: subscription.current_period_end * 1000,
-                  });
-                  console.log("✅ Membership marked for cancellation at period end");
-                } catch (error) {
-                  console.error("❌ Failed to update membership status:", error);
-                }
-                break;
-              }
-              
-              // Handle reactivations
-              if (subscription.status === "active" && subscription.cancel_at_period_end === false) {
-                console.log("🔄 Subscription reactivated");
-                try {
-                  await ctx.runMutation(api.memberships.updateMembershipStatus, {
-                    stripeSubscriptionId: subscription.id,
-                    status: "active",
-                    cancelAtPeriodEnd: false,
-                  });
-                  console.log("✅ Membership status updated to active");
-                } catch (error) {
-                  console.error("❌ Failed to reactivate membership:", error);
-                }
-                break;
-              }
-              
-              // For other subscription updates, skip processing
-              console.log("⏭️ Skipping subscription update - no action needed");
-              break;
-            }
-            
-            // Only process subscription.created events for new membership creation          // Get the checkout session that created this subscription
+    try {
+      console.log("🔄 Processing event:", event.type);
+      switch (event.type) {
+        case "customer.subscription.created":
+        case "customer.subscription.updated":
+          console.log("💳 Processing subscription event");
+          const subscription = event.data.object;
+          const customerId = subscription.customer;
+          console.log("👤 Customer ID:", customerId);
+          console.log("📋 Subscription ID:", subscription.id);
+          
+          // Get the checkout session that created this subscription
           const checkoutSessions = await stripe.checkout.sessions.list({
             customer: customerId,
             limit: 10, // Get more sessions to find the right one
