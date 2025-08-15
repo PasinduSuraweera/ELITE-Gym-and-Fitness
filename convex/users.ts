@@ -201,6 +201,19 @@ export const createSuperAdmin = mutation({
   },
 });
 
+// Get user by Clerk ID
+export const getUserByClerkId = query({
+  args: { clerkId: v.string() },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+    
+    return user;
+  },
+});
+
 // Migration function to update existing users
 export const migrateExistingUsers = mutation({
   handler: async (ctx) => {

@@ -42,6 +42,7 @@ export function AdminLayout({
     { href: "/admin", icon: Home, label: "Dashboard", active: pathname === "/admin" },
     { href: "/admin/users", icon: Users, label: "Members", active: pathname === "/admin/users" },
     { href: "/admin/trainer-applications", icon: UserCheck, label: "Trainers", active: pathname === "/admin/trainer-applications" },
+    { href: "/admin/memberships", icon: Settings, label: "Memberships", active: pathname === "/admin/memberships" },
     { href: "/admin/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/admin/recipes" },
     { href: "/admin/marketplace", icon: ShoppingBag, label: "Marketplace", active: pathname === "/admin/marketplace" },
     { href: "/admin/content", icon: BarChart3, label: "Content", active: pathname === "/admin/content" },

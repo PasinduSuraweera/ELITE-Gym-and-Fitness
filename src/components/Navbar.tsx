@@ -110,6 +110,17 @@ const Navbar = () => {
             )}
           </Link>
           <Link
+            href="/membership"
+            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+              pathname === "/membership" ? "" : ""
+            }`}
+          >
+            <span>Membership</span>
+            {pathname === "/membership" && (
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+            )}
+          </Link>
+          <Link
             href="/trainer-booking"
             className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
               pathname === "/trainer-booking" ? "" : ""

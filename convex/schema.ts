@@ -121,4 +121,57 @@ export default defineSchema({
     .index("by_recommended", ["isRecommended"])
     .index("by_difficulty", ["difficulty"])
     .index("by_created_at", ["createdAt"]),
+
+  memberships: defineTable({
+    userId: v.id("users"),
+    clerkId: v.string(),
+    membershipType: v.union(
+      v.literal("basic"),
+      v.literal("premium"),
+      v.literal("couple"),
+      v.literal("beginner")
+    ),
+    status: v.union(
+      v.literal("active"),
+      v.literal("cancelled"),
+      v.literal("expired"),
+      v.literal("pending")
+    ),
+    stripeCustomerId: v.optional(v.string()),
+    stripeSubscriptionId: v.optional(v.string()),
+    stripePriceId: v.string(),
+    currentPeriodStart: v.number(),
+    currentPeriodEnd: v.number(),
+    cancelAtPeriodEnd: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_stripe_customer", ["stripeCustomerId"])
+    .index("by_subscription", ["stripeSubscriptionId"])
+    .index("by_status", ["status"]),
+
+  membershipPlans: defineTable({
+    name: v.string(),
+    description: v.string(),
+    price: v.number(), // in LKR
+    currency: v.string(),
+    type: v.union(
+      v.literal("basic"),
+      v.literal("premium"),
+      v.literal("couple"),
+      v.literal("beginner")
+    ),
+    stripePriceId: v.string(),
+    stripeProductId: v.string(),
+    features: v.array(v.string()),
+    isActive: v.boolean(),
+    sortOrder: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_type", ["type"])
+    .index("by_active", ["isActive"])
+    .index("by_sort_order", ["sortOrder"]),
 });
