@@ -112,6 +112,7 @@ export default defineSchema({
     ),
     instructions: v.array(v.string()),
     tags: v.array(v.string()),
+    rating: v.optional(v.number()), // Rating out of 5
     isRecommended: v.boolean(),
     createdAt: v.number(),
     updatedAt: v.number(),
@@ -174,4 +175,112 @@ export default defineSchema({
     .index("by_type", ["type"])
     .index("by_active", ["isActive"])
     .index("by_sort_order", ["sortOrder"]),
+
+  trainerProfiles: defineTable({
+    userId: v.id("users"),
+    clerkId: v.string(),
+    name: v.string(),
+    email: v.string(),
+    bio: v.string(),
+    specializations: v.array(v.string()), // ["personal_training", "zumba", "yoga", "crossfit", "cardio", "strength"]
+    experience: v.string(),
+    certifications: v.array(v.string()),
+    hourlyRate: v.number(),
+    profileImage: v.optional(v.string()),
+    isActive: v.boolean(),
+    rating: v.number(), // Average rating
+    totalReviews: v.number(),
+    totalSessions: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_active", ["isActive"])
+    .index("by_rating", ["rating"])
+    .index("by_specializations", ["specializations"]),
+
+  trainerAvailability: defineTable({
+    trainerId: v.id("trainerProfiles"),
+    dayOfWeek: v.union(
+      v.literal("monday"),
+      v.literal("tuesday"),
+      v.literal("wednesday"),
+      v.literal("thursday"),
+      v.literal("friday"),
+      v.literal("saturday"),
+      v.literal("sunday")
+    ),
+    startTime: v.string(), // "09:00"
+    endTime: v.string(), // "17:00"
+    isRecurring: v.boolean(), // true for weekly recurring availability
+    specificDate: v.optional(v.string()), // "2025-08-20" for one-time availability
+    isActive: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index("by_trainer", ["trainerId"])
+    .index("by_day", ["dayOfWeek"])
+    .index("by_active", ["isActive"])
+    .index("by_date", ["specificDate"]),
+
+  bookings: defineTable({
+    userId: v.id("users"),
+    trainerId: v.id("trainerProfiles"),
+    userClerkId: v.string(),
+    trainerClerkId: v.string(),
+    sessionType: v.union(
+      v.literal("personal_training"),
+      v.literal("zumba"),
+      v.literal("yoga"),
+      v.literal("crossfit"),
+      v.literal("cardio"),
+      v.literal("strength"),
+      v.literal("nutrition_consultation"),
+      v.literal("group_class")
+    ),
+    sessionDate: v.string(), // "2025-08-20"
+    startTime: v.string(), // "14:00"
+    endTime: v.string(), // "15:00"
+    duration: v.number(), // in minutes
+    status: v.union(
+      v.literal("pending"),
+      v.literal("confirmed"),
+      v.literal("cancelled"),
+      v.literal("completed"),
+      v.literal("no_show")
+    ),
+    notes: v.optional(v.string()),
+    totalAmount: v.number(),
+    paymentStatus: v.union(
+      v.literal("pending"),
+      v.literal("paid"),
+      v.literal("refunded"),
+      v.literal("included_with_membership")
+    ),
+    paymentSessionId: v.optional(v.string()), // Stripe session ID
+    cancellationReason: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_trainer", ["trainerId"])
+    .index("by_user_clerk", ["userClerkId"])
+    .index("by_trainer_clerk", ["trainerClerkId"])
+    .index("by_date", ["sessionDate"])
+    .index("by_status", ["status"])
+    .index("by_session_type", ["sessionType"])
+    .index("by_datetime", ["sessionDate", "startTime"]),
+
+  trainerReviews: defineTable({
+    bookingId: v.id("bookings"),
+    userId: v.id("users"),
+    trainerId: v.id("trainerProfiles"),
+    rating: v.number(), // 1-5 stars
+    comment: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index("by_booking", ["bookingId"])
+    .index("by_trainer", ["trainerId"])
+    .index("by_user", ["userId"])
+    .index("by_rating", ["rating"]),
 });

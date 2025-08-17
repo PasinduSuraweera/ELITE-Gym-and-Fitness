@@ -26,6 +26,13 @@ const ProfilePage = () => {
     api.memberships.getUserMembershipWithExpiryCheck,
     user?.id ? { clerkId: user.id } : "skip"
   );
+  
+  // Get user's recent bookings
+  const userBookings = useQuery(
+    api.bookings.getUserBookings,
+    user?.id ? { userClerkId: user.id } : "skip"
+  );
+  
   const cancelMembership = useMutation(api.memberships.cancelMembership);
 
   // Prevent hydration mismatch

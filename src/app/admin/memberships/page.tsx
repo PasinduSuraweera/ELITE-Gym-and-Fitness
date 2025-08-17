@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 
 export default function AdminMembershipsPage() {
   const [mounted, setMounted] = useState(false);
-  const seedMembershipPlans = useMutation(api.memberships.seedMembershipPlans);
   const checkExpiredMemberships = useMutation(api.memberships.checkExpiredMemberships);
   const fixAllMembershipPeriods = useMutation(api.memberships.fixAllMembershipPeriods);
   const cancelMembership = useMutation(api.memberships.cancelMembership);
@@ -137,16 +136,6 @@ export default function AdminMembershipsPage() {
     }
   };
 
-  const handleSeedPlans = async () => {
-    try {
-      await seedMembershipPlans({});
-      alert("Membership plans seeded successfully!");
-    } catch (error) {
-      console.error("Error seeding plans:", error);
-      alert("Error seeding membership plans");
-    }
-  };
-
   // Calculate real stats from actual data
   const totalPlans = membershipPlans?.length || 0;
   const membershipStats = getMembershipStats();
@@ -225,12 +214,6 @@ export default function AdminMembershipsPage() {
 
       {/* Actions */}
       <div className="flex gap-4 mb-8">
-        <Button 
-          onClick={handleSeedPlans}
-          className="bg-red-600 hover:bg-red-700"
-        >
-          Seed Membership Plans
-        </Button>
         <Button 
           onClick={handleFixPeriods}
           className="bg-blue-600 hover:bg-blue-700"
@@ -413,12 +396,7 @@ export default function AdminMembershipsPage() {
             <div className="text-center py-8">
               <Crown className="h-16 w-16 text-gray-500 mx-auto mb-4" />
               <p className="text-gray-400 mb-4">No membership plans found</p>
-              <Button 
-                onClick={handleSeedPlans}
-                className="bg-red-600 hover:bg-red-700"
-              >
-                Create Initial Plans
-              </Button>
+              <p className="text-gray-500 text-sm">Membership plans will appear here once created</p>
             </div>
           )}
         </CardContent>

@@ -38,6 +38,7 @@ export function UserLayout({
     { href: "/profile", icon: User, label: "Profile", active: pathname === "/profile" },
     { href: "/profile/fitness-plans", icon: Dumbbell, label: "Workout Plans", active: pathname === "/profile/fitness-plans" },
     { href: "/profile/diet-plans", icon: Apple, label: "Diet Plans", active: pathname === "/profile/diet-plans" },
+    { href: "/profile/training-sessions", icon: Activity, label: "Training Sessions", active: pathname === "/profile/training-sessions" },
     { href: "/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/recipes" },
     { href: "/generate-program", icon: Target, label: "Generate Program", active: pathname === "/generate-program" },
     { href: "/marketplace", icon: ShoppingBag, label: "Marketplace", active: pathname === "/marketplace" },
@@ -66,7 +67,7 @@ export function UserLayout({
                   Dashboard
                 </h3>
                 <nav className="space-y-2">
-                  {sidebarItems.slice(0, 3).map((item) => (
+                  {sidebarItems.slice(0, 4).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -86,7 +87,7 @@ export function UserLayout({
                   Services
                 </h3>
                 <nav className="space-y-2">
-                  {sidebarItems.slice(3).map((item) => (
+                  {sidebarItems.slice(4).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}

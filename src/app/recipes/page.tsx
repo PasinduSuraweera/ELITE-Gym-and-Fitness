@@ -3,11 +3,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, Users, Flame, Zap, Star, Filter, Search } from "lucide-react";
+import { Clock, Users, Flame, Zap, Star, Filter, Search, Target, TrendingUp, Brain } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
 
 // Simple Badge component
 const Badge = ({ children, className = "", variant = "default" }: { 
@@ -40,6 +41,7 @@ const Input = ({ className = "", ...props }: React.InputHTMLAttributes<HTMLInput
 };
 
 const RecipesPage = () => {
+  const { user } = useUser();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,6 +53,24 @@ const RecipesPage = () => {
   });
 
   const recommendedRecipes = useQuery(api.recipes.getRecommendedRecipes, { limit: 6 });
+
+  // Get personalized recommendations based on user's plan
+  const personalizedRecipes = useQuery(
+    api.recipes.getPersonalizedRecipes,
+    user?.id ? { clerkId: user.id, limit: 8 } : "skip"
+  );
+
+  // Get workout-based recommendations
+  const workoutBasedRecipes = useQuery(
+    api.recipes.getWorkoutBasedRecipes,
+    user?.id ? { clerkId: user.id } : "skip"
+  );
+
+  // Get meal prep suggestions
+  const mealPrepRecipes = useQuery(
+    api.recipes.getMealPrepSuggestions,
+    user?.id ? { clerkId: user.id } : "skip"
+  );
 
   // Search recipes if there's a search term
   const searchResults = useQuery(api.recipes.searchRecipes, 
@@ -179,49 +199,338 @@ const RecipesPage = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="recommended" className="max-w-7xl mx-auto">
-          <TabsList className="grid w-full grid-cols-2 mb-8 bg-black/50 border border-red-500/30">
+        <Tabs defaultValue="personalized" className="max-w-7xl mx-auto">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-black/50 border border-red-500/30">
+            <TabsTrigger 
+              value="personalized" 
+              className="data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 data-[state=active]:border-red-500/50"
+            >
+              <Brain className="h-4 w-4 mr-2" />
+              For You
+            </TabsTrigger>
+            <TabsTrigger 
+              value="workout" 
+              className="data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 data-[state=active]:border-red-500/50"
+            >
+              <Target className="h-4 w-4 mr-2" />
+              Workout
+            </TabsTrigger>
             <TabsTrigger 
               value="recommended" 
               className="data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 data-[state=active]:border-red-500/50"
             >
               <Star className="h-4 w-4 mr-2" />
-              Recommended
+              Popular
             </TabsTrigger>
             <TabsTrigger 
               value="all"
               className="data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 data-[state=active]:border-red-500/50"
             >
               <Zap className="h-4 w-4 mr-2" />
-              All Recipes
+              All
             </TabsTrigger>
           </TabsList>
+
+          {/* Personalized Recipes */}
+          <TabsContent value="personalized">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                <span className="text-red-500">Personalized</span> for Your Goals
+              </h2>
+              <p className="text-gray-400">
+                AI-curated recipes based on your fitness plan and dietary needs
+              </p>
+            </div>
+
+            {user?.id ? (
+              <>
+                {/* Meal Prep Section */}
+                {mealPrepRecipes && mealPrepRecipes.length > 0 && (
+                  <div className="mb-12">
+                    <div className="flex items-center gap-2 mb-6">
+                      <TrendingUp className="h-5 w-5 text-orange-500" />
+                      <h3 className="text-xl font-semibold text-white">Meal Prep Champions</h3>
+                      <span className="text-sm text-gray-400">Perfect for your workout schedule</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                      {mealPrepRecipes.slice(0, 3).map((recipe: any) => (
+                        <Card key={recipe._id} className="bg-black/90 backdrop-blur-sm border-orange-500/30 hover:border-orange-500/50 transition-all duration-300 group flex flex-col h-full">
+                          <CardHeader className="pb-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <CardTitle className="text-white text-lg mb-2 group-hover:text-orange-400 transition-colors">
+                                  {recipe.title}
+                                </CardTitle>
+                                <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                                  {recipe.description}
+                                </CardDescription>
+                              </div>
+                              <div className="ml-2 text-right">
+                                <div className="text-xs text-orange-400 font-mono">
+                                  {recipe.weeklyPortions} portions
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  Score: {recipe.suitabilityScore}
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              <Badge className={getCategoryColor(recipe.category)}>
+                                {recipe.category}
+                              </Badge>
+                              <Badge className="bg-orange-900/50 text-orange-400 border-orange-500/30">
+                                meal-prep
+                              </Badge>
+                            </div>
+                          </CardHeader>
+
+                          <CardContent className="pt-0 flex flex-col flex-1">
+                            <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                              <div className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 text-orange-400" />
+                                <span className="text-gray-300">{recipe.cookingTime} min</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Users className="h-4 w-4 text-orange-400" />
+                                <span className="text-gray-300">{recipe.servings} servings</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Flame className="h-4 w-4 text-orange-400" />
+                                <span className="text-gray-300">{recipe.calories} cal</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Zap className="h-4 w-4 text-orange-400" />
+                                <span className="text-gray-300">{recipe.protein}g protein</span>
+                              </div>
+                            </div>
+
+                            <Link href={`/recipes/${recipe._id}`} className="mt-auto">
+                              <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white border-0">
+                                View Recipe
+                              </Button>
+                            </Link>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Personalized Recipes Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {personalizedRecipes?.map((recipe: any) => (
+                    <Card key={recipe._id} className="bg-black/90 backdrop-blur-sm border-green-500/30 hover:border-green-500/50 transition-all duration-300 group flex flex-col h-full">
+                      <CardHeader className="pb-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <CardTitle className="text-white text-lg mb-2 group-hover:text-green-400 transition-colors">
+                              {recipe.title}
+                            </CardTitle>
+                            <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                              {recipe.description}
+                            </CardDescription>
+                          </div>
+                          <div className="ml-2 text-right">
+                            <div className="text-xs text-green-400 font-mono">
+                              Match: {Math.round((recipe.score / 100) * 100)}%
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          <Badge className={getCategoryColor(recipe.category)}>
+                            {recipe.category}
+                          </Badge>
+                          <Badge className={getDifficultyColor(recipe.difficulty)}>
+                            {recipe.difficulty}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+
+                      <CardContent className="pt-0 flex flex-col flex-1">
+                        <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-green-400" />
+                            <span className="text-gray-300">{recipe.cookingTime} min</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Users className="h-4 w-4 text-green-400" />
+                            <span className="text-gray-300">{recipe.servings} servings</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Flame className="h-4 w-4 text-green-400" />
+                            <span className="text-gray-300">{recipe.calories} cal</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Zap className="h-4 w-4 text-green-400" />
+                            <span className="text-gray-300">{recipe.protein}g protein</span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap gap-1 mb-4">
+                          {recipe.tags.slice(0, 3).map((tag: string) => (
+                            <Badge key={tag} variant="outline" className="text-xs border-gray-600 text-gray-400">
+                              {tag}
+                            </Badge>
+                          ))}
+                          {recipe.tags.length > 3 && (
+                            <Badge variant="outline" className="text-xs border-gray-600 text-gray-400">
+                              +{recipe.tags.length - 3}
+                            </Badge>
+                          )}
+                        </div>
+
+                        <Link href={`/recipes/${recipe._id}`} className="mt-auto">
+                          <Button className="w-full bg-green-600 hover:bg-green-700 text-white border-0">
+                            View Recipe
+                          </Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <Brain className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">Sign in for Personalized Recipes</h3>
+                <p className="text-gray-400 mb-6">
+                  Get AI-powered recipe recommendations based on your fitness goals and plans
+                </p>
+                <Button asChild className="bg-red-600 hover:bg-red-700">
+                  <Link href="/sign-in">Sign In</Link>
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Workout-Based Recipes */}
+          <TabsContent value="workout">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-white mb-2">
+                <span className="text-red-500">Workout</span> Optimized
+              </h2>
+              <p className="text-gray-400">
+                Perfect nutrition timing for your training schedule
+              </p>
+            </div>
+
+            {user?.id ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {workoutBasedRecipes?.map((recipe: any) => (
+                  <Card key={recipe._id} className="bg-black/90 backdrop-blur-sm border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 group flex flex-col h-full">
+                    <CardHeader className="pb-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-white text-lg mb-2 group-hover:text-blue-400 transition-colors">
+                            {recipe.title}
+                          </CardTitle>
+                          <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                            {recipe.description}
+                          </CardDescription>
+                        </div>
+                        <Target className="h-5 w-5 text-blue-500 ml-2 flex-shrink-0" />
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        <Badge className={getCategoryColor(recipe.category)}>
+                          {recipe.category}
+                        </Badge>
+                        <Badge className={getDifficultyColor(recipe.difficulty)}>
+                          {recipe.difficulty}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent className="pt-0 flex flex-col flex-1">
+                      <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-blue-400" />
+                          <span className="text-gray-300">{recipe.cookingTime} min</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-blue-400" />
+                          <span className="text-gray-300">{recipe.servings} servings</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Flame className="h-4 w-4 text-blue-400" />
+                          <span className="text-gray-300">{recipe.calories} cal</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Zap className="h-4 w-4 text-blue-400" />
+                          <span className="text-gray-300">{recipe.protein}g protein</span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1 mb-4">
+                        {recipe.tags.slice(0, 3).map((tag: string) => (
+                          <Badge key={tag} variant="outline" className="text-xs border-gray-600 text-gray-400">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {recipe.tags.length > 3 && (
+                          <Badge variant="outline" className="text-xs border-gray-600 text-gray-400">
+                            +{recipe.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+
+                      <Link href={`/recipes/${recipe._id}`} className="mt-auto">
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white border-0">
+                          View Recipe
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Target className="h-16 w-16 text-gray-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">Sign in for Workout Recipes</h3>
+                <p className="text-gray-400 mb-6">
+                  Get recipes optimized for your workout schedule and timing
+                </p>
+                <Button asChild className="bg-red-600 hover:bg-red-700">
+                  <Link href="/sign-in">Sign In</Link>
+                </Button>
+              </div>
+            )}
+          </TabsContent>
 
           {/* Recommended Recipes */}
           <TabsContent value="recommended">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-white mb-2">
-                Chef&apos;s <span className="text-red-500">Recommendations</span>
+                <span className="text-red-500">Popular</span> Recipes
               </h2>
               <p className="text-gray-400">
-                Our top picks for optimal nutrition and performance
+                Community favorites and most loved recipes
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recommendedRecipes?.map((recipe: any) => (
-                <Card key={recipe._id} className="bg-black/90 backdrop-blur-sm border-red-500/30 hover:border-red-500/50 transition-all duration-300 group">
+              {recommendedRecipes
+                ?.slice(0, 9)
+                .map((recipe: any) => (
+                <Card key={recipe._id} className="bg-black/90 backdrop-blur-sm border-yellow-500/30 hover:border-yellow-500/50 transition-all duration-300 group flex flex-col h-full">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-white text-lg mb-2 group-hover:text-red-400 transition-colors">
+                        <CardTitle className="text-white text-lg mb-2 group-hover:text-yellow-400 transition-colors">
                           {recipe.title}
                         </CardTitle>
                         <CardDescription className="text-gray-400 text-sm line-clamp-2">
                           {recipe.description}
                         </CardDescription>
                       </div>
-                      <Star className="h-5 w-5 text-yellow-500 ml-2 flex-shrink-0" />
+                      <div className="ml-2 flex items-center gap-1">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                        <span className="text-yellow-400 text-sm font-semibold">
+                          {recipe.rating?.toFixed(1) || "5.0"}
+                        </span>
+                      </div>
                     </div>
                     
                     <div className="flex flex-wrap gap-2 mt-3">
@@ -231,25 +540,28 @@ const RecipesPage = () => {
                       <Badge className={getDifficultyColor(recipe.difficulty)}>
                         {recipe.difficulty}
                       </Badge>
+                      <Badge className="bg-yellow-900/50 text-yellow-400 border-yellow-500/30">
+                        popular
+                      </Badge>
                     </div>
                   </CardHeader>
 
-                  <CardContent className="pt-0">
+                  <CardContent className="pt-0 flex flex-col flex-1">
                     <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                       <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-red-400" />
+                        <Clock className="h-4 w-4 text-yellow-400" />
                         <span className="text-gray-300">{recipe.cookingTime} min</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-red-400" />
+                        <Users className="h-4 w-4 text-yellow-400" />
                         <span className="text-gray-300">{recipe.servings} servings</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Flame className="h-4 w-4 text-red-400" />
+                        <Flame className="h-4 w-4 text-yellow-400" />
                         <span className="text-gray-300">{recipe.calories} cal</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Zap className="h-4 w-4 text-red-400" />
+                        <Zap className="h-4 w-4 text-yellow-400" />
                         <span className="text-gray-300">{recipe.protein}g protein</span>
                       </div>
                     </div>
@@ -267,8 +579,8 @@ const RecipesPage = () => {
                       )}
                     </div>
 
-                    <Link href={`/recipes/${recipe._id}`}>
-                      <Button className="w-full bg-red-600 hover:bg-red-700 text-white border-0">
+                    <Link href={`/recipes/${recipe._id}`} className="mt-auto">
+                      <Button className="w-full bg-yellow-600 hover:bg-yellow-700 text-white border-0">
                         View Recipe
                       </Button>
                     </Link>
@@ -296,7 +608,7 @@ const RecipesPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayRecipes?.map((recipe: any) => (
-                <Card key={recipe._id} className="bg-black/90 backdrop-blur-sm border-red-500/30 hover:border-red-500/50 transition-all duration-300 group">
+                <Card key={recipe._id} className="bg-black/90 backdrop-blur-sm border-red-500/30 hover:border-red-500/50 transition-all duration-300 group flex flex-col h-full">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -322,7 +634,7 @@ const RecipesPage = () => {
                     </div>
                   </CardHeader>
 
-                  <CardContent className="pt-0">
+                  <CardContent className="pt-0 flex flex-col flex-1">
                     <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-red-400" />
@@ -355,7 +667,7 @@ const RecipesPage = () => {
                       )}
                     </div>
 
-                    <Link href={`/recipes/${recipe._id}`}>
+                    <Link href={`/recipes/${recipe._id}`} className="mt-auto">
                       <Button className="w-full bg-red-600 hover:bg-red-700 text-white border-0">
                         View Recipe
                       </Button>

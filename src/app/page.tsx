@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import ChadBot from "@/components/ChadBot";
 
 const HomePage = () => {
   return (
@@ -104,6 +105,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* ChadBot - Only on homepage */}
+      <ChadBot />
     </div>
   );
 };
