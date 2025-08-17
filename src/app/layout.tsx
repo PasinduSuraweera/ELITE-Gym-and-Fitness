@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Elite Gym",
+  title: "Elite Gym & Fitness",
   description: "A modern fitness AI platform to get jacked for free.",
 };
 

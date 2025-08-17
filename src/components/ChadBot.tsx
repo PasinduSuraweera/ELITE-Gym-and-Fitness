@@ -186,11 +186,6 @@ const ChadBot = () => {
           className="relative bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white rounded-full w-16 h-16 shadow-2xl transition-all duration-300 hover:scale-110 group border-2 border-white/20"
         >
           <MessageCircle className="h-6 w-6" />
-          
-          {/* Notification badge */}
-          <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold animate-bounce">
-            !
-          </div>
         </Button>
         
         {/* Enhanced tooltip */}
