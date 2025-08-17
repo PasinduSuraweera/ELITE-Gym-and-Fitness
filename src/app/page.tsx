@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import ChadBot from "@/components/ChadBot";

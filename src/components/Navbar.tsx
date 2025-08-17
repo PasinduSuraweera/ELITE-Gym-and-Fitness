@@ -169,13 +169,13 @@ const Navbar = () => {
           {userRole === "admin" && (
             <Link
               href="/admin"
-              className={`text-yellow-400 hover:text-yellow-300 transition-colors text-sm font-medium relative pb-2 ${
+              className={`text-red-400 hover:text-red-300 transition-colors text-sm font-medium relative pb-2 ${
                 pathname.startsWith("/admin") ? "" : ""
               }`}
             >
               <span>Admin Panel</span>
               {pathname.startsWith("/admin") && (
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-400"></div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-400"></div>
               )}
             </Link>
           )}
@@ -183,13 +183,13 @@ const Navbar = () => {
           {(userRole === "trainer" || userRole === "admin") && (
             <Link
               href="/trainer"
-              className={`text-blue-400 hover:text-blue-300 transition-colors text-sm font-medium relative pb-2 ${
+              className={`text-orange-400 hover:text-orange-300 transition-colors text-sm font-medium relative pb-2 ${
                 pathname === "/trainer" || pathname.startsWith("/trainer/") ? "" : ""
               }`}
             >
               <span>Trainer Panel</span>
               {(pathname === "/trainer" || pathname.startsWith("/trainer/")) && (
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-400"></div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-400"></div>
               )}
             </Link>
           )}

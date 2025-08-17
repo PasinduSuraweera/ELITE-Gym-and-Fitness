@@ -64,6 +64,28 @@ const ChadBot = () => {
   const getResponse = (userInput: string): string => {
     const input = userInput.toLowerCase().trim();
 
+    // Bad words filter (simple example, expand as needed)
+    const badWords = [
+      "fuck", "shit", "bitch", "asshole", "bastard", "dick", "crap", "piss", "damn", "cunt", "fag", "slut", "whore"
+    ];
+    for (const word of badWords) {
+      if (input.includes(word)) {
+        return "Whoa, bro! 🚫 Let's keep it ELITE and positive in here. No bad vibes or language—ChadBot's all about respect and GAINS! 💪";
+      }
+    }
+
+    // Positive/neutral words
+    if (["great", "cool", "yeah", "awesome", "nice", "good", "ok", "okay", "fine", "super", "amazing", "thanks", "thank you", "love it", "perfect", "sweet", "dope", "lit", "sick", "alright", "yup", "sure", "wow", "fantastic", "excellent", "brilliant", "legendary", "epic", "solid", "respect"].some(w => input === w || input.includes(w))) {
+      const hypeReplies = [
+        "That's what I like to hear, CHAMP! Keep that energy up! 💪🔥",
+        "YEAH BUDDY! That's the ELITE spirit! Let's crush it! 🏋️‍♂️",
+        "Love the vibes! Stay LEGENDARY! 🤙",
+        "You got this, bro! Keep it going! 🚀",
+        "Respect! That's how ELITE members roll! 🙌"
+      ];
+      return hypeReplies[Math.floor(Math.random() * hypeReplies.length)];
+    }
+
     // Memberships & Pricing (Most specific first)
     if (input.includes("membership") || input.includes("price") || input.includes("cost") || input.includes("rupee") || input.includes("rs.") || input.includes("rs ") || input === "rs" || input.includes("fee") || input.includes("subscription") || input.includes("monthly") || input.includes("payment") || input.includes("how much")) {
       return "Bro, our memberships are ABSOLUTELY FIRE! 🔥💰 Check these ELITE packages:\n\n🏃‍♂️ **BEGINNER** - Rs. 2,500/month\n✅ Perfect for fitness newbies\n✅ Basic gym access & guided workouts\n✅ Off-peak hours access\n\n💪 **BASIC** - Rs. 2,500/month\n✅ Full gym equipment access\n✅ All operating hours\n✅ Standard facilities\n\n💑 **COUPLE** - Rs. 4,500/month\n✅ Train together, stay together!\n✅ Couple workout programs\n✅ Premium facilities for 2\n\n👑 **PREMIUM** - Rs. 3,000/month (MOST POPULAR!)\n✅ Ultimate fitness experience\n✅ Personal training sessions\n✅ Spa & sauna access\n✅ 24/7 gym access\n\nAll include AI workout generation, trainer bookings & ELITE community access! Which one's calling your name?";
@@ -86,7 +108,7 @@ const ChadBot = () => {
         (input.includes("generate") && (input.includes("workout") || input.includes("program"))) ||
         (input.includes("custom") && (input.includes("workout") || input.includes("program"))) ||
         input.includes("personalized workout") || input.includes("workout plan") || input.includes("program generate")) {
-      return "Dude, our AI is NEXT LEVEL INSANE! 🤖💪🚀 We've already generated 300+ personalized plans and counting! Our AI is like having a genius trainer + nutritionist combo:\n\n🔥 **Custom Workout Routines**\n✅ Tailored to YOUR specific goals\n✅ Adapts as you get STRONGER\n✅ Progressive overload built-in\n\n🥗 **Personalized Diet Plans**\n✅ Delicious meals that fuel gains\n✅ Macro calculations done for you\n✅ Meal prep made EASY\n\n📊 **Smart Progress Tracking**\n✅ AI analyzes your improvements\n✅ Adjusts plans automatically\n✅ Keeps you motivated 24/7\n\n🎯 **Goal-Specific Programs**\n✅ Weight loss, muscle gain, strength\n✅ Sport-specific training\n✅ Injury recovery protocols\n\nIt's like having a personal trainer in your pocket that NEVER sleeps! Ready to get your custom AI-generated plan?";
+      return "Dude, our AI is NEXT LEVEL INSANE! 🤖💪🚀 We've already generated 300+ personalized plans and counting! Our AI is like having a genius trainer + nutritionist combo:\n\n🔥 **Custom Workout Routines**\n✅ Tailored to YOUR specific goals\n✅ Adapts as you get STRONGER\n✅ Progressive overload built-in\n\n🥗 **Personalized Diet Plans & Recipes**\n✅ Delicious meals that fuel gains\n✅ Macro calculations done for you\n✅ Meal prep made EASY\n✅ Custom recipes for your goals and taste\n\n🎯 **Goal-Specific Programs**\n✅ Weight loss, muscle gain, strength\n✅ Sport-specific training\n✅ Injury recovery protocols\n\nIt's like having a personal trainer in your pocket that NEVER sleeps! Ready to get your custom AI-generated plan?";
     }
 
     // Recipes & Nutrition
@@ -165,14 +187,29 @@ const ChadBot = () => {
   if (!isOpen) {
     return (
       <div className="fixed bottom-6 right-6 z-50">
+        {/* Pulsing attention ring */}
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-full animate-ping"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-full animate-pulse"></div>
+        
         <Button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white rounded-full w-16 h-16 shadow-2xl transition-all duration-300 hover:scale-110 group"
+          className="relative bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white rounded-full w-16 h-16 shadow-2xl transition-all duration-300 hover:scale-110 group border-2 border-white/20"
         >
           <MessageCircle className="h-6 w-6" />
+          
+          {/* Notification badge */}
+          <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold animate-bounce">
+            !
+          </div>
         </Button>
-        <div className="absolute bottom-full right-0 mb-2 bg-black/90 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-          Chat with ChadBot! 💪
+        
+        {/* Enhanced tooltip */}
+        <div className="absolute bottom-full right-0 mb-4 bg-gradient-to-r from-red-600 to-orange-600 text-white px-4 py-3 rounded-xl text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-white/20 group-hover:scale-105">
+          <div className="font-bold">💪 Chat with ChadBot!</div>
+          <div className="text-xs text-white/80">Your fitness bro is here to help</div>
+          
+          {/* Tooltip arrow */}
+          <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-orange-600"></div>
         </div>
       </div>
     );
