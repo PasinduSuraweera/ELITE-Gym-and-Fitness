@@ -74,17 +74,7 @@ const ChadBot = () => {
       }
     }
 
-    // Positive/neutral words
-    if (["great", "cool", "yeah", "awesome", "nice", "good", "ok", "okay", "fine", "super", "amazing", "thanks", "thank you", "love it", "perfect", "sweet", "dope", "lit", "sick", "alright", "yup", "sure", "wow", "fantastic", "excellent", "brilliant", "legendary", "epic", "solid", "respect"].some(w => input === w || input.includes(w))) {
-      const hypeReplies = [
-        "That's what I like to hear, CHAMP! Keep that energy up! 💪🔥",
-        "YEAH BUDDY! That's the ELITE spirit! Let's crush it! 🏋️‍♂️",
-        "Love the vibes! Stay LEGENDARY! 🤙",
-        "You got this, bro! Keep it going! 🚀",
-        "Respect! That's how ELITE members roll! 🙌"
-      ];
-      return hypeReplies[Math.floor(Math.random() * hypeReplies.length)];
-    }
+    
 
     // Memberships & Pricing (Most specific first)
     if (input.includes("membership") || input.includes("price") || input.includes("cost") || input.includes("rupee") || input.includes("rs.") || input.includes("rs ") || input === "rs" || input.includes("fee") || input.includes("subscription") || input.includes("monthly") || input.includes("payment") || input.includes("how much")) {
