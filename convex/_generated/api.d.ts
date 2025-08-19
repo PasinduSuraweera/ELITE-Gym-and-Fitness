@@ -15,9 +15,11 @@ import type {
 } from "convex/server";
 import type * as availability from "../availability.js";
 import type * as bookings from "../bookings.js";
+import type * as cart from "../cart.js";
 import type * as http from "../http.js";
 import type * as marketplace from "../marketplace.js";
 import type * as memberships from "../memberships.js";
+import type * as orders from "../orders.js";
 import type * as plans from "../plans.js";
 import type * as recipes from "../recipes.js";
 import type * as reviews from "../reviews.js";
@@ -36,9 +38,11 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   availability: typeof availability;
   bookings: typeof bookings;
+  cart: typeof cart;
   http: typeof http;
   marketplace: typeof marketplace;
   memberships: typeof memberships;
+  orders: typeof orders;
   plans: typeof plans;
   recipes: typeof recipes;
   reviews: typeof reviews;

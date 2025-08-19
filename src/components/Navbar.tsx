@@ -8,11 +8,16 @@ import { Button } from "./ui/button";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useState, useEffect } from "react";
+import { ShoppingCart } from "lucide-react";
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
   const pathname = usePathname();
   const userRole = useQuery(api.users.getCurrentUserRole);
+  const cartSummary = useQuery(
+    api.cart.getCartSummary,
+    user?.id ? { clerkId: user.id } : "skip"
+  );
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -211,6 +216,24 @@ const Navbar = () => {
 
         {/* AUTH BUTTONS */}
         <div className="flex items-center gap-4" suppressHydrationWarning>
+          {/* Shopping Cart Icon */}
+          {isSignedIn && (
+            <Link href="/marketplace/cart" className="relative">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white hover:text-red-500 hover:bg-transparent p-2"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {cartSummary && cartSummary.totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {cartSummary.totalItems > 9 ? "9+" : cartSummary.totalItems}
+                  </span>
+                )}
+              </Button>
+            </Link>
+          )}
+
           {isSignedIn ? (
             <>
               <Link

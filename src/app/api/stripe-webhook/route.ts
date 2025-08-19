@@ -55,11 +55,15 @@ export async function POST(req: NextRequest) {
     }
 
     console.log("🔄 Processing webhook event type:", event.type);
+    console.log("📋 Event data preview:", JSON.stringify(event.data, null, 2).substring(0, 500) + "...");
 
     switch (event.type) {
       case "checkout.session.completed":
         console.log("💳 Processing checkout.session.completed");
         const session = event.data.object as Stripe.Checkout.Session;
+        console.log("📋 Session metadata:", JSON.stringify(session.metadata, null, 2));
+        console.log("📋 Session mode:", session.mode);
+        console.log("📋 Session ID:", session.id);
         await handleSessionCompleted(session);
         break;
 
@@ -69,8 +73,20 @@ export async function POST(req: NextRequest) {
         console.log("Payment succeeded:", paymentIntent.id);
         break;
 
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted":
+      case "invoice.payment_succeeded":
+      case "invoice.payment_failed":
+        console.log(`📋 Subscription/Invoice event: ${event.type} - handled elsewhere`);
+        break;
+
       default:
         console.log(`⚠️ Unhandled event type: ${event.type}`);
+        console.log("📋 Available event types in your webhook should include:");
+        console.log("   - checkout.session.completed (for marketplace orders)");
+        console.log("   - customer.subscription.* (for memberships)");
+        console.log("   - invoice.payment_* (for recurring payments)");
     }
 
     console.log("✅ Webhook processed successfully");
@@ -99,13 +115,97 @@ async function handleSessionCompleted(session: Stripe.Checkout.Session) {
       console.log("🏋️ Processing membership subscription");
       await handleMembershipSession(session);
     } else if (session.mode === "payment") {
-      console.log("📅 Processing booking payment");
-      await handleBookingSession(session);
+      console.log("📅 Processing payment session");
+      
+      // Check if this is a marketplace order or booking
+      if (session.metadata?.type === "marketplace_order") {
+        console.log("🛒 Processing marketplace order");
+        await handleMarketplaceSession(session);
+      } else {
+        console.log("📅 Processing booking payment");
+        await handleBookingSession(session);
+      }
     } else {
       console.log("⚠️ Unknown session mode:", session.mode);
     }
   } catch (error) {
     console.error("Error processing session completion:", error);
+  }
+}
+
+async function handleMarketplaceSession(session: Stripe.Checkout.Session) {
+  try {
+    console.log("🔄 Starting marketplace order processing...");
+    console.log("📋 Session metadata:", JSON.stringify(session.metadata, null, 2));
+    console.log("📋 Session payment status:", session.payment_status);
+    console.log("📋 Session amount total:", session.amount_total);
+    
+    // Verify payment was successful
+    if (session.payment_status !== 'paid') {
+      console.error("❌ Payment not completed. Status:", session.payment_status);
+      return;
+    }
+
+    const {
+      clerkId,
+      shippingAddress,
+    } = session.metadata!;
+
+    if (!clerkId) {
+      console.error("❌ No clerkId in marketplace session metadata");
+      console.error("📋 Available metadata keys:", Object.keys(session.metadata || {}));
+      return;
+    }
+
+    if (!shippingAddress) {
+      console.error("❌ No shipping address in marketplace session metadata");
+      console.error("📋 Available metadata keys:", Object.keys(session.metadata || {}));
+      return;
+    }
+
+    let parsedShippingAddress;
+    try {
+      parsedShippingAddress = JSON.parse(shippingAddress);
+      console.log("✅ Shipping address parsed:", parsedShippingAddress);
+    } catch (error) {
+      console.error("❌ Error parsing shipping address:", error);
+      console.error("❌ Raw shipping address:", shippingAddress);
+      return;
+    }
+
+    console.log("🔄 Creating order for user:", clerkId);
+    console.log("🔄 Convex URL:", process.env.NEXT_PUBLIC_CONVEX_URL);
+    
+    try {
+      // Create order from cart
+      const orderResult = await convex.mutation(api.orders.createOrderFromCart, {
+        clerkId,
+        shippingAddress: parsedShippingAddress,
+        stripeSessionId: session.id,
+      });
+
+      console.log("✅ Order created successfully:", orderResult);
+      console.log("✅ Order number:", orderResult.orderNumber);
+      console.log("✅ Order ID:", orderResult.orderId);
+
+      // Update payment status
+      const paymentUpdate = await convex.mutation(api.orders.updatePaymentStatus, {
+        stripeSessionId: session.id,
+        paymentStatus: "paid",
+        stripePaymentIntentId: session.payment_intent as string,
+      });
+
+      console.log("✅ Payment status updated successfully:", paymentUpdate);
+      console.log("✅ Final order number:", orderResult.orderNumber);
+      
+    } catch (convexError) {
+      console.error("❌ Error with Convex operations:", convexError);
+      console.error("❌ Convex error details:", convexError instanceof Error ? convexError.message : String(convexError));
+      throw convexError; // Re-throw to be caught by outer try-catch
+    }
+  } catch (error) {
+    console.error("❌ Error creating marketplace order:", error);
+    console.error("❌ Error stack:", error instanceof Error ? error.stack : "No stack trace");
   }
 }
 

@@ -283,4 +283,75 @@ export default defineSchema({
     .index("by_trainer", ["trainerId"])
     .index("by_user", ["userId"])
     .index("by_rating", ["rating"]),
+
+  cartItems: defineTable({
+    userId: v.id("users"),
+    userClerkId: v.string(),
+    productId: v.id("marketplaceItems"),
+    quantity: v.number(),
+    priceAtTime: v.number(), // Price when added to cart in LKR
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user_clerk", ["userClerkId"])
+    .index("by_user_product", ["userClerkId", "productId"])
+    .index("by_user", ["userId"]),
+
+  orders: defineTable({
+    userId: v.id("users"),
+    userClerkId: v.string(),
+    orderNumber: v.string(), // Auto-generated order number
+    items: v.array(
+      v.object({
+        productId: v.id("marketplaceItems"),
+        productName: v.string(),
+        quantity: v.number(),
+        pricePerItem: v.number(), // Price in LKR at time of order
+        totalPrice: v.number(), // quantity * pricePerItem
+      })
+    ),
+    subtotal: v.number(), // Sum of all item totals in LKR
+    shippingCost: v.number(), // Shipping cost in LKR
+    tax: v.number(), // Tax amount in LKR
+    totalAmount: v.number(), // Final total in LKR
+    currency: v.string(), // "LKR"
+    status: v.union(
+      v.literal("pending"),
+      v.literal("confirmed"),
+      v.literal("processing"),
+      v.literal("shipped"),
+      v.literal("delivered"),
+      v.literal("cancelled"),
+      v.literal("refunded")
+    ),
+    paymentStatus: v.union(
+      v.literal("pending"),
+      v.literal("paid"),
+      v.literal("failed"),
+      v.literal("refunded")
+    ),
+    stripeSessionId: v.optional(v.string()),
+    stripePaymentIntentId: v.optional(v.string()),
+    shippingAddress: v.object({
+      name: v.string(),
+      phone: v.string(),
+      addressLine1: v.string(),
+      addressLine2: v.optional(v.string()),
+      city: v.string(),
+      postalCode: v.string(),
+      country: v.string(),
+      email: v.optional(v.string()), // Add email field to match what Stripe sends
+    }),
+    estimatedDelivery: v.optional(v.number()),
+    trackingNumber: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_clerk", ["userClerkId"])
+    .index("by_order_number", ["orderNumber"])
+    .index("by_status", ["status"])
+    .index("by_payment_status", ["paymentStatus"])
+    .index("by_stripe_session", ["stripeSessionId"]),
 });

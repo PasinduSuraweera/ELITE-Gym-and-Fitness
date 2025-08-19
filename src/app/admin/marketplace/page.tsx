@@ -13,7 +13,9 @@ import {
   Star, 
   Package,
   DollarSign,
-  TrendingUp
+  TrendingUp,
+  X,
+  Plus
 } from "lucide-react";
 
 export default function MarketplaceAdminPage() {
@@ -35,14 +37,11 @@ export default function MarketplaceAdminPage() {
   }, []);
 
   const formatPrice = (price: number | undefined) => {
-    if (!mounted || price === undefined) return '$0';
+    if (!mounted || price === undefined) return 'Rs. 0';
     try {
-      return price.toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      });
+      return `Rs. ${price.toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     } catch {
-      return '$0';
+      return 'Rs. 0';
     }
   };
 
@@ -52,8 +51,54 @@ export default function MarketplaceAdminPage() {
   const updateItem = useMutation(api.marketplace.updateMarketplaceItem);
   const deleteItem = useMutation(api.marketplace.deleteMarketplaceItem);
 
+  const handleAddProduct = () => {
+    setEditingItem(null);
+    setFormData({
+      name: "",
+      description: "",
+      price: 0,
+      category: "supplements",
+      imageUrl: "",
+      stock: 0,
+      featured: false,
+    });
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditingItem(null);
+    setFormData({
+      name: "",
+      description: "",
+      price: 0,
+      category: "supplements",
+      imageUrl: "",
+      stock: 0,
+      featured: false,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!formData.name.trim()) {
+      alert("Product name is required");
+      return;
+    }
+    if (!formData.description.trim()) {
+      alert("Product description is required");
+      return;
+    }
+    if (formData.price <= 0) {
+      alert("Price must be greater than 0");
+      return;
+    }
+    if (formData.stock < 0) {
+      alert("Stock cannot be negative");
+      return;
+    }
     
     try {
       if (editingItem) {
@@ -61,8 +106,10 @@ export default function MarketplaceAdminPage() {
           itemId: editingItem._id,
           ...formData,
         });
+        alert("Product updated successfully!");
       } else {
         await createItem(formData);
+        alert("Product created successfully!");
       }
       
       setShowModal(false);
@@ -128,9 +175,6 @@ export default function MarketplaceAdminPage() {
     <AdminLayout 
       title="Marketplace" 
       subtitle="Manage your gym's product catalog"
-      showAddButton
-      onAddClick={() => setShowModal(true)}
-      addButtonText="Add Product"
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -173,6 +217,17 @@ export default function MarketplaceAdminPage() {
             <DollarSign className="h-8 w-8 text-red-400" />
           </div>
         </div>
+      </div>
+
+      {/* Add Product Button */}
+      <div className="mb-8">
+        <Button
+          onClick={handleAddProduct}
+          className="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3"
+        >
+          <Plus className="h-5 w-5 mr-2" />
+          Add New Product
+        </Button>
       </div>
 
       {/* Products Table */}
@@ -221,7 +276,7 @@ export default function MarketplaceAdminPage() {
                     <span className="capitalize text-gray-300">{item.category}</span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-white font-medium">${item.price}</span>
+                    <span className="text-white font-medium">Rs. {item.price.toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </td>
                   <td className="px-6 py-4">
                     <span className={`text-sm ${item.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -285,9 +340,18 @@ export default function MarketplaceAdminPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-900 border border-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-white mb-6">
-                {editingItem ? "Edit Product" : "Add New Product"}
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-white">
+                  {editingItem ? "Edit Product" : "Add New Product"}
+                </h2>
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -337,7 +401,7 @@ export default function MarketplaceAdminPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">
-                      Price ($) *
+                      Price (LKR) *
                     </label>
                     <input
                       type="number"
@@ -397,10 +461,7 @@ export default function MarketplaceAdminPage() {
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                      setEditingItem(null);
-                    }}
+                    onClick={handleCloseModal}
                     className="flex-1 bg-gray-700 hover:bg-gray-600 text-white"
                   >
                     Cancel
