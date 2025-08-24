@@ -14,15 +14,20 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as availability from "../availability.js";
+import type * as blog from "../blog.js";
+import type * as blogComments from "../blogComments.js";
 import type * as bookings from "../bookings.js";
 import type * as cart from "../cart.js";
 import type * as http from "../http.js";
 import type * as marketplace from "../marketplace.js";
 import type * as memberships from "../memberships.js";
+import type * as newsletter from "../newsletter.js";
 import type * as orders from "../orders.js";
 import type * as plans from "../plans.js";
 import type * as recipes from "../recipes.js";
 import type * as reviews from "../reviews.js";
+import type * as seedBlog from "../seedBlog.js";
+import type * as seedBlogTest from "../seedBlogTest.js";
 import type * as trainerProfiles from "../trainerProfiles.js";
 import type * as trainers from "../trainers.js";
 import type * as users from "../users.js";
@@ -37,15 +42,20 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   availability: typeof availability;
+  blog: typeof blog;
+  blogComments: typeof blogComments;
   bookings: typeof bookings;
   cart: typeof cart;
   http: typeof http;
   marketplace: typeof marketplace;
   memberships: typeof memberships;
+  newsletter: typeof newsletter;
   orders: typeof orders;
   plans: typeof plans;
   recipes: typeof recipes;
   reviews: typeof reviews;
+  seedBlog: typeof seedBlog;
+  seedBlogTest: typeof seedBlogTest;
   trainerProfiles: typeof trainerProfiles;
   trainers: typeof trainers;
   users: typeof users;

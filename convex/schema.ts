@@ -354,4 +354,98 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_payment_status", ["paymentStatus"])
     .index("by_stripe_session", ["stripeSessionId"]),
+
+  blogPosts: defineTable({
+    title: v.string(),
+    slug: v.string(), // URL-friendly version of title
+    excerpt: v.string(), // Short description
+    content: v.string(), // Full article content (HTML/Markdown)
+    featuredImage: v.optional(v.string()), // URL to featured image
+    category: v.union(
+      v.literal("workout-tips"),
+      v.literal("nutrition"),
+      v.literal("success-stories"),
+      v.literal("trainer-insights"),
+      v.literal("equipment-guides"),
+      v.literal("wellness"),
+      v.literal("news")
+    ),
+    tags: v.array(v.string()), // Array of tags
+    status: v.union(
+      v.literal("draft"),
+      v.literal("published"),
+      v.literal("archived")
+    ),
+    authorId: v.id("users"), // Author (admin or trainer)
+    authorName: v.string(), // Cached author name
+    authorImage: v.optional(v.string()), // Cached author image
+    readTime: v.number(), // Estimated read time in minutes
+    views: v.number(), // View count
+    likes: v.number(), // Like count
+    isFeatured: v.boolean(), // Featured on homepage
+    publishedAt: v.optional(v.number()), // When published
+    seoTitle: v.optional(v.string()), // SEO optimized title
+    seoDescription: v.optional(v.string()), // Meta description
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_status", ["status"])
+    .index("by_category", ["category"])
+    .index("by_author", ["authorId"])
+    .index("by_slug", ["slug"])
+    .index("by_featured", ["isFeatured"])
+    .index("by_published", ["publishedAt"])
+    .index("by_views", ["views"]),
+
+  blogComments: defineTable({
+    postId: v.id("blogPosts"),
+    userId: v.id("users"),
+    userClerkId: v.string(),
+    userName: v.string(), // Cached user name
+    userImage: v.optional(v.string()), // Cached user image
+    content: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("rejected")
+    ),
+    parentCommentId: v.optional(v.id("blogComments")), // For nested comments
+    likes: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_post", ["postId"])
+    .index("by_user", ["userId"])
+    .index("by_user_clerk", ["userClerkId"])
+    .index("by_status", ["status"])
+    .index("by_parent", ["parentCommentId"]),
+
+  blogLikes: defineTable({
+    postId: v.optional(v.id("blogPosts")),
+    commentId: v.optional(v.id("blogComments")),
+    userId: v.id("users"),
+    userClerkId: v.string(),
+    type: v.union(v.literal("post"), v.literal("comment")),
+    createdAt: v.number(),
+  })
+    .index("by_post", ["postId"])
+    .index("by_comment", ["commentId"])
+    .index("by_user", ["userId"])
+    .index("by_user_clerk", ["userClerkId"])
+    .index("by_type", ["type"]),
+
+  newsletter: defineTable({
+    email: v.string(),
+    name: v.optional(v.string()),
+    status: v.union(
+      v.literal("subscribed"),
+      v.literal("unsubscribed"),
+      v.literal("pending")
+    ),
+    source: v.string(), // Where they subscribed from
+    subscribedAt: v.number(),
+    unsubscribedAt: v.optional(v.number()),
+  })
+    .index("by_email", ["email"])
+    .index("by_status", ["status"]),
 });

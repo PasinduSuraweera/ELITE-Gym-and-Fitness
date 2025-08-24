@@ -137,24 +137,13 @@ const Navbar = () => {
             )}
           </Link>
           <Link
-            href="/reviews"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
-              pathname === "/reviews" ? "" : ""
-            }`}
-          >
-            <span>Reviews</span>
-            {pathname === "/reviews" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
-            )}
-          </Link>
-          <Link
             href="/blog"
             className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
-              pathname === "/blog" ? "" : ""
+              pathname.startsWith("/blog") ? "" : ""
             }`}
           >
             <span>Blog</span>
-            {pathname === "/blog" && (
+            {pathname.startsWith("/blog") && (
               <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
             )}
           </Link>

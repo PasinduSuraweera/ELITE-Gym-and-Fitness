@@ -9,6 +9,7 @@ import { Id } from "../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/input";
+import { UserLayout } from "@/components/UserLayout";
 import { Star, Calendar, Clock, User, MessageCircle, Trophy } from "lucide-react";
 
 interface ReviewFormData {
@@ -104,35 +105,23 @@ export default function ReviewsPage() {
 
   if (!user) {
     return (
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
-        <div className="flex items-center justify-center min-h-screen relative z-10">
+      <UserLayout 
+        title="Reviews & Feedback"
+        subtitle="Please sign in to view and write reviews"
+      >
+        <div className="flex items-center justify-center min-h-[50vh]">
           <div className="text-white text-xl">Please sign in to view reviews.</div>
         </div>
-      </div>
+      </UserLayout>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20" suppressHydrationWarning></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
-      
-      <div className="container mx-auto px-4 py-32 relative z-10" suppressHydrationWarning>
-        {/* Header */}
-        <div className="text-center mb-12" suppressHydrationWarning>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            <span className="text-white">Reviews & </span>
-            <span className="text-red-500">Feedback</span>
-          </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Share your experience and help others choose their trainer
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <UserLayout 
+      title="Reviews & Feedback"
+      subtitle="Share your experience and help others choose their trainer"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Reviewable Sessions */}
           <div>
             <h2 className="text-2xl font-semibold text-white mb-6">Sessions to Review</h2>
@@ -387,7 +376,6 @@ export default function ReviewsPage() {
             </Card>
           </div>
         )}
-      </div>
-    </div>
+    </UserLayout>
   );
 }

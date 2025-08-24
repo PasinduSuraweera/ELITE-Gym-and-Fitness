@@ -8,19 +8,19 @@ import {
   Users, 
   UserCheck, 
   ShoppingBag, 
-  BarChart3, 
   Settings,
   Bell,
   Search,
   Plus,
-  ChefHat
+  ChefHat,
+  FileText
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   subtitle?: string;
   showAddButton?: boolean;
   onAddClick?: () => void;
@@ -44,10 +44,8 @@ export function AdminLayout({
     { href: "/admin/trainer-applications", icon: UserCheck, label: "Trainers", active: pathname === "/admin/trainer-applications" },
     { href: "/admin/memberships", icon: Settings, label: "Memberships", active: pathname === "/admin/memberships" },
     { href: "/admin/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/admin/recipes" },
+    { href: "/admin/blog", icon: FileText, label: "Blog", active: pathname.startsWith("/admin/blog") },
     { href: "/admin/marketplace", icon: ShoppingBag, label: "Marketplace", active: pathname === "/admin/marketplace" },
-    { href: "/admin/content", icon: BarChart3, label: "Content", active: pathname === "/admin/content" },
-    { href: "/admin/equipment", icon: Settings, label: "Equipment", active: pathname === "/admin/equipment" },
-    { href: "/admin/revenue", icon: BarChart3, label: "Revenue", active: pathname === "/admin/revenue" },
   ];
 
   return (
@@ -66,11 +64,15 @@ export function AdminLayout({
                 <p className="text-gray-400 text-xs">Admin Dashboard</p>
               </div>
             </div>
-            <div className="h-8 w-px bg-gray-700 mx-2"></div>
-            <div>
-              <h2 className="text-xl font-semibold text-white">{title}</h2>
-              {subtitle && <p className="text-gray-400 text-sm">{subtitle}</p>}
-            </div>
+            {title && (
+              <>
+                <div className="h-8 w-px bg-gray-700 mx-2"></div>
+                <div>
+                  <h2 className="text-xl font-semibold text-white">{title}</h2>
+                  {subtitle && <p className="text-gray-400 text-sm">{subtitle}</p>}
+                </div>
+              </>
+            )}
           </div>
           
           <div className="flex items-center gap-4">

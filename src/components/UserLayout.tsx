@@ -12,7 +12,8 @@ import {
   Plus,
   Target,
   Activity,
-  Package
+  Package,
+  Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -40,6 +41,7 @@ export function UserLayout({
     { href: "/profile/fitness-plans", icon: Dumbbell, label: "Workout Plans", active: pathname === "/profile/fitness-plans" },
     { href: "/profile/diet-plans", icon: Apple, label: "Diet Plans", active: pathname === "/profile/diet-plans" },
     { href: "/profile/training-sessions", icon: Activity, label: "Training Sessions", active: pathname === "/profile/training-sessions" },
+    { href: "/reviews", icon: Star, label: "Reviews", active: pathname === "/reviews" },
     { href: "/profile/orders", icon: Package, label: "Orders", active: pathname === "/profile/orders" },
     { href: "/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/recipes" },
     { href: "/generate-program", icon: Target, label: "Generate Program", active: pathname === "/generate-program" },
@@ -69,7 +71,7 @@ export function UserLayout({
                   Dashboard
                 </h3>
                 <nav className="space-y-2">
-                  {sidebarItems.slice(0, 5).map((item) => (
+                  {sidebarItems.slice(0, 6).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -89,7 +91,7 @@ export function UserLayout({
                   Services
                 </h3>
                 <nav className="space-y-2">
-                  {sidebarItems.slice(5).map((item) => (
+                  {sidebarItems.slice(6).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
