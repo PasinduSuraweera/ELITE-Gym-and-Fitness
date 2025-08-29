@@ -178,46 +178,46 @@ const ChadBot = () => {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         {/* Pulsing attention ring */}
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-full animate-ping"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-full animate-pulse"></div>
+        <div className="absolute inset-0 bg-primary/30 rounded-full animate-ping"></div>
+        <div className="absolute inset-0 bg-primary/20 rounded-full animate-pulse"></div>
         
         <Button
           onClick={() => setIsOpen(true)}
-          className="relative bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white rounded-full w-16 h-16 shadow-2xl transition-all duration-300 hover:scale-110 group border-2 border-white/20"
+          className="relative bg-primary hover:bg-primary/90 text-primary-foreground rounded-full w-16 h-16 shadow-2xl transition-all duration-300 hover:scale-110 group border-2 border-border"
         >
           <MessageCircle className="h-6 w-6" />
         </Button>
         
         {/* Enhanced tooltip */}
-        <div className="absolute bottom-full right-0 mb-4 bg-gradient-to-r from-red-600 to-orange-600 text-white px-4 py-3 rounded-xl text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-white/20 group-hover:scale-105">
+        <div className="absolute bottom-full right-0 mb-4 bg-primary text-primary-foreground px-4 py-3 rounded-xl text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl border border-border group-hover:scale-105">
           <div className="font-bold">💪 Chat with ChadBot!</div>
-          <div className="text-xs text-white/80">Your fitness bro is here to help</div>
+          <div className="text-xs opacity-80">Your fitness bro is here to help</div>
           
           {/* Tooltip arrow */}
-          <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-orange-600"></div>
+          <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-primary"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-96 h-[500px] bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+    <div className="fixed bottom-6 right-6 z-50 w-96 h-[500px] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 to-orange-600 p-4 flex items-center justify-between">
+      <div className="bg-primary p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-            <Dumbbell className="h-5 w-5 text-white" />
+          <div className="w-10 h-10 bg-primary-foreground/20 rounded-full flex items-center justify-center">
+            <Dumbbell className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h3 className="text-white font-bold">ChadBot</h3>
-            <p className="text-white/80 text-sm">Your fitness bro 💪</p>
+            <h3 className="text-primary-foreground font-bold">ChadBot</h3>
+            <p className="text-primary-foreground/80 text-sm">Your fitness bro 💪</p>
           </div>
         </div>
         <Button
           onClick={() => setIsOpen(false)}
           variant="ghost"
           size="sm"
-          className="text-white hover:bg-white/20"
+          className="text-primary-foreground hover:bg-primary-foreground/20"
         >
           <X className="h-4 w-4" />
         </Button>
@@ -233,8 +233,8 @@ const ChadBot = () => {
             <div
               className={`max-w-[80%] p-3 rounded-2xl ${
                 message.isBot
-                  ? 'bg-gray-800 text-white'
-                  : 'bg-gradient-to-r from-red-600 to-orange-600 text-white'
+                  ? 'bg-muted text-foreground'
+                  : 'bg-primary text-primary-foreground'
               }`}
             >
               <p className="text-sm whitespace-pre-line">{message.text}</p>
@@ -250,11 +250,11 @@ const ChadBot = () => {
         
         {isTyping && (
           <div className="flex justify-start">
-            <div className="bg-gray-800 text-white p-3 rounded-2xl">
+            <div className="bg-muted text-foreground p-3 rounded-2xl">
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
               </div>
             </div>
           </div>
@@ -263,7 +263,7 @@ const ChadBot = () => {
       </div>
 
       {/* Input */}
-      <div className="p-4 border-t border-gray-700">
+      <div className="p-4 border-t border-border">
         <div className="flex gap-2">
           <input
             type="text"
@@ -271,13 +271,13 @@ const ChadBot = () => {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask ChadBot anything..."
-            className="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             disabled={isTyping}
           />
           <Button
             onClick={handleSendMessage}
             disabled={!inputValue.trim() || isTyping}
-            className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white px-3"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-3"
           >
             <Send className="h-4 w-4" />
           </Button>

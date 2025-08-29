@@ -47,17 +47,76 @@
   /* Base Variables */
   --radius: 0.625rem;
 
-  /* Dark Gym Theme Colors */
-  --gym-black: #000000;
-  --gym-dark: #0a0a0a;
+  /* Light Theme Colors - Gym inspired */
+  --gym-white: #ffffff;
+  --gym-light-gray: #f8fafc;
+  --gym-medium-gray: #e2e8f0;
+  --gym-dark-gray: #64748b;
   --gym-red: #dc2626;
   --gym-red-bright: #ef4444;
   --gym-orange: #ea580c;
   --gym-orange-bright: #fb923c;
+  --gym-blue: #2563eb;
+  --gym-blue-bright: #3b82f6;
+
+  /* Light Theme */
+  --background: var(--gym-white);
+  --foreground: #0f172a;
+
+  /* Card and popover elements */
+  --card: var(--gym-white);
+  --card-foreground: #0f172a;
+  --popover: var(--gym-white);
+  --popover-foreground: #0f172a;
+
+  /* Primary - Red */
+  --primary: var(--gym-red);
+  --primary-foreground: #ffffff;
+
+  /* Secondary - Orange */
+  --secondary: var(--gym-orange);
+  --secondary-foreground: #ffffff;
+
+  /* Accent - Orange bright */
+  --accent: var(--gym-light-gray);
+  --accent-foreground: #0f172a;
+
+  /* Muted elements */
+  --muted: var(--gym-medium-gray);
+  --muted-foreground: var(--gym-dark-gray);
+
+  /* System colors */
+  --destructive: #ef4444;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: var(--gym-red);
+
+  /* Chart colors - light theme */
+  --chart-1: var(--gym-red);
+  --chart-2: var(--gym-orange);
+  --chart-3: var(--gym-red-bright);
+  --chart-4: var(--gym-orange-bright);
+  --chart-5: #f97316;
+
+  /* Sidebar colors */
+  --sidebar: var(--gym-light-gray);
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: var(--gym-red);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--gym-orange);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: var(--gym-red);
+}
+
+.dark {
+  /* Dark Gym Theme Colors */
+  --gym-black: #000000;
+  --gym-dark: #0a0a0a;
   --gym-gray: #1f2937;
   --gym-gray-light: #374151;
 
-  /* Background */
+  /* Dark Theme Background */
   --background: var(--gym-black);
   --foreground: #ffffff;
 
@@ -89,7 +148,7 @@
   --input: rgba(220, 38, 38, 0.2);
   --ring: var(--gym-red);
 
-  /* Chart colors - gym theme */
+  /* Chart colors - dark theme */
   --chart-1: var(--gym-red);
   --chart-2: var(--gym-orange);
   --chart-3: var(--gym-red-bright);
@@ -97,75 +156,14 @@
   --chart-5: #f97316;
 
   /* Sidebar colors */
-  --sidebar: var(--cyber-dark);
+  --sidebar: var(--gym-dark);
   --sidebar-foreground: #f2f2f2;
-  --sidebar-primary: var(--cyber-blue-bright);
-  --sidebar-primary-foreground: var(--cyber-dark);
-  --sidebar-accent: var(--cyber-blue);
+  --sidebar-primary: var(--gym-red);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--gym-orange);
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(24, 206, 242, 0.2);
-  --sidebar-ring: var(--cyber-blue);
-
-  /* Custom Cyberpunk UI Variables */
-  --cyber-grid-color: rgba(24, 206, 242, 0.05);
-  --cyber-glow-primary: rgba(24, 206, 242, 0.2);
-  --cyber-glow-strong: rgba(24, 206, 242, 0.5);
-  --cyber-line-color: rgba(24, 206, 242, 0.3);
-  --cyber-terminal-bg: rgba(0, 0, 0, 0.7);
-  --cyber-text-bright: #ffffff;
-  --cyber-text-muted: rgba(242, 242, 242, 0.7);
-  --cyber-text-dim: rgba(242, 242, 242, 0.5);
-}
-
-.dark {
-  /* Background */
-  --background: var(--cyber-dark);
-  --foreground: #f2f2f2;
-
-  /* Card and popover elements */
-  --card: #111827;
-  --card-foreground: #f2f2f2;
-  --popover: #111827;
-  --popover-foreground: #f2f2f2;
-
-  /* Primary - Main blue */
-  --primary: var(--cyber-blue-bright);
-  --primary-foreground: var(--cyber-dark);
-
-  /* Secondary - Darker blue */
-  --secondary: var(--cyber-blue);
-  --secondary-foreground: #ffffff;
-
-  /* Accent - Light blue with glow */
-  --accent: var(--cyber-blue-glow);
-  --accent-foreground: var(--cyber-dark);
-
-  /* Muted elements */
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-
-  /* System colors */
-  --destructive: #ef4444;
-  --border: rgba(24, 206, 242, 0.2);
-  --input: rgba(24, 206, 242, 0.2);
-  --ring: var(--cyber-blue);
-
-  /* Chart colors - cyberpunk theme */
-  --chart-1: var(--cyber-blue-bright);
-  --chart-2: #3b82f6;
-  --chart-3: var(--cyber-blue);
-  --chart-4: #06b6d4;
-  --chart-5: #0284c7;
-
-  /* Sidebar colors */
-  --sidebar: var(--cyber-dark);
-  --sidebar-foreground: #f2f2f2;
-  --sidebar-primary: var(--cyber-blue-bright);
-  --sidebar-primary-foreground: var(--cyber-dark);
-  --sidebar-accent: var(--cyber-blue);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(24, 206, 242, 0.2);
-  --sidebar-ring: var(--cyber-blue);
+  --sidebar-border: rgba(220, 38, 38, 0.2);
+  --sidebar-ring: var(--gym-red);
 }
 
 @layer base {
@@ -191,7 +189,6 @@
   }
 }
 
-/* TODO: EXPLAIN THIS BC U PROMISED JUST IN THE FIRST SECTION */
 @keyframes slow-spin {
   from {
     transform: rotate(0deg);
