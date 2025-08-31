@@ -193,22 +193,22 @@ export default function AdminDashboard() {
     >
       {/* Enhanced Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-red-500/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Total Users</p>
-              <p className="text-3xl font-bold text-white">{totalUsers}</p>
-              <p className="text-gray-500 text-xs mt-1">{userCount} members, {trainerCount} trainers</p>
+              <p className="text-muted-foreground text-sm">Total Users</p>
+              <p className="text-3xl font-bold text-foreground">{totalUsers}</p>
+              <p className="text-muted-foreground text-xs mt-1">{userCount} members, {trainerCount} trainers</p>
             </div>
-            <Users className="h-8 w-8 text-red-500" />
+            <Users className="h-8 w-8 text-primary" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-blue-500/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Active Trainers</p>
-              <p className="text-3xl font-bold text-white">{activeTrainerCount}</p>
+              <p className="text-muted-foreground text-sm">Active Trainers</p>
+              <p className="text-3xl font-bold text-foreground">{activeTrainerCount}</p>
               <div className="flex items-center gap-1 mt-1">
                 <Star className="h-3 w-3 text-yellow-500 fill-current" />
                 <p className="text-yellow-400 text-xs">{averageTrainerRating.toFixed(1)} avg rating</p>
@@ -218,44 +218,44 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-green-500/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Active Memberships</p>
-              <p className="text-3xl font-bold text-white">{activeMemberships}</p>
+              <p className="text-muted-foreground text-sm">Active Memberships</p>
+              <p className="text-3xl font-bold text-foreground">{activeMemberships}</p>
               <p className="text-green-400 text-xs mt-1">{((activeMemberships/totalMemberships)*100 || 0).toFixed(1)}% active rate</p>
             </div>
             <Activity className="h-8 w-8 text-green-400" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-orange-500/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Healthy Recipes</p>
-              <p className="text-3xl font-bold text-white">{totalRecipes}</p>
+              <p className="text-muted-foreground text-sm">Healthy Recipes</p>
+              <p className="text-3xl font-bold text-foreground">{totalRecipes}</p>
               <p className="text-orange-400 text-xs mt-1">{recommendedRecipesCount} featured</p>
             </div>
             <ChefHat className="h-8 w-8 text-orange-400" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-purple-500/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Marketplace</p>
-              <p className="text-3xl font-bold text-white">{marketplaceStats?.activeItems || 0}</p>
+              <p className="text-muted-foreground text-sm">Marketplace</p>
+              <p className="text-3xl font-bold text-foreground">{marketplaceStats?.activeItems || 0}</p>
               <p className="text-purple-400 text-xs mt-1">{formatCurrency(marketplaceStats?.totalValue || 0)} value</p>
             </div>
             <ShoppingBag className="h-8 w-8 text-purple-400" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-yellow-500/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Monthly Revenue</p>
-              <p className="text-3xl font-bold text-white">{formatCurrency(monthlyRevenue)}</p>
+              <p className="text-muted-foreground text-sm">Monthly Revenue</p>
+              <p className="text-3xl font-bold text-foreground">{formatCurrency(monthlyRevenue)}</p>
               <p className="text-yellow-400 text-xs mt-1">+{revenueGrowth}% this month</p>
             </div>
             <DollarSign className="h-8 w-8 text-yellow-400" />
@@ -268,17 +268,17 @@ export default function AdminDashboard() {
         <div className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border border-blue-800/50 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-4">
             <Clock className="h-6 w-6 text-blue-400" />
-            <h3 className="text-lg font-semibold text-white">Pending Actions</h3>
+            <h3 className="text-lg font-semibold text-foreground">Pending Actions</h3>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 text-sm">Trainer Applications</span>
+              <span className="text-muted-foreground text-sm">Trainer Applications</span>
               <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full text-xs font-medium">
                 {pendingApplications}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 text-sm">Expired Memberships</span>
+              <span className="text-muted-foreground text-sm">Expired Memberships</span>
               <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs font-medium">
                 {expiredMemberships}
               </span>
@@ -289,15 +289,15 @@ export default function AdminDashboard() {
         <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 border border-green-800/50 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-4">
             <TrendingUp className="h-6 w-6 text-green-400" />
-            <h3 className="text-lg font-semibold text-white">Revenue Overview</h3>
+            <h3 className="text-lg font-semibold text-foreground">Revenue Overview</h3>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 text-sm">Total Active Revenue</span>
+              <span className="text-muted-foreground text-sm">Total Active Revenue</span>
               <span className="text-green-400 font-medium">{formatCurrency(totalRevenue)}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 text-sm">This Month</span>
+              <span className="text-muted-foreground text-sm">This Month</span>
               <span className="text-green-400 font-medium">{formatCurrency(monthlyRevenue)}</span>
             </div>
           </div>
@@ -306,18 +306,18 @@ export default function AdminDashboard() {
         <div className="bg-gradient-to-r from-purple-900/20 to-purple-800/20 border border-purple-800/50 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-4">
             <Award className="h-6 w-6 text-purple-400" />
-            <h3 className="text-lg font-semibold text-white">Performance</h3>
+            <h3 className="text-lg font-semibold text-foreground">Performance</h3>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 text-sm">Avg Trainer Rating</span>
+              <span className="text-muted-foreground text-sm">Avg Trainer Rating</span>
               <div className="flex items-center gap-1">
                 <Star className="h-3 w-3 text-yellow-500 fill-current" />
                 <span className="text-purple-400 font-medium">{averageTrainerRating.toFixed(1)}/5</span>
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-300 text-sm">Member Retention</span>
+              <span className="text-muted-foreground text-sm">Member Retention</span>
               <span className="text-purple-400 font-medium">{((activeMemberships/totalMemberships)*100 || 0).toFixed(1)}%</span>
             </div>
           </div>
@@ -328,27 +328,27 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Link 
           href="/admin/users"
-          className="group bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-red-500/50 transition-all duration-300"
+          className="group bg-card/50 border border-border rounded-lg p-6 hover:border-primary/50 transition-all duration-300"
         >
           <div className="flex items-center mb-4">
-            <Shield className="h-6 w-6 text-red-500 mr-3" />
-            <h3 className="text-xl font-semibold text-white group-hover:text-red-500">Manage Users</h3>
+            <Shield className="h-6 w-6 text-primary mr-3" />
+            <h3 className="text-xl font-semibold text-foreground group-hover:text-primary">Manage Users</h3>
           </div>
-          <p className="text-gray-400 mb-4">View, edit, and manage user roles and permissions</p>
-          <div className="text-red-500 text-sm font-medium">
+          <p className="text-muted-foreground mb-4">View, edit, and manage user roles and permissions</p>
+          <div className="text-primary text-sm font-medium">
             {totalUsers} total users →
           </div>
         </Link>
 
         <Link 
           href="/admin/trainer-applications"
-          className="group bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-yellow-500/50 transition-all duration-300"
+          className="group bg-card/50 border border-border rounded-lg p-6 hover:border-yellow-500/50 transition-all duration-300"
         >
           <div className="flex items-center mb-4">
             <UserCheck className="h-6 w-6 text-yellow-500 mr-3" />
-            <h3 className="text-xl font-semibold text-white group-hover:text-yellow-500">Trainer Applications</h3>
+            <h3 className="text-xl font-semibold text-foreground group-hover:text-yellow-500">Trainer Applications</h3>
           </div>
-          <p className="text-gray-400 mb-4">Review and approve trainer applications</p>
+          <p className="text-muted-foreground mb-4">Review and approve trainer applications</p>
           <div className="text-yellow-500 text-sm font-medium">
             {pendingApplications} pending →
           </div>
@@ -356,13 +356,13 @@ export default function AdminDashboard() {
 
         <Link 
           href="/admin/recipes"
-          className="group bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-orange-500/50 transition-all duration-300"
+          className="group bg-card/50 border border-border rounded-lg p-6 hover:border-orange-500/50 transition-all duration-300"
         >
           <div className="flex items-center mb-4">
             <ChefHat className="h-6 w-6 text-orange-500 mr-3" />
-            <h3 className="text-xl font-semibold text-white group-hover:text-orange-500">Healthy Recipes</h3>
+            <h3 className="text-xl font-semibold text-foreground group-hover:text-orange-500">Healthy Recipes</h3>
           </div>
-          <p className="text-gray-400 mb-4">Manage nutrition recipes for gym members</p>
+          <p className="text-muted-foreground mb-4">Manage nutrition recipes for gym members</p>
           <div className="text-orange-500 text-sm font-medium">
             {totalRecipes} recipes ({recommendedRecipesCount} recommended) →
           </div>
@@ -370,13 +370,13 @@ export default function AdminDashboard() {
 
         <Link 
           href="/admin/marketplace"
-          className="group bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-blue-500/50 transition-all duration-300"
+          className="group bg-card/50 border border-border rounded-lg p-6 hover:border-blue-500/50 transition-all duration-300"
         >
           <div className="flex items-center mb-4">
             <ShoppingBag className="h-6 w-6 text-blue-500 mr-3" />
-            <h3 className="text-xl font-semibold text-white group-hover:text-blue-500">Marketplace</h3>
+            <h3 className="text-xl font-semibold text-foreground group-hover:text-blue-500">Marketplace</h3>
           </div>
-          <p className="text-gray-400 mb-4">Manage products, inventory, and pricing</p>
+          <p className="text-muted-foreground mb-4">Manage products, inventory, and pricing</p>
           <div className="text-blue-500 text-sm font-medium">
             {marketplaceStats?.activeItems || 0} active items →
           </div>
@@ -384,34 +384,34 @@ export default function AdminDashboard() {
       </div>
 
       {/* Enhanced Recent Activity */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+      <div className="bg-card/50 border border-border rounded-lg p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">Recent Activity</h2>
+          <h2 className="text-xl font-bold text-foreground">Recent Activity</h2>
           <div className="flex items-center gap-2">
-            <Activity className="h-5 w-5 text-gray-400" />
-            <span className="text-gray-400 text-sm">Live Updates</span>
+            <Activity className="h-5 w-5 text-muted-foreground" />
+            <span className="text-muted-foreground text-sm">Live Updates</span>
           </div>
         </div>
         <div className="space-y-4">
           {!mounted ? (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 mx-auto mb-4"></div>
-              <p className="text-gray-400">Loading activity...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading activity...</p>
             </div>
           ) : recentActivity.length > 0 ? (
             recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-center justify-between py-3 border-b border-gray-800 last:border-b-0 hover:bg-gray-800/30 rounded-lg px-3 transition-all duration-200">
+              <div key={activity.id} className="flex items-center justify-between py-3 border-b border-border last:border-b-0 hover:bg-accent/30 rounded-lg px-3 transition-all duration-200">
                 <div className="flex items-center">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 font-medium text-white ${
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 font-medium text-primary-foreground ${
                     activity.type === 'application' ? 'bg-gradient-to-r from-blue-500 to-purple-500' :
                     activity.type === 'membership' ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
-                    'bg-gradient-to-r from-gray-500 to-gray-600'
+                    'bg-gradient-to-r from-muted to-muted-foreground'
                   }`}>
                     {activity.avatar}
                   </div>
                   <div>
-                    <p className="text-white font-medium">{activity.title}</p>
-                    <p className="text-gray-400 text-sm">{activity.subtitle}</p>
+                    <p className="text-foreground font-medium">{activity.title}</p>
+                    <p className="text-muted-foreground text-sm">{activity.subtitle}</p>
                   </div>
                 </div>
                 <div className="text-right">
@@ -419,11 +419,11 @@ export default function AdminDashboard() {
                     activity.status === "pending" ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" :
                     activity.status === "approved" || activity.status === "active" ? "bg-green-500/20 text-green-400 border border-green-500/30" :
                     activity.status === "rejected" ? "bg-red-500/20 text-red-400 border border-red-500/30" :
-                    "bg-gray-500/20 text-gray-400 border border-gray-500/30"
+                    "bg-muted/20 text-muted-foreground border border-border"
                   }`}>
                     {activity.status}
                   </span>
-                  <p className="text-gray-500 text-xs mt-2">
+                  <p className="text-muted-foreground text-xs mt-2">
                     {formatDate(activity.date)}
                   </p>
                 </div>
@@ -431,11 +431,11 @@ export default function AdminDashboard() {
             ))
           ) : (
             <div className="text-center py-8">
-              <Activity className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-400">No recent activity</p>
-              <p className="text-gray-500 text-sm">Activity will appear here as users interact with the system</p>
+              <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground">No recent activity</p>
+              <p className="text-muted-foreground text-sm">Activity will appear here as users interact with the system</p>
               {mounted && (
-                <div className="mt-4 text-xs text-gray-600">
+                <div className="mt-4 text-xs text-muted-foreground">
                   <p>Debug Info:</p>
                   <p>Applications: {applications?.length || 0}</p>
                   <p>Memberships: {allMemberships?.length || 0}</p>
@@ -447,9 +447,9 @@ export default function AdminDashboard() {
         </div>
         
         {recentActivity.length > 0 && (
-          <div className="mt-6 pt-4 border-t border-gray-800">
+          <div className="mt-6 pt-4 border-t border-border">
             <div className="flex justify-between items-center">
-              <span className="text-gray-500 text-sm">
+              <span className="text-muted-foreground text-sm">
                 Showing {recentActivity.length} recent activities
               </span>
               <div className="flex gap-4">

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import ConvexClerkProvider from "@/providers/ConvexClerkProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -91,26 +92,28 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClerkProvider>
-      <html lang="en" className="dark">
+      <html lang="en" suppressHydrationWarning>
         <body 
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white min-h-screen flex flex-col`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
           suppressHydrationWarning={true}
         >
-          <Navbar />
+          <ThemeProvider>
+            <Navbar />
 
-          {/* DARK BACKGROUND WITH SUBTLE PATTERNS */}
-          <div className="fixed inset-0 -z-10" suppressHydrationWarning>
-            {/* Base gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-950 to-red-950/10" suppressHydrationWarning></div>
-            {/* Subtle grid pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" suppressHydrationWarning></div>
-            {/* Radial gradient overlay for depth */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(220,38,38,0.05)_0%,transparent_50%)]" suppressHydrationWarning></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(234,88,12,0.05)_0%,transparent_50%)]" suppressHydrationWarning></div>
-          </div>
+            {/* DYNAMIC BACKGROUND WITH THEME SUPPORT */}
+            <div className="fixed inset-0 -z-10" suppressHydrationWarning>
+              {/* Base gradient background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/20 to-primary/5" suppressHydrationWarning></div>
+              {/* Subtle grid pattern */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--foreground-rgb,0,0,0),0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--foreground-rgb,0,0,0),0.02)_1px,transparent_1px)] bg-[size:50px_50px]" suppressHydrationWarning></div>
+              {/* Radial gradient overlay for depth */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(var(--primary-rgb,220,38,38),0.05)_0%,transparent_50%)]" suppressHydrationWarning></div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(var(--secondary-rgb,234,88,12),0.05)_0%,transparent_50%)]" suppressHydrationWarning></div>
+            </div>
 
-          <main className="flex-1 relative z-10">{children}</main>
-          <Footer />
+            <main className="flex-1 relative z-10">{children}</main>
+            <Footer />
+          </ThemeProvider>
           <BrowserExtensionHandler />
         </body>
       </html>

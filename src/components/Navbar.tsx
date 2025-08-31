@@ -9,6 +9,8 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useState, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
+import { ThemeAwareLogo } from "./ThemeAwareLogo";
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -26,29 +28,25 @@ const Navbar = () => {
 
   // Prevent hydration mismatch by not rendering dynamic content until mounted
   if (!mounted) {
-    return (
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800/50 py-2">
-        <div className="container mx-auto flex items-center justify-between px-4">
-          {/* LOGO */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
-              <Image 
-                src="/logo.png" 
-                alt="Elite Gym Logo" 
-                width={48} 
-                height={48} 
-                className="object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold text-white">ELITE GYM</span>
-              <span className="text-xs text-gray-400 font-mono tracking-wider">FITNESS & WELLNESS</span>
-            </div>
-          </Link>
-
-          {/* Loading state for auth section */}
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50 py-2">
+      <div className="container mx-auto flex items-center justify-between px-4">
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-3">
+          <div className="w-12 h-12 flex items-center justify-center">
+            <ThemeAwareLogo 
+              width={48} 
+              height={48} 
+              className="object-contain"
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xl font-bold text-foreground">ELITE GYM</span>
+            <span className="text-xs text-muted-foreground font-mono tracking-wider">FITNESS & WELLNESS</span>
+          </div>
+        </Link>          {/* Loading state for auth section */}
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-full bg-gray-700 animate-pulse"></div>
+            <div className="w-8 h-8 rounded-full bg-muted animate-pulse"></div>
           </div>
         </div>
       </header>
@@ -56,24 +54,22 @@ const Navbar = () => {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-gray-800/50 py-2">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50 py-2">
       <div className="container mx-auto flex items-center justify-between px-4" suppressHydrationWarning>
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg overflow-hidden" suppressHydrationWarning>
-            <Image 
-              src="/logo.png" 
-              alt="Elite Gym Logo" 
+          <div className="w-12 h-12 flex items-center justify-center" suppressHydrationWarning>
+            <ThemeAwareLogo 
               width={48} 
               height={48} 
               className="object-contain"
             />
           </div>
           <div className="flex flex-col" suppressHydrationWarning>
-            <span className="text-lg font-bold text-white leading-tight">
+            <span className="text-lg font-bold text-foreground leading-tight">
               ELITE GYM
             </span>
-            <span className="text-xs text-gray-400 uppercase tracking-wider">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider">
               FITNESS & WELLNESS
             </span>
           </div>
@@ -83,79 +79,79 @@ const Navbar = () => {
         <nav className="hidden lg:flex items-center gap-8">
           <Link
             href="/"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+            className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
               pathname === "/" ? "" : ""
             }`}
           >
             <span>Home</span>
             {pathname === "/" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
             )}
           </Link>
           <Link
             href="/generate-program"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+            className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
               pathname === "/generate-program" ? "" : ""
             }`}
           >
             <span>AI Plan Generator</span>
             {pathname === "/generate-program" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
             )}
           </Link>
           <Link
             href="/recipes"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+            className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
               pathname === "/recipes" ? "" : ""
             }`}
           >
             <span>Recipes</span>
             {pathname === "/recipes" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
             )}
           </Link>
           <Link
             href="/membership"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+            className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
               pathname === "/membership" ? "" : ""
             }`}
           >
             <span>Membership</span>
             {pathname === "/membership" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
             )}
           </Link>
           <Link
             href="/trainer-booking"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+            className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
               pathname === "/trainer-booking" ? "" : ""
             }`}
           >
             <span>Trainer Booking</span>
             {pathname === "/trainer-booking" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
             )}
           </Link>
           <Link
             href="/blog"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+            className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
               pathname.startsWith("/blog") ? "" : ""
             }`}
           >
             <span>Blog</span>
             {pathname.startsWith("/blog") && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
             )}
           </Link>
           <Link
             href="/marketplace"
-            className={`text-white hover:text-red-500 transition-colors text-sm font-medium relative pb-2 ${
+            className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
               pathname === "/marketplace" ? "" : ""
             }`}
           >
             <span>Marketplace</span>
             {pathname === "/marketplace" && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500"></div>
+              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
             )}
           </Link>
 
@@ -163,13 +159,13 @@ const Navbar = () => {
           {userRole === "admin" && (
             <Link
               href="/admin"
-              className={`text-red-400 hover:text-red-300 transition-colors text-sm font-medium relative pb-2 ${
+              className={`text-primary hover:text-primary/80 transition-colors text-sm font-medium relative pb-2 ${
                 pathname.startsWith("/admin") ? "" : ""
               }`}
             >
               <span>Admin Panel</span>
               {pathname.startsWith("/admin") && (
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-red-400"></div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
               )}
             </Link>
           )}
@@ -177,13 +173,13 @@ const Navbar = () => {
           {(userRole === "trainer" || userRole === "admin") && (
             <Link
               href="/trainer"
-              className={`text-orange-400 hover:text-orange-300 transition-colors text-sm font-medium relative pb-2 ${
+              className={`text-secondary hover:text-secondary/80 transition-colors text-sm font-medium relative pb-2 ${
                 pathname === "/trainer" || pathname.startsWith("/trainer/") ? "" : ""
               }`}
             >
               <span>Trainer Panel</span>
               {(pathname === "/trainer" || pathname.startsWith("/trainer/")) && (
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-400"></div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-secondary"></div>
               )}
             </Link>
           )}
@@ -191,13 +187,13 @@ const Navbar = () => {
           {userRole === "user" && (
             <Link
               href="/become-trainer"
-              className={`text-green-400 hover:text-green-300 transition-colors text-sm font-medium relative pb-2 ${
+              className={`text-accent hover:text-accent/80 transition-colors text-sm font-medium relative pb-2 ${
                 pathname === "/become-trainer" ? "" : ""
               }`}
             >
               <span>Become Trainer</span>
               {pathname === "/become-trainer" && (
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-green-400"></div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-accent"></div>
               )}
             </Link>
           )}
@@ -205,17 +201,20 @@ const Navbar = () => {
 
         {/* AUTH BUTTONS */}
         <div className="flex items-center gap-4" suppressHydrationWarning>
+          {/* Theme Toggle */}
+          <ThemeToggle />
+          
           {/* Shopping Cart Icon */}
           {isSignedIn && (
             <Link href="/marketplace/cart" className="relative">
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-white hover:text-red-500 hover:bg-transparent p-2"
+                className="text-foreground hover:text-primary hover:bg-accent/10 p-2"
               >
                 <ShoppingCart className="h-5 w-5" />
                 {cartSummary && cartSummary.totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                     {cartSummary.totalItems > 9 ? "9+" : cartSummary.totalItems}
                   </span>
                 )}
@@ -227,7 +226,7 @@ const Navbar = () => {
             <>
               <Link
                 href="/profile"
-                className="hidden md:block text-white hover:text-red-500 transition-colors text-sm font-medium"
+                className="hidden md:block text-foreground hover:text-primary transition-colors text-sm font-medium"
               >
                 Profile
               </Link>
@@ -244,14 +243,14 @@ const Navbar = () => {
               <SignInButton mode="modal">
                 <Button
                   variant="ghost"
-                  className="text-white hover:text-red-500 border border-orange-500/50 hover:border-orange-500 rounded-full px-6 py-2 transition-all duration-300 bg-transparent hover:bg-transparent"
+                  className="text-foreground hover:text-primary border border-border hover:border-primary rounded-full px-6 py-2 transition-all duration-300 bg-transparent hover:bg-accent/10"
                 >
                   Login
                 </Button>
               </SignInButton>
 
               <SignUpButton mode="modal">
-                <Button className="bg-red-600 hover:bg-red-700 text-white rounded-full px-6 py-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-red-500/25">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6 py-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-primary/25">
                   Sign Up
                 </Button>
               </SignUpButton>
