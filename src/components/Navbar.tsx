@@ -28,23 +28,28 @@ const Navbar = () => {
 
   // Prevent hydration mismatch by not rendering dynamic content until mounted
   if (!mounted) {
-  return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50 py-2">
-      <div className="container mx-auto flex items-center justify-between px-4">
-        {/* LOGO */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="w-12 h-12 flex items-center justify-center">
-            <ThemeAwareLogo 
-              width={48} 
-              height={48} 
-              className="object-contain"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold text-foreground">ELITE GYM</span>
-            <span className="text-xs text-muted-foreground font-mono tracking-wider">FITNESS & WELLNESS</span>
-          </div>
-        </Link>          {/* Loading state for auth section */}
+    return (
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50 py-2">
+        <div className="container mx-auto flex items-center justify-between px-4">
+          {/* LOGO */}
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-12 h-12 flex items-center justify-center">
+              <ThemeAwareLogo
+                width={48}
+                height={48}
+                className="object-contain"
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-foreground">
+                ELITE GYM
+              </span>
+              <span className="text-xs text-muted-foreground font-mono tracking-wider">
+                FITNESS & WELLNESS
+              </span>
+            </div>
+          </Link>{" "}
+          {/* Loading state for auth section */}
           <div className="flex items-center gap-4">
             <div className="w-8 h-8 rounded-full bg-muted animate-pulse"></div>
           </div>
@@ -55,15 +60,17 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50 py-2">
-      <div className="container mx-auto flex items-center justify-between px-4" suppressHydrationWarning>
+      <div
+        className="container mx-auto flex items-center justify-between px-4"
+        suppressHydrationWarning
+      >
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-12 h-12 flex items-center justify-center" suppressHydrationWarning>
-            <ThemeAwareLogo 
-              width={48} 
-              height={48} 
-              className="object-contain"
-            />
+          <div
+            className="w-12 h-12 flex items-center justify-center"
+            suppressHydrationWarning
+          >
+            <ThemeAwareLogo width={48} height={48} className="object-contain" />
           </div>
           <div className="flex flex-col" suppressHydrationWarning>
             <span className="text-lg font-bold text-foreground leading-tight">
@@ -174,11 +181,14 @@ const Navbar = () => {
             <Link
               href="/trainer"
               className={`text-secondary hover:text-secondary/80 transition-colors text-sm font-medium relative pb-2 ${
-                pathname === "/trainer" || pathname.startsWith("/trainer/") ? "" : ""
+                pathname === "/trainer" || pathname.startsWith("/trainer/")
+                  ? ""
+                  : ""
               }`}
             >
               <span>Trainer Panel</span>
-              {(pathname === "/trainer" || pathname.startsWith("/trainer/")) && (
+              {(pathname === "/trainer" ||
+                pathname.startsWith("/trainer/")) && (
                 <div className="absolute bottom-0 left-0 w-full h-0.5 bg-secondary"></div>
               )}
             </Link>
@@ -203,7 +213,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4" suppressHydrationWarning>
           {/* Theme Toggle */}
           <ThemeToggle />
-          
+
           {/* Shopping Cart Icon */}
           {isSignedIn && (
             <Link href="/marketplace/cart" className="relative">
@@ -230,11 +240,11 @@ const Navbar = () => {
               >
                 Profile
               </Link>
-              <UserButton 
+              <UserButton
                 appearance={{
                   elements: {
-                    avatarBox: "h-10 w-10"
-                  }
+                    avatarBox: "h-10 w-10",
+                  },
                 }}
               />
             </>
