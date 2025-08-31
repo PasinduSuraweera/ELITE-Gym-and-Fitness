@@ -175,7 +175,6 @@ const AdminRecipesPage = () => {
         protein: recipe.protein,
         carbs: recipe.carbs,
         fats: recipe.fats,
-        imageUrl: recipe.imageUrl || "/api/placeholder/400/300",
         isRecommended: recipe.isRecommended,
       });
       setShowEditModal(true);
