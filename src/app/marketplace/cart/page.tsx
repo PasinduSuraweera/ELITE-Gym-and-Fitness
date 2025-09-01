@@ -91,14 +91,14 @@ const CartPage = () => {
 
   if (!user) {
     return (
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-primary/10"></div>
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
           <div className="text-center">
-            <ShoppingCart className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-white mb-2">Sign In Required</h1>
-            <p className="text-gray-400 mb-6">Please sign in to view your shopping cart</p>
-            <Button asChild className="bg-red-600 hover:bg-red-700">
+            <ShoppingCart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">Sign In Required</h1>
+            <p className="text-muted-foreground mb-6">Please sign in to view your shopping cart</p>
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link href="/sign-in">Sign In</Link>
             </Button>
           </div>
@@ -108,25 +108,25 @@ const CartPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-primary/10"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary),0.1)_0%,transparent_50%)]"></div>
       
       <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
         {/* Header */}
         <div className="flex items-center mb-8">
-          <Button variant="outline" asChild className="mr-4 border-gray-700 text-white hover:bg-gray-800">
+          <Button variant="outline" asChild className="mr-4 border-border text-foreground hover:bg-accent">
             <Link href="/marketplace">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Shop
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">
-              Shopping <span className="text-red-500">Cart</span>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+              Shopping <span className="text-primary">Cart</span>
             </h1>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               {cartSummary ? `${cartSummary.totalItems} items in your cart` : "Loading cart..."}
             </p>
           </div>
@@ -137,11 +137,11 @@ const CartPage = () => {
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-4">
               {cartItems.map((item) => (
-                <Card key={item._id} className="bg-gray-900/50 border-gray-700">
+                <Card key={item._id} className="bg-card/50 border-border">
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
                       {/* Product Image */}
-                      <div className="w-20 h-20 bg-gray-800 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden flex-shrink-0">
                         {item.product?.imageUrl ? (
                           <Image
                             src={item.product.imageUrl}
@@ -152,20 +152,20 @@ const CartPage = () => {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <Package className="h-8 w-8 text-gray-600" />
+                            <Package className="h-8 w-8 text-muted-foreground" />
                           </div>
                         )}
                       </div>
 
                       {/* Product Details */}
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-white">
+                        <h3 className="text-lg font-semibold text-foreground">
                           {item.product?.name}
                         </h3>
-                        <p className="text-sm text-gray-400 capitalize">
+                        <p className="text-sm text-muted-foreground capitalize">
                           {item.product?.category}
                         </p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {formatPrice(item.priceAtTime)} each
                         </p>
                       </div>
@@ -177,12 +177,12 @@ const CartPage = () => {
                           size="sm"
                           onClick={() => handleQuantityUpdate(item._id, item.quantity - 1)}
                           disabled={item.quantity <= 1 || updatingQuantity === item._id}
-                          className="h-8 w-8 p-0 border-gray-600 hover:bg-gray-700"
+                          className="h-8 w-8 p-0 border-border hover:bg-accent"
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
                         
-                        <span className="text-white font-medium w-8 text-center">
+                        <span className="text-foreground font-medium w-8 text-center">
                           {updatingQuantity === item._id ? "..." : item.quantity}
                         </span>
                         
@@ -190,8 +190,8 @@ const CartPage = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleQuantityUpdate(item._id, item.quantity + 1)}
-                          disabled={updatingQuantity === item._id || (item.product && item.quantity >= item.product.stock)}
-                          className="h-8 w-8 p-0 border-gray-600 hover:bg-gray-700"
+                          disabled={Boolean(updatingQuantity === item._id || (item.product && item.quantity >= item.product.stock))}
+                          className="h-8 w-8 p-0 border-border hover:bg-accent"
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
@@ -199,7 +199,7 @@ const CartPage = () => {
 
                       {/* Price */}
                       <div className="text-right">
-                        <p className="text-lg font-bold text-white">
+                        <p className="text-lg font-bold text-foreground">
                           {formatPrice(item.priceAtTime * item.quantity)}
                         </p>
                       </div>
@@ -210,7 +210,7 @@ const CartPage = () => {
                         size="sm"
                         onClick={() => handleRemoveItem(item._id)}
                         disabled={removingItem === item._id}
-                        className="h-8 w-8 p-0 border-red-600 text-red-500 hover:bg-red-600 hover:text-white"
+                        className="h-8 w-8 p-0 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground"
                       >
                         {removingItem === item._id ? "..." : <X className="h-4 w-4" />}
                       </Button>
@@ -222,21 +222,21 @@ const CartPage = () => {
 
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <Card className="bg-gray-900/50 border-gray-700 sticky top-8">
+              <Card className="bg-card/50 border-border sticky top-8">
                 <CardHeader>
-                  <CardTitle className="text-white">Order Summary</CardTitle>
+                  <CardTitle className="text-foreground">Order Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {cartSummary && (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Subtotal ({cartSummary.totalItems} items)</span>
-                        <span className="text-white">{formatPrice(cartSummary.totalPrice)}</span>
+                        <span className="text-muted-foreground">Subtotal ({cartSummary.totalItems} items)</span>
+                        <span className="text-foreground">{formatPrice(cartSummary.totalPrice)}</span>
                       </div>
                       
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Shipping</span>
-                        <span className="text-white">
+                        <span className="text-muted-foreground">Shipping</span>
+                        <span className="text-foreground">
                           {calculateShipping(cartSummary.totalPrice) === 0 ? 
                             "Free" : 
                             formatPrice(calculateShipping(cartSummary.totalPrice))
@@ -245,15 +245,15 @@ const CartPage = () => {
                       </div>
                       
                       <div className="flex justify-between">
-                        <span className="text-gray-400">Tax (VAT 18%)</span>
-                        <span className="text-white">{formatPrice(calculateTax(cartSummary.totalPrice))}</span>
+                        <span className="text-muted-foreground">Tax (VAT 18%)</span>
+                        <span className="text-foreground">{formatPrice(calculateTax(cartSummary.totalPrice))}</span>
                       </div>
                       
-                      <hr className="border-gray-700" />
+                      <hr className="border-border" />
                       
                       <div className="flex justify-between text-lg font-bold">
-                        <span className="text-white">Total</span>
-                        <span className="text-white">
+                        <span className="text-foreground">Total</span>
+                        <span className="text-foreground">
                           {formatPrice(
                             cartSummary.totalPrice + 
                             calculateShipping(cartSummary.totalPrice) + 
@@ -271,7 +271,7 @@ const CartPage = () => {
                       <Button
                         onClick={handleCheckout}
                         disabled={isCheckingOut}
-                        className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3"
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3"
                       >
                         {isCheckingOut ? "Processing..." : "Proceed to Checkout"}
                       </Button>
@@ -281,7 +281,7 @@ const CartPage = () => {
                   <Button
                     variant="outline"
                     asChild
-                    className="w-full border-gray-600 text-white hover:bg-gray-700"
+                    className="w-full border-border text-foreground hover:bg-accent"
                   >
                     <Link href="/marketplace">Continue Shopping</Link>
                   </Button>
@@ -292,12 +292,12 @@ const CartPage = () => {
         ) : (
           /* Empty Cart */
           <div className="text-center py-16">
-            <ShoppingCart className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">Your cart is empty</h2>
-            <p className="text-gray-400 mb-6">
+            <ShoppingCart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-foreground mb-2">Your cart is empty</h2>
+            <p className="text-muted-foreground mb-6">
               Discover our amazing fitness products and start building your perfect workout setup
             </p>
-            <Button asChild className="bg-red-600 hover:bg-red-700">
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link href="/marketplace">Start Shopping</Link>
             </Button>
           </div>
