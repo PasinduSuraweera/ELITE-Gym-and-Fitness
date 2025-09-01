@@ -1,8 +1,16 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import ChadBot from "@/components/ChadBot";
+import dynamic from "next/dynamic";
+import GymLocationsSection from "@/components/GymLocationsSection";
+
+// Dynamic import to prevent hydration issues
+const ChadBot = dynamic(() => import("@/components/ChadBot"), {
+  ssr: false,
+});
 
 const HomePage = () => {
   return (
@@ -141,6 +149,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* Gym Locations Section */}
+      <GymLocationsSection />
 
       {/* ChadBot - Only on homepage */}
       <ChadBot />
