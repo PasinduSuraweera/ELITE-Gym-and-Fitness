@@ -6,17 +6,17 @@ import { useUser } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "../../../../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
-import { 
-  ShoppingCart, 
-  Star, 
-  ArrowLeft, 
-  Plus, 
-  Minus, 
+import {
+  ShoppingCart,
+  Star,
+  ArrowLeft,
+  Plus,
+  Minus,
   Heart,
   Share2,
   Truck,
   Shield,
-  RotateCcw
+  RotateCcw,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -26,7 +26,7 @@ const ProductDetailPage = () => {
   const params = useParams();
   const router = useRouter();
   const productId = params.id as string;
-  
+
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -49,12 +49,12 @@ const ProductDetailPage = () => {
   const addToCart = useMutation(api.cart.addToCart);
 
   const formatPrice = (price: number) => {
-    return `Rs. ${price.toLocaleString('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `Rs. ${price.toLocaleString("en-LK", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   const handleAddToCart = async () => {
     if (!user?.id || !product) return;
-    
+
     setAddingToCart(true);
     try {
       await addToCart({
@@ -101,7 +101,7 @@ const ProductDetailPage = () => {
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
-      
+
       <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6">
@@ -110,14 +110,17 @@ const ProductDetailPage = () => {
               Home
             </Link>
             <span>/</span>
-            <Link href="/marketplace" className="hover:text-white transition-colors">
+            <Link
+              href="/marketplace"
+              className="hover:text-white transition-colors"
+            >
               Marketplace
             </Link>
             {product?.category && (
               <>
                 <span>/</span>
-                <Link 
-                  href={`/marketplace?category=${product.category}`} 
+                <Link
+                  href={`/marketplace?category=${product.category}`}
                   className="hover:text-white transition-colors capitalize"
                 >
                   {product.category}
@@ -172,7 +175,9 @@ const ProductDetailPage = () => {
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
                     className={`w-18 h-18 rounded-lg overflow-hidden border-2 ${
-                      index === selectedImageIndex ? 'border-red-500' : 'border-gray-700'
+                      index === selectedImageIndex
+                        ? "border-red-500"
+                        : "border-gray-700"
                     }`}
                   >
                     <Image
@@ -215,7 +220,9 @@ const ProductDetailPage = () => {
               </div>
               <div className="text-gray-400">
                 {product.stock > 0 ? (
-                  <span className="text-green-400">✓ {product.stock} in stock</span>
+                  <span className="text-green-400">
+                    ✓ {product.stock} in stock
+                  </span>
                 ) : (
                   <span className="text-red-400">✗ Out of stock</span>
                 )}
@@ -292,7 +299,10 @@ const ProductDetailPage = () => {
                   </Button>
                 </div>
               ) : (
-                <Button asChild className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-lg">
+                <Button
+                  asChild
+                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-lg"
+                >
                   <Link href="/sign-in">
                     <ShoppingCart className="h-5 w-5 mr-2" />
                     Sign In to Purchase
@@ -302,7 +312,11 @@ const ProductDetailPage = () => {
 
               {/* Cart Link */}
               {user && cartSummary && cartSummary.totalItems > 0 && (
-                <Button asChild variant="outline" className="w-full border-gray-600 text-white hover:bg-gray-800">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="w-full border-gray-600 text-white hover:bg-gray-800"
+                >
                   <Link href="/marketplace/cart">
                     View Cart ({cartSummary.totalItems} items)
                   </Link>
@@ -334,19 +348,21 @@ const ProductDetailPage = () => {
         {relatedProducts && relatedProducts.length > 1 && (
           <div className="mt-16">
             <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-2xl font-bold text-white">Related Products</h2>
+              <h2 className="text-2xl font-bold text-white">
+                Related Products
+              </h2>
               <div className="flex-1 h-px bg-gradient-to-r from-red-500/50 to-transparent"></div>
               <span className="text-gray-400 text-sm capitalize">
                 {product?.category} Collection
               </span>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts
-                .filter(item => item._id !== product?._id) // Exclude current product
+                .filter((item) => item._id !== product?._id) // Exclude current product
                 .slice(0, 4) // Show only 4 related products
                 .map((item) => (
-                  <Link 
+                  <Link
                     key={item._id}
                     href={`/marketplace/product/${item._id}`}
                     className="group"
@@ -367,7 +383,7 @@ const ProductDetailPage = () => {
                             <ShoppingCart className="h-8 w-8 text-gray-600" />
                           </div>
                         )}
-                        
+
                         {item.featured && (
                           <div className="absolute top-2 left-2 bg-yellow-500 text-black px-2 py-1 rounded-full text-xs font-bold flex items-center">
                             <Star className="h-3 w-3 mr-1" />
@@ -377,7 +393,9 @@ const ProductDetailPage = () => {
 
                         {item.stock === 0 && (
                           <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                            <span className="text-red-400 font-medium text-sm">Out of Stock</span>
+                            <span className="text-red-400 font-medium text-sm">
+                              Out of Stock
+                            </span>
                           </div>
                         )}
                       </div>
@@ -387,7 +405,7 @@ const ProductDetailPage = () => {
                         <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-red-400 transition-colors min-h-[3.5rem]">
                           {item.name}
                         </h3>
-                        
+
                         <p className="text-gray-400 text-sm mb-4 line-clamp-2 flex-1 min-h-[2.5rem]">
                           {item.description}
                         </p>
@@ -401,7 +419,7 @@ const ProductDetailPage = () => {
                               {item.stock} in stock
                             </p>
                           </div>
-                          
+
                           <div className="text-red-400 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
                             <ArrowLeft className="h-4 w-4 rotate-180" />
                           </div>
@@ -414,13 +432,14 @@ const ProductDetailPage = () => {
 
             {/* View All Products Button */}
             <div className="text-center mt-8">
-              <Button 
-                asChild 
-                variant="outline" 
+              <Button
+                asChild
+                variant="outline"
                 className="border-gray-600 text-white hover:bg-gray-800 hover:border-red-500"
               >
                 <Link href={`/marketplace?category=${product?.category}`}>
-                  View All {product?.category?.charAt(0).toUpperCase()}{product?.category?.slice(1)} Products
+                  View All {product?.category?.charAt(0).toUpperCase()}
+                  {product?.category?.slice(1)} Products
                 </Link>
               </Button>
             </div>
