@@ -441,7 +441,11 @@ const RecipesPage = () => {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                           <div className="absolute top-2 right-2 text-xs text-green-400 font-mono bg-black/80 px-2 py-1 rounded">
-                            Match: {Math.round((recipe.score / 100) * 100)}%
+                            Match:{" "}
+                            {recipe.score
+                              ? Math.round((recipe.score / 100) * 100)
+                              : 0}
+                            %
                           </div>
                         </div>
                       )}
@@ -458,7 +462,11 @@ const RecipesPage = () => {
                           {!recipe.imageUrl && (
                             <div className="ml-2 text-right">
                               <div className="text-xs text-green-400 font-mono">
-                                Match: {Math.round((recipe.score / 100) * 100)}%
+                                Match:{" "}
+                                {recipe.score
+                                  ? Math.round((recipe.score / 100) * 100)
+                                  : 0}
+                                %
                               </div>
                             </div>
                           )}
@@ -473,7 +481,7 @@ const RecipesPage = () => {
                             {recipe.difficulty}
                           </Badge>
                         </div>
-                        
+
                         <div className="grid grid-cols-2 gap-4 mb-4 text-sm mt-4">
                           <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4 text-green-400" />
