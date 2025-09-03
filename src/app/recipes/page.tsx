@@ -323,13 +323,13 @@ const RecipesPage = () => {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                       {mealPrepRecipes.slice(0, 3).map((recipe: any) => (
-                        <Card
+                        <div
                           key={recipe._id}
-                          className="bg-black/90 backdrop-blur-sm border-orange-500/30 hover:border-orange-500/50 transition-all duration-300 group flex flex-col h-full"
+                          className="bg-black/90 backdrop-blur-sm border border-orange-500/30 hover:border-orange-500/50 transition-all duration-300 group flex flex-col h-full overflow-hidden rounded-lg"
                         >
                           {/* Recipe Image */}
                           {recipe.imageUrl && (
-                            <div className="relative h-48 overflow-hidden">
+                            <div className="relative h-48 overflow-hidden flex-shrink-0">
                               <img
                                 src={recipe.imageUrl}
                                 alt={recipe.title}
@@ -347,15 +347,15 @@ const RecipesPage = () => {
                             </div>
                           )}
 
-                          <CardHeader className="pb-4">
+                          <div className="p-4 pb-4 flex-1 flex flex-col">
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
-                                <CardTitle className="text-white text-lg mb-2 group-hover:text-orange-400 transition-colors">
+                                <h3 className="text-white text-lg mb-2 group-hover:text-orange-400 transition-colors">
                                   {recipe.title}
-                                </CardTitle>
-                                <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                                </h3>
+                                <p className="text-gray-400 text-sm line-clamp-2">
                                   {recipe.description}
-                                </CardDescription>
+                                </p>
                               </div>
                               {!recipe.imageUrl && (
                                 <div className="ml-2 text-right">
@@ -381,10 +381,8 @@ const RecipesPage = () => {
                                 </Badge>
                               )}
                             </div>
-                          </CardHeader>
 
-                          <CardContent className="pt-0 flex flex-col flex-1">
-                            <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                            <div className="grid grid-cols-2 gap-4 mb-4 text-sm mt-4">
                               <div className="flex items-center gap-2">
                                 <Clock className="h-4 w-4 text-orange-400" />
                                 <span className="text-gray-300">
@@ -419,8 +417,8 @@ const RecipesPage = () => {
                                 View Recipe
                               </Button>
                             </Link>
-                          </CardContent>
-                        </Card>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -429,13 +427,13 @@ const RecipesPage = () => {
                 {/* Personalized Recipes Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {personalizedRecipes?.map((recipe: any) => (
-                    <Card
+                    <div
                       key={recipe._id}
-                      className="bg-black/90 backdrop-blur-sm border-green-500/30 hover:border-green-500/50 transition-all duration-300 group flex flex-col h-full"
+                      className="bg-black/90 backdrop-blur-sm border border-green-500/30 hover:border-green-500/50 transition-all duration-300 group flex flex-col h-full overflow-hidden rounded-lg"
                     >
                       {/* Recipe Image */}
                       {recipe.imageUrl && (
-                        <div className="relative h-48 overflow-hidden">
+                        <div className="relative h-48 overflow-hidden flex-shrink-0">
                           <img
                             src={recipe.imageUrl}
                             alt={recipe.title}
@@ -446,16 +444,16 @@ const RecipesPage = () => {
                             Match: {Math.round((recipe.score / 100) * 100)}%
                           </div>
                         </div>
-                      )}{" "}
-                      <CardHeader className="pb-4">
+                      )}
+                      <div className="p-4 pb-4 flex-1 flex flex-col">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <CardTitle className="text-white text-lg mb-2 group-hover:text-green-400 transition-colors">
+                            <h3 className="text-white text-lg mb-2 group-hover:text-green-400 transition-colors">
                               {recipe.title}
-                            </CardTitle>
-                            <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                            </h3>
+                            <p className="text-gray-400 text-sm line-clamp-2">
                               {recipe.description}
-                            </CardDescription>
+                            </p>
                           </div>
                           {!recipe.imageUrl && (
                             <div className="ml-2 text-right">
@@ -464,7 +462,7 @@ const RecipesPage = () => {
                               </div>
                             </div>
                           )}
-                        </div>{" "}
+                        </div>
                         <div className="flex flex-wrap gap-2 mt-3">
                           <Badge className={getCategoryColor(recipe.category)}>
                             {recipe.category}
@@ -475,9 +473,8 @@ const RecipesPage = () => {
                             {recipe.difficulty}
                           </Badge>
                         </div>
-                      </CardHeader>
-                      <CardContent className="pt-0 flex flex-col flex-1">
-                        <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        
+                        <div className="grid grid-cols-2 gap-4 mb-4 text-sm mt-4">
                           <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4 text-green-400" />
                             <span className="text-gray-300">
@@ -532,8 +529,8 @@ const RecipesPage = () => {
                             View Recipe
                           </Button>
                         </Link>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </>
@@ -568,13 +565,13 @@ const RecipesPage = () => {
             {user?.id ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {workoutBasedRecipes?.map((recipe: any) => (
-                  <Card
+                  <div
                     key={recipe._id}
-                    className="bg-black/90 backdrop-blur-sm border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 group flex flex-col h-full"
+                    className="bg-black/90 backdrop-blur-sm border border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 group flex flex-col h-full overflow-hidden rounded-lg"
                   >
                     {/* Recipe Image */}
                     {recipe.imageUrl && (
-                      <div className="relative h-48 overflow-hidden">
+                      <div className="relative h-48 overflow-hidden flex-shrink-0">
                         <img
                           src={recipe.imageUrl}
                           alt={recipe.title}
@@ -587,15 +584,15 @@ const RecipesPage = () => {
                       </div>
                     )}
 
-                    <CardHeader className="pb-4">
+                    <div className="p-4 pb-4 flex-1 flex flex-col">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <CardTitle className="text-white text-lg mb-2 group-hover:text-blue-400 transition-colors">
+                          <h3 className="text-white text-lg mb-2 group-hover:text-blue-400 transition-colors">
                             {recipe.title}
-                          </CardTitle>
-                          <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                          </h3>
+                          <p className="text-gray-400 text-sm line-clamp-2">
                             {recipe.description}
-                          </CardDescription>
+                          </p>
                         </div>
                         {!recipe.imageUrl && (
                           <Target className="h-5 w-5 text-blue-500 ml-2 flex-shrink-0" />
@@ -612,10 +609,8 @@ const RecipesPage = () => {
                           {recipe.difficulty}
                         </Badge>
                       </div>
-                    </CardHeader>
 
-                    <CardContent className="pt-0 flex flex-col flex-1">
-                      <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                      <div className="grid grid-cols-2 gap-4 mb-4 text-sm mt-4">
                         <div className="flex items-center gap-2">
                           <Clock className="h-4 w-4 text-blue-400" />
                           <span className="text-gray-300">
@@ -667,8 +662,8 @@ const RecipesPage = () => {
                           View Recipe
                         </Button>
                       </Link>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -700,13 +695,13 @@ const RecipesPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {recommendedRecipes?.slice(0, 9).map((recipe: any) => (
-                <Card
+                <div
                   key={recipe._id}
-                  className="bg-black/90 backdrop-blur-sm border-yellow-500/30 hover:border-yellow-500/50 transition-all duration-300 group flex flex-col h-full"
+                  className="bg-black/90 backdrop-blur-sm border border-yellow-500/30 hover:border-yellow-500/50 transition-all duration-300 group flex flex-col h-full overflow-hidden rounded-lg"
                 >
                   {/* Recipe Image */}
                   {recipe.imageUrl && (
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden flex-shrink-0">
                       <img
                         src={recipe.imageUrl}
                         alt={recipe.title}
@@ -727,15 +722,15 @@ const RecipesPage = () => {
                     </div>
                   )}
 
-                  <CardHeader className="pb-4">
+                  <div className="p-4 pb-4 flex-1 flex flex-col">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-white text-lg mb-2 group-hover:text-yellow-400 transition-colors">
+                        <h3 className="text-white text-lg mb-2 group-hover:text-yellow-400 transition-colors">
                           {recipe.title}
-                        </CardTitle>
-                        <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                        </h3>
+                        <p className="text-gray-400 text-sm line-clamp-2">
                           {recipe.description}
-                        </CardDescription>
+                        </p>
                       </div>
                       {!recipe.imageUrl && (
                         <div className="ml-2 flex items-center gap-1">
@@ -760,10 +755,8 @@ const RecipesPage = () => {
                         </Badge>
                       )}
                     </div>
-                  </CardHeader>
 
-                  <CardContent className="pt-0 flex flex-col flex-1">
-                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm mt-4">
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-yellow-400" />
                         <span className="text-gray-300">
@@ -815,8 +808,8 @@ const RecipesPage = () => {
                         View Recipe
                       </Button>
                     </Link>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           </TabsContent>
@@ -840,13 +833,13 @@ const RecipesPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayRecipes?.map((recipe: any) => (
-                <Card
+                <div
                   key={recipe._id}
-                  className="bg-black/90 backdrop-blur-sm border-red-500/30 hover:border-red-500/50 transition-all duration-300 group flex flex-col h-full"
+                  className="bg-black/90 backdrop-blur-sm border border-red-500/30 hover:border-red-500/50 transition-all duration-300 group flex flex-col h-full overflow-hidden rounded-lg"
                 >
                   {/* Recipe Image */}
                   {recipe.imageUrl && (
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-48 overflow-hidden flex-shrink-0">
                       <img
                         src={recipe.imageUrl}
                         alt={recipe.title}
@@ -861,15 +854,15 @@ const RecipesPage = () => {
                     </div>
                   )}
 
-                  <CardHeader className="pb-4">
+                  <div className="p-4 pb-4 flex-1 flex flex-col">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-white text-lg mb-2 group-hover:text-red-400 transition-colors">
+                        <h3 className="text-white text-lg mb-2 group-hover:text-red-400 transition-colors">
                           {recipe.title}
-                        </CardTitle>
-                        <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                        </h3>
+                        <p className="text-gray-400 text-sm line-clamp-2">
                           {recipe.description}
-                        </CardDescription>
+                        </p>
                       </div>
                       {!recipe.imageUrl && recipe.isRecommended && (
                         <Star className="h-5 w-5 text-yellow-500 ml-2 flex-shrink-0" />
@@ -884,10 +877,8 @@ const RecipesPage = () => {
                         {recipe.difficulty}
                       </Badge>
                     </div>
-                  </CardHeader>
 
-                  <CardContent className="pt-0 flex flex-col flex-1">
-                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm mt-4">
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-red-400" />
                         <span className="text-gray-300">
@@ -939,8 +930,8 @@ const RecipesPage = () => {
                         View Recipe
                       </Button>
                     </Link>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
 

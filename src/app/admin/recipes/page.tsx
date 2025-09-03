@@ -476,13 +476,13 @@ const AdminRecipesPage = () => {
         {/* Recipes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {recipes.map((recipe: any) => (
-            <Card
+            <div
               key={recipe._id}
-              className="bg-black/50 border-red-500/30 hover:border-red-400/50 transition-colors"
+              className="bg-black/50 border border-red-500/30 hover:border-red-400/50 transition-colors rounded-lg overflow-hidden flex flex-col h-full"
             >
               {/* Recipe Image */}
               {recipe.imageUrl && (
-                <div className="relative h-32 overflow-hidden rounded-t-lg">
+                <div className="relative h-32 overflow-hidden flex-shrink-0">
                   <img
                     src={recipe.imageUrl}
                     alt={recipe.title}
@@ -497,18 +497,18 @@ const AdminRecipesPage = () => {
                 </div>
               )}
 
-              <CardHeader className="pb-3">
+              <div className="p-4 pb-3 flex-1 flex flex-col">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <CardTitle className="text-white text-lg mb-2 flex items-center gap-2">
+                    <h3 className="text-white text-lg mb-2 flex items-center gap-2">
                       {recipe.title}
                       {!recipe.imageUrl && recipe.isRecommended && (
                         <Star className="h-4 w-4 text-yellow-400" />
                       )}
-                    </CardTitle>
-                    <CardDescription className="text-gray-400 text-sm line-clamp-2">
+                    </h3>
+                    <p className="text-gray-400 text-sm line-clamp-2">
                       {recipe.description}
-                    </CardDescription>
+                    </p>
                   </div>
                 </div>
 
@@ -520,11 +520,9 @@ const AdminRecipesPage = () => {
                     {recipe.difficulty}
                   </Badge>
                 </div>
-              </CardHeader>
 
-              <CardContent className="pt-0">
                 {/* Recipe Stats */}
-                <div className="grid grid-cols-3 gap-4 mb-4 text-center">
+                <div className="grid grid-cols-3 gap-4 mb-4 text-center mt-4">
                   <div>
                     <Clock className="h-4 w-4 text-gray-400 mx-auto mb-1" />
                     <div className="text-sm font-semibold text-white">
@@ -570,7 +568,7 @@ const AdminRecipesPage = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-2">
+                <div className="flex gap-2 mt-auto">
                   <Link href={`/recipes/${recipe._id}`} className="flex-1">
                     <Button
                       variant="outline"
@@ -613,8 +611,8 @@ const AdminRecipesPage = () => {
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))}
         </div>
 
