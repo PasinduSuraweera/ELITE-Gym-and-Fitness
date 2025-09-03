@@ -12,11 +12,15 @@ export const getRecipes = query({
     let recipesQuery = ctx.db.query("recipes");
 
     if (args.category) {
-      recipesQuery = recipesQuery.filter((q) => q.eq(q.field("category"), args.category));
+      recipesQuery = recipesQuery.filter((q) =>
+        q.eq(q.field("category"), args.category)
+      );
     }
 
     if (args.difficulty) {
-      recipesQuery = recipesQuery.filter((q) => q.eq(q.field("difficulty"), args.difficulty));
+      recipesQuery = recipesQuery.filter((q) =>
+        q.eq(q.field("difficulty"), args.difficulty)
+      );
     }
 
     const recipes = await recipesQuery.order("desc").collect();
@@ -67,7 +71,7 @@ export const getRecipeById = query({
 
 // Get recipes by category
 export const getRecipesByCategory = query({
-  args: { 
+  args: {
     category: v.union(
       v.literal("breakfast"),
       v.literal("lunch"),
@@ -97,10 +101,10 @@ export const getRecipesByCategory = query({
 
 // Get personalized recipe recommendations based on user's fitness plan
 export const getPersonalizedRecipes = query({
-  args: { 
+  args: {
     clerkId: v.string(),
     limit: v.optional(v.number()),
-    mealType: v.optional(v.string()) // "breakfast", "lunch", "dinner", "pre-workout", "post-workout"
+    mealType: v.optional(v.string()), // "breakfast", "lunch", "dinner", "pre-workout", "post-workout"
   },
   handler: async (ctx, args) => {
     // Get user's active plan
@@ -118,11 +122,14 @@ export const getPersonalizedRecipes = query({
       .first();
 
     let allRecipes = await ctx.db.query("recipes").collect();
-    
+
     if (!userPlan) {
-      // If no plan, return general healthy recipes
+      // If no plan, return general healthy recipes with 0 score
       return allRecipes
-        .filter(recipe => recipe.isRecommended || recipe.category === "healthy")
+        .filter(
+          (recipe) => recipe.isRecommended || recipe.category === "healthy"
+        )
+        .map((recipe) => ({ ...recipe, score: 0 }))
         .sort((a, b) => b.createdAt - a.createdAt)
         .slice(0, args.limit || 10);
     }
@@ -131,40 +138,43 @@ export const getPersonalizedRecipes = query({
     const { dietPlan, workoutPlan } = userPlan;
     const dailyCalories = dietPlan.dailyCalories;
     const workoutDays = workoutPlan.schedule.length;
-    
+
     // Calculate user's fitness intensity
-    const totalExercises = workoutPlan.exercises.reduce((total, day) => total + day.routines.length, 0);
+    const totalExercises = workoutPlan.exercises.reduce(
+      (total, day) => total + day.routines.length,
+      0
+    );
     const avgExercisesPerDay = totalExercises / workoutDays;
     const isHighIntensity = avgExercisesPerDay > 8 || workoutDays > 4;
-    
+
     // Score recipes based on user's needs
-    const scoredRecipes = allRecipes.map(recipe => {
+    const scoredRecipes = allRecipes.map((recipe) => {
       let score = 0;
-      
+
       // Base score for all recipes
       score += recipe.isRecommended ? 10 : 0;
-      
+
       // Calorie matching (prefer recipes that fit their daily goal)
       const calorieRatio = recipe.calories / (dailyCalories / 4); // assuming 4 meals per day
       if (calorieRatio >= 0.8 && calorieRatio <= 1.2) score += 15;
       else if (calorieRatio >= 0.6 && calorieRatio <= 1.4) score += 10;
       else if (calorieRatio >= 0.4 && calorieRatio <= 1.6) score += 5;
-      
+
       // Protein priority for high-intensity workouts
       if (isHighIntensity && recipe.protein > 20) score += 12;
       else if (recipe.protein > 15) score += 8;
       else if (recipe.protein > 10) score += 5;
-      
+
       // Workout day considerations
-      const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+      const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
       const isWorkoutDay = workoutPlan.schedule.includes(today);
-      
+
       if (isWorkoutDay) {
         // Prioritize pre/post workout meals
         if (recipe.category === "pre-workout") score += 20;
         if (recipe.category === "post-workout") score += 18;
         if (recipe.category === "protein") score += 15;
-        
+
         // Higher carbs for energy
         if (recipe.carbs > 30) score += 10;
       } else {
@@ -172,44 +182,52 @@ export const getPersonalizedRecipes = query({
         if (recipe.category === "healthy") score += 12;
         if (recipe.calories < dailyCalories / 4) score += 8;
       }
-      
+
       // Membership level considerations
       if (userMembership) {
         if (userMembership.membershipType === "premium") {
           // Premium members get complex recipes
-          if (recipe.difficulty === "medium" || recipe.difficulty === "hard") score += 8;
+          if (recipe.difficulty === "medium" || recipe.difficulty === "hard")
+            score += 8;
         } else {
           // Basic members prefer easy recipes
           if (recipe.difficulty === "easy") score += 8;
         }
       }
-      
+
       // Meal type filtering
       if (args.mealType) {
         if (recipe.category === args.mealType) score += 25;
-        
+
         // Time-based suggestions
         const hour = new Date().getHours();
-        if (args.mealType === "breakfast" && (recipe.category === "breakfast" || recipe.cookingTime <= 15)) score += 15;
-        if (args.mealType === "lunch" && recipe.category === "lunch") score += 15;
-        if (args.mealType === "dinner" && recipe.category === "dinner") score += 15;
-        
+        if (
+          args.mealType === "breakfast" &&
+          (recipe.category === "breakfast" || recipe.cookingTime <= 15)
+        )
+          score += 15;
+        if (args.mealType === "lunch" && recipe.category === "lunch")
+          score += 15;
+        if (args.mealType === "dinner" && recipe.category === "dinner")
+          score += 15;
+
         // Pre/post workout timing
         if (args.mealType === "pre-workout" && recipe.carbs > 20) score += 10;
-        if (args.mealType === "post-workout" && recipe.protein > 15) score += 10;
+        if (args.mealType === "post-workout" && recipe.protein > 15)
+          score += 10;
       }
-      
+
       // Cooking time preferences (busy people prefer quick meals)
       if (recipe.cookingTime <= 15) score += 5;
       else if (recipe.cookingTime <= 30) score += 3;
-      
+
       // Variety bonus (prefer different categories)
       if (recipe.tags.includes("quick") && isHighIntensity) score += 5;
       if (recipe.tags.includes("meal-prep") && workoutDays > 3) score += 8;
-      
+
       return { ...recipe, score };
     });
-    
+
     // Sort by score and return top results
     return scoredRecipes
       .sort((a, b) => b.score - a.score)
@@ -219,7 +237,7 @@ export const getPersonalizedRecipes = query({
 
 // Get recipes based on workout schedule analysis
 export const getWorkoutBasedRecipes = query({
-  args: { 
+  args: {
     clerkId: v.string(),
     timeOfDay: v.optional(v.string()), // "morning", "afternoon", "evening"
   },
@@ -229,15 +247,15 @@ export const getWorkoutBasedRecipes = query({
       .withIndex("by_user_id", (q) => q.eq("userId", args.clerkId))
       .filter((q) => q.eq(q.field("isActive"), true))
       .first();
-    
+
     if (!userPlan) return [];
-    
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+
+    const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
     const isWorkoutDay = userPlan.workoutPlan.schedule.includes(today);
     const hour = new Date().getHours();
-    
+
     let targetCategories: string[] = [];
-    
+
     if (isWorkoutDay) {
       if (hour < 10) {
         // Morning workout day
@@ -255,14 +273,14 @@ export const getWorkoutBasedRecipes = query({
       else if (hour < 16) targetCategories = ["lunch", "healthy", "snack"];
       else targetCategories = ["dinner", "healthy"];
     }
-    
+
     const recipes = await ctx.db.query("recipes").collect();
-    
+
     return recipes
-      .filter(recipe => targetCategories.includes(recipe.category))
+      .filter((recipe) => targetCategories.includes(recipe.category))
       .sort((a, b) => {
         // Prioritize by category relevance and protein content
-        const aScore = (recipe => {
+        const aScore = ((recipe) => {
           let score = 0;
           if (targetCategories[0] === recipe.category) score += 10;
           if (targetCategories[1] === recipe.category) score += 8;
@@ -270,8 +288,8 @@ export const getWorkoutBasedRecipes = query({
           score += recipe.protein * 0.5;
           return score;
         })(a);
-        
-        const bScore = (recipe => {
+
+        const bScore = ((recipe) => {
           let score = 0;
           if (targetCategories[0] === recipe.category) score += 10;
           if (targetCategories[1] === recipe.category) score += 8;
@@ -279,7 +297,7 @@ export const getWorkoutBasedRecipes = query({
           score += recipe.protein * 0.5;
           return score;
         })(b);
-        
+
         return bScore - aScore;
       })
       .slice(0, 8);
@@ -295,35 +313,36 @@ export const getMealPrepSuggestions = query({
       .withIndex("by_user_id", (q) => q.eq("userId", args.clerkId))
       .filter((q) => q.eq(q.field("isActive"), true))
       .first();
-    
+
     if (!userPlan) return [];
-    
+
     const workoutDays = userPlan.workoutPlan.schedule.length;
     const dailyCalories = userPlan.dietPlan.dailyCalories;
-    
+
     const recipes = await ctx.db.query("recipes").collect();
-    
+
     // Filter recipes suitable for meal prep
     return recipes
-      .filter(recipe => {
+      .filter((recipe) => {
         // Good for meal prep: high protein, reasonable cooking time, stores well
-        return recipe.protein > 15 && 
-               recipe.cookingTime <= 45 && 
-               (recipe.tags.includes("meal-prep") || 
-                recipe.category === "lunch" || 
-                recipe.category === "dinner" ||
-                recipe.category === "protein");
+        return (
+          recipe.protein > 15 &&
+          recipe.cookingTime <= 45 &&
+          (recipe.tags.includes("meal-prep") ||
+            recipe.category === "lunch" ||
+            recipe.category === "dinner" ||
+            recipe.category === "protein")
+        );
       })
-      .map(recipe => ({
+      .map((recipe) => ({
         ...recipe,
         weeklyPortions: Math.ceil(workoutDays * 1.5), // More portions for active people
         totalCalories: recipe.calories * Math.ceil(workoutDays * 1.5),
-        suitabilityScore: (
+        suitabilityScore:
           (recipe.protein > 20 ? 10 : 5) +
           (recipe.cookingTime <= 30 ? 8 : 4) +
           (recipe.tags.includes("meal-prep") ? 15 : 0) +
-          (workoutDays > 3 ? 10 : 5)
-        )
+          (workoutDays > 3 ? 10 : 5),
       }))
       .sort((a, b) => b.suitabilityScore - a.suitabilityScore)
       .slice(0, 6);
@@ -332,18 +351,19 @@ export const getMealPrepSuggestions = query({
 
 // Search recipes by title or tags
 export const searchRecipes = query({
-  args: { 
+  args: {
     searchTerm: v.string(),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const recipes = await ctx.db.query("recipes").collect();
     const searchTerm = args.searchTerm.toLowerCase();
-    
-    const filteredRecipes = recipes.filter((recipe) =>
-      recipe.title.toLowerCase().includes(searchTerm) ||
-      recipe.description.toLowerCase().includes(searchTerm) ||
-      recipe.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+
+    const filteredRecipes = recipes.filter(
+      (recipe) =>
+        recipe.title.toLowerCase().includes(searchTerm) ||
+        recipe.description.toLowerCase().includes(searchTerm) ||
+        recipe.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
     );
 
     // Sort by creation date descending
@@ -375,7 +395,11 @@ export const createRecipe = mutation({
     ),
     cookingTime: v.number(),
     servings: v.number(),
-    difficulty: v.union(v.literal("easy"), v.literal("medium"), v.literal("hard")),
+    difficulty: v.union(
+      v.literal("easy"),
+      v.literal("medium"),
+      v.literal("hard")
+    ),
     calories: v.number(),
     protein: v.number(),
     carbs: v.number(),
@@ -440,19 +464,23 @@ export const updateRecipe = mutation({
     title: v.optional(v.string()),
     description: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
-    category: v.optional(v.union(
-      v.literal("breakfast"),
-      v.literal("lunch"),
-      v.literal("dinner"),
-      v.literal("snack"),
-      v.literal("pre-workout"),
-      v.literal("post-workout"),
-      v.literal("protein"),
-      v.literal("healthy")
-    )),
+    category: v.optional(
+      v.union(
+        v.literal("breakfast"),
+        v.literal("lunch"),
+        v.literal("dinner"),
+        v.literal("snack"),
+        v.literal("pre-workout"),
+        v.literal("post-workout"),
+        v.literal("protein"),
+        v.literal("healthy")
+      )
+    ),
     cookingTime: v.optional(v.number()),
     servings: v.optional(v.number()),
-    difficulty: v.optional(v.union(v.literal("easy"), v.literal("medium"), v.literal("hard"))),
+    difficulty: v.optional(
+      v.union(v.literal("easy"), v.literal("medium"), v.literal("hard"))
+    ),
     calories: v.optional(v.number()),
     protein: v.optional(v.number()),
     carbs: v.optional(v.number()),
@@ -544,12 +572,13 @@ export const seedMoreRecipes = mutation({
     }
 
     const now = Date.now();
-    
+
     const newRecipes = [
       // Breakfast Recipes
       {
         title: "Power Protein Pancakes",
-        description: "Fluffy pancakes packed with protein for sustained morning energy.",
+        description:
+          "Fluffy pancakes packed with protein for sustained morning energy.",
         category: "breakfast" as const,
         cookingTime: 20,
         servings: 3,
@@ -574,15 +603,16 @@ export const seedMoreRecipes = mutation({
           "Combine wet and dry ingredients",
           "Fold in blueberries",
           "Cook on medium heat for 2-3 minutes per side",
-          "Serve hot with sugar-free syrup"
+          "Serve hot with sugar-free syrup",
         ],
         tags: ["high-protein", "breakfast", "muscle-building", "filling"],
         isRecommended: true,
       },
-      
+
       {
         title: "Green Warrior Smoothie Bowl",
-        description: "Nutrient-dense smoothie bowl with superfoods for maximum energy.",
+        description:
+          "Nutrient-dense smoothie bowl with superfoods for maximum energy.",
         category: "breakfast" as const,
         cookingTime: 10,
         servings: 1,
@@ -606,7 +636,7 @@ export const seedMoreRecipes = mutation({
           "Pour into bowl",
           "Top with chia seeds, granola, and almonds",
           "Add fresh berries if available",
-          "Eat immediately for best texture"
+          "Eat immediately for best texture",
         ],
         tags: ["superfood", "antioxidants", "energy", "vitamins"],
         isRecommended: true,
@@ -640,7 +670,7 @@ export const seedMoreRecipes = mutation({
           "Fold in chocolate chips",
           "Roll into 8 balls",
           "Refrigerate for 30 minutes",
-          "Store in fridge for up to 1 week"
+          "Store in fridge for up to 1 week",
         ],
         tags: ["no-bake", "portable", "quick-energy", "meal-prep"],
         isRecommended: true,
@@ -649,7 +679,8 @@ export const seedMoreRecipes = mutation({
       // Post-Workout Recipes
       {
         title: "Recovery Muscle Smoothie",
-        description: "Ultimate post-workout smoothie for muscle recovery and growth.",
+        description:
+          "Ultimate post-workout smoothie for muscle recovery and growth.",
         category: "post-workout" as const,
         cookingTime: 5,
         servings: 1,
@@ -673,9 +704,14 @@ export const seedMoreRecipes = mutation({
           "Add protein powder and creatine",
           "Add ice and blend until smooth",
           "Drink within 30 minutes post-workout",
-          "Add more liquid if too thick"
+          "Add more liquid if too thick",
         ],
-        tags: ["recovery", "high-protein", "fast-absorption", "muscle-building"],
+        tags: [
+          "recovery",
+          "high-protein",
+          "fast-absorption",
+          "muscle-building",
+        ],
         isRecommended: true,
       },
 
@@ -710,7 +746,7 @@ export const seedMoreRecipes = mutation({
           "Top with quinoa, chickpeas, vegetables",
           "Slice chicken and place on top",
           "Crumble feta cheese over bowl",
-          "Drizzle with olive oil and lemon juice"
+          "Drizzle with olive oil and lemon juice",
         ],
         tags: ["mediterranean", "lean-protein", "healthy-fats", "balanced"],
         isRecommended: true,
@@ -719,7 +755,8 @@ export const seedMoreRecipes = mutation({
       // Dinner Recipes
       {
         title: "Lean Beef Stir-Fry",
-        description: "Quick and protein-rich stir-fry with colorful vegetables.",
+        description:
+          "Quick and protein-rich stir-fry with colorful vegetables.",
         category: "dinner" as const,
         cookingTime: 20,
         servings: 2,
@@ -746,7 +783,7 @@ export const seedMoreRecipes = mutation({
           "Add broccoli and bell peppers",
           "Stir-fry for 5-7 minutes until vegetables are tender-crisp",
           "Add soy sauce and toss to combine",
-          "Serve over brown rice"
+          "Serve over brown rice",
         ],
         tags: ["high-protein", "quick-dinner", "vegetables", "asian-inspired"],
         isRecommended: false,
@@ -780,7 +817,7 @@ export const seedMoreRecipes = mutation({
           "Add water if too thick",
           "Taste and adjust seasonings",
           "Serve with vegetables or whole grain crackers",
-          "Store in fridge for up to 1 week"
+          "Store in fridge for up to 1 week",
         ],
         tags: ["protein-snack", "meal-prep", "healthy", "plant-protein"],
         isRecommended: true,
@@ -789,7 +826,8 @@ export const seedMoreRecipes = mutation({
       // Healthy Category
       {
         title: "Detox Green Soup",
-        description: "Cleansing vegetable soup packed with nutrients and fiber.",
+        description:
+          "Cleansing vegetable soup packed with nutrients and fiber.",
         category: "healthy" as const,
         cookingTime: 30,
         servings: 4,
@@ -816,11 +854,11 @@ export const seedMoreRecipes = mutation({
           "Simmer for 15 minutes until vegetables are tender",
           "Add spinach and cook until wilted",
           "Blend soup until smooth",
-          "Stir in coconut milk and season to taste"
+          "Stir in coconut milk and season to taste",
         ],
         tags: ["detox", "low-calorie", "fiber-rich", "vitamins"],
         isRecommended: false,
-      }
+      },
     ];
 
     // Insert all new recipes
@@ -835,9 +873,9 @@ export const seedMoreRecipes = mutation({
       createdRecipes.push(recipeId);
     }
 
-    return { 
+    return {
       message: `Successfully created ${newRecipes.length} new recipes`,
-      recipeIds: createdRecipes
+      recipeIds: createdRecipes,
     };
   },
 });
@@ -865,11 +903,12 @@ export const seedRecipes = mutation({
     }
 
     const now = Date.now();
-    
+
     // Sample recipe 1
     await ctx.db.insert("recipes", {
       title: "Protein Power Bowl",
-      description: "A high-protein, nutrient-dense bowl perfect for post-workout recovery.",
+      description:
+        "A high-protein, nutrient-dense bowl perfect for post-workout recovery.",
       category: "post-workout",
       cookingTime: 15,
       servings: 2,
@@ -892,7 +931,7 @@ export const seedRecipes = mutation({
         "Slice avocado and halve cherry tomatoes",
         "Arrange quinoa in bowl, top with mixed greens",
         "Add sliced chicken, avocado, and tomatoes",
-        "Dollop with Greek yogurt and serve"
+        "Dollop with Greek yogurt and serve",
       ],
       tags: ["high-protein", "healthy", "quick", "post-workout"],
       isRecommended: true,
@@ -904,7 +943,8 @@ export const seedRecipes = mutation({
     // Sample recipe 2
     await ctx.db.insert("recipes", {
       title: "Overnight Oats Energy Bowl",
-      description: "Perfect breakfast to fuel your morning workout with sustained energy.",
+      description:
+        "Perfect breakfast to fuel your morning workout with sustained energy.",
       category: "breakfast",
       cookingTime: 5,
       servings: 1,
@@ -928,7 +968,7 @@ export const seedRecipes = mutation({
         "Refrigerate overnight",
         "In the morning, top with sliced banana",
         "Add a dollop of almond butter",
-        "Enjoy cold or warm"
+        "Enjoy cold or warm",
       ],
       tags: ["breakfast", "overnight", "energy", "fiber"],
       isRecommended: true,
@@ -940,7 +980,8 @@ export const seedRecipes = mutation({
     // Sample recipe 3
     await ctx.db.insert("recipes", {
       title: "Lean Turkey Meatballs",
-      description: "Flavorful, lean protein-packed meatballs perfect for meal prep.",
+      description:
+        "Flavorful, lean protein-packed meatballs perfect for meal prep.",
       category: "lunch",
       cookingTime: 25,
       servings: 4,
@@ -966,7 +1007,7 @@ export const seedRecipes = mutation({
         "Heat olive oil in oven-safe skillet",
         "Brown meatballs on all sides",
         "Transfer to oven for 12-15 minutes",
-        "Serve with your favorite sauce"
+        "Serve with your favorite sauce",
       ],
       tags: ["protein", "meal-prep", "lean", "gluten-free"],
       isRecommended: false,
@@ -1000,7 +1041,7 @@ export const seedRecipes = mutation({
         "Blend on high until smooth",
         "Add more almond milk if too thick",
         "Serve immediately",
-        "Drink 30-60 minutes before workout"
+        "Drink 30-60 minutes before workout",
       ],
       tags: ["smoothie", "pre-workout", "energy", "quick"],
       isRecommended: true,
@@ -1012,7 +1053,8 @@ export const seedRecipes = mutation({
     // Sample recipe 5
     await ctx.db.insert("recipes", {
       title: "Salmon Power Salad",
-      description: "Omega-3 rich salmon with nutrient-dense vegetables for optimal recovery.",
+      description:
+        "Omega-3 rich salmon with nutrient-dense vegetables for optimal recovery.",
       category: "dinner",
       cookingTime: 20,
       servings: 2,
@@ -1038,7 +1080,7 @@ export const seedRecipes = mutation({
         "Arrange greens in bowls",
         "Top with roasted sweet potato and flaked salmon",
         "Sprinkle with walnuts and feta",
-        "Drizzle with olive oil and lemon juice"
+        "Drizzle with olive oil and lemon juice",
       ],
       tags: ["omega-3", "recovery", "nutrient-dense", "anti-inflammatory"],
       isRecommended: true,
@@ -1087,7 +1129,8 @@ export const seedComprehensiveRecipes = mutation({
       // BREAKFAST RECIPES
       {
         title: "Power Breakfast Protein Pancakes",
-        description: "Fluffy protein-packed pancakes perfect for muscle building and energy. Made with oats, protein powder, and bananas.",
+        description:
+          "Fluffy protein-packed pancakes perfect for muscle building and energy. Made with oats, protein powder, and bananas.",
         category: "breakfast",
         difficulty: "easy",
         cookingTime: 15,
@@ -1104,7 +1147,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Unsweetened almond milk", amount: "1/2", unit: "cup" },
           { name: "Baking powder", amount: "1", unit: "tsp" },
           { name: "Cinnamon", amount: "1/2", unit: "tsp" },
-          { name: "Natural peanut butter", amount: "1", unit: "tbsp" }
+          { name: "Natural peanut butter", amount: "1", unit: "tbsp" },
         ],
         instructions: [
           "Blend oats into flour consistency",
@@ -1112,9 +1155,15 @@ export const seedComprehensiveRecipes = mutation({
           "Combine wet ingredients separately",
           "Mix wet and dry ingredients until smooth",
           "Cook on medium heat for 2-3 minutes per side",
-          "Serve with peanut butter drizzle"
+          "Serve with peanut butter drizzle",
         ],
-        tags: ["high-protein", "muscle-building", "pre-workout", "gluten-free", "meal-prep"],
+        tags: [
+          "high-protein",
+          "muscle-building",
+          "pre-workout",
+          "gluten-free",
+          "meal-prep",
+        ],
         rating: 4.8,
         isRecommended: true,
         createdAt: Date.now(),
@@ -1122,7 +1171,8 @@ export const seedComprehensiveRecipes = mutation({
       },
       {
         title: "Greek Yogurt Berry Protein Bowl",
-        description: "Antioxidant-rich breakfast bowl with Greek yogurt, mixed berries, and crunchy granola.",
+        description:
+          "Antioxidant-rich breakfast bowl with Greek yogurt, mixed berries, and crunchy granola.",
         category: "breakfast",
         difficulty: "easy",
         cookingTime: 5,
@@ -1137,7 +1187,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Homemade granola", amount: "2", unit: "tbsp" },
           { name: "Chia seeds", amount: "1", unit: "tbsp" },
           { name: "Honey", amount: "1", unit: "tsp" },
-          { name: "Sliced almonds", amount: "1", unit: "tbsp" }
+          { name: "Sliced almonds", amount: "1", unit: "tbsp" },
         ],
         instructions: [
           "Layer Greek yogurt in bowl",
@@ -1145,9 +1195,15 @@ export const seedComprehensiveRecipes = mutation({
           "Sprinkle granola and chia seeds",
           "Drizzle with honey",
           "Add sliced almonds",
-          "Serve immediately"
+          "Serve immediately",
         ],
-        tags: ["quick", "high-protein", "antioxidants", "probiotics", "meal-prep"],
+        tags: [
+          "quick",
+          "high-protein",
+          "antioxidants",
+          "probiotics",
+          "meal-prep",
+        ],
         rating: 4.6,
         isRecommended: true,
         createdAt: Date.now(),
@@ -1157,7 +1213,8 @@ export const seedComprehensiveRecipes = mutation({
       // LUNCH RECIPES
       {
         title: "Grilled Chicken Power Salad",
-        description: "Nutrient-dense salad with grilled chicken, quinoa, and fresh vegetables. Perfect for lean muscle building.",
+        description:
+          "Nutrient-dense salad with grilled chicken, quinoa, and fresh vegetables. Perfect for lean muscle building.",
         category: "lunch",
         difficulty: "medium",
         cookingTime: 25,
@@ -1175,7 +1232,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Olive oil", amount: "2", unit: "tbsp" },
           { name: "Lemon juice", amount: "1", unit: "tbsp" },
           { name: "Cherry tomatoes", amount: "1/2", unit: "cup" },
-          { name: "Cucumber slices", amount: "1/2", unit: "cup" }
+          { name: "Cucumber slices", amount: "1/2", unit: "cup" },
         ],
         instructions: [
           "Season and grill chicken breast",
@@ -1183,9 +1240,15 @@ export const seedComprehensiveRecipes = mutation({
           "Prepare all vegetables",
           "Make dressing with olive oil and lemon",
           "Assemble salad with warm quinoa base",
-          "Top with sliced grilled chicken"
+          "Top with sliced grilled chicken",
         ],
-        tags: ["lean-protein", "quinoa", "healthy-fats", "meal-prep", "gluten-free"],
+        tags: [
+          "lean-protein",
+          "quinoa",
+          "healthy-fats",
+          "meal-prep",
+          "gluten-free",
+        ],
         rating: 4.7,
         isRecommended: true,
         createdAt: Date.now(),
@@ -1193,7 +1256,8 @@ export const seedComprehensiveRecipes = mutation({
       },
       {
         title: "Turkey and Sweet Potato Bowl",
-        description: "Balanced macro bowl with lean turkey, roasted sweet potato, and steamed broccoli.",
+        description:
+          "Balanced macro bowl with lean turkey, roasted sweet potato, and steamed broccoli.",
         category: "lunch",
         difficulty: "medium",
         cookingTime: 30,
@@ -1210,7 +1274,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Garlic powder", amount: "1", unit: "tsp" },
           { name: "Paprika", amount: "1", unit: "tsp" },
           { name: "Salt and pepper", amount: "1", unit: "pinch" },
-          { name: "Fresh herbs", amount: "2", unit: "tbsp" }
+          { name: "Fresh herbs", amount: "2", unit: "tbsp" },
         ],
         instructions: [
           "Preheat oven to 400°F",
@@ -1218,9 +1282,15 @@ export const seedComprehensiveRecipes = mutation({
           "Roast sweet potato for 25 minutes",
           "Cook ground turkey with seasonings",
           "Steam broccoli until tender",
-          "Combine all components in bowl"
+          "Combine all components in bowl",
         ],
-        tags: ["lean-protein", "complex-carbs", "vegetables", "meal-prep", "paleo"],
+        tags: [
+          "lean-protein",
+          "complex-carbs",
+          "vegetables",
+          "meal-prep",
+          "paleo",
+        ],
         rating: 4.5,
         isRecommended: false,
         createdAt: Date.now(),
@@ -1230,7 +1300,8 @@ export const seedComprehensiveRecipes = mutation({
       // DINNER RECIPES
       {
         title: "Herb-Crusted Salmon with Vegetables",
-        description: "Omega-3 rich salmon with colorful roasted vegetables. Anti-inflammatory and muscle recovery focused.",
+        description:
+          "Omega-3 rich salmon with colorful roasted vegetables. Anti-inflammatory and muscle recovery focused.",
         category: "dinner",
         difficulty: "medium",
         cookingTime: 35,
@@ -1247,7 +1318,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Olive oil", amount: "2", unit: "tbsp" },
           { name: "Fresh dill", amount: "2", unit: "tbsp" },
           { name: "Lemon zest", amount: "1", unit: "tsp" },
-          { name: "Garlic cloves", amount: "2", unit: "pieces" }
+          { name: "Garlic cloves", amount: "2", unit: "pieces" },
         ],
         instructions: [
           "Preheat oven to 425°F",
@@ -1255,9 +1326,15 @@ export const seedComprehensiveRecipes = mutation({
           "Toss vegetables with olive oil",
           "Place salmon on baking sheet with vegetables",
           "Bake for 12-15 minutes",
-          "Finish with lemon zest"
+          "Finish with lemon zest",
         ],
-        tags: ["omega-3", "anti-inflammatory", "heart-healthy", "low-carb", "paleo"],
+        tags: [
+          "omega-3",
+          "anti-inflammatory",
+          "heart-healthy",
+          "low-carb",
+          "paleo",
+        ],
         rating: 4.9,
         isRecommended: true,
         createdAt: Date.now(),
@@ -1267,7 +1344,8 @@ export const seedComprehensiveRecipes = mutation({
       // PRE-WORKOUT RECIPES
       {
         title: "Energy Boosting Banana Smoothie",
-        description: "Quick-digesting carbs and caffeine for optimal pre-workout energy. Ready in 2 minutes.",
+        description:
+          "Quick-digesting carbs and caffeine for optimal pre-workout energy. Ready in 2 minutes.",
         category: "pre-workout",
         difficulty: "easy",
         cookingTime: 2,
@@ -1283,14 +1361,14 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Almond butter", amount: "1", unit: "tbsp" },
           { name: "Cinnamon", amount: "1/2", unit: "tsp" },
           { name: "Ice cubes", amount: "4", unit: "pieces" },
-          { name: "Espresso shot (optional)", amount: "1", unit: "shot" }
+          { name: "Espresso shot (optional)", amount: "1", unit: "shot" },
         ],
         instructions: [
           "Add all ingredients to blender",
           "Blend until smooth and creamy",
           "Add ice for desired consistency",
           "Serve immediately",
-          "Consume 30-45 minutes before workout"
+          "Consume 30-45 minutes before workout",
         ],
         tags: ["pre-workout", "quick-energy", "portable", "caffeine-optional"],
         rating: 4.7,
@@ -1302,7 +1380,8 @@ export const seedComprehensiveRecipes = mutation({
       // POST-WORKOUT RECIPES
       {
         title: "Recovery Chocolate Protein Smoothie",
-        description: "Ultimate post-workout recovery drink with fast-absorbing proteins and carbs for muscle repair.",
+        description:
+          "Ultimate post-workout recovery drink with fast-absorbing proteins and carbs for muscle repair.",
         category: "post-workout",
         difficulty: "easy",
         cookingTime: 3,
@@ -1318,16 +1397,21 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Almond butter", amount: "1", unit: "tbsp" },
           { name: "Spinach (optional)", amount: "1", unit: "cup" },
           { name: "Cacao powder", amount: "1", unit: "tsp" },
-          { name: "Ice cubes", amount: "4", unit: "pieces" }
+          { name: "Ice cubes", amount: "4", unit: "pieces" },
         ],
         instructions: [
           "Add all ingredients to blender",
           "Blend until completely smooth",
           "Adjust consistency with more milk if needed",
           "Serve immediately",
-          "Consume within 30 minutes post-workout"
+          "Consume within 30 minutes post-workout",
         ],
-        tags: ["post-workout", "muscle-recovery", "high-protein", "antioxidants"],
+        tags: [
+          "post-workout",
+          "muscle-recovery",
+          "high-protein",
+          "antioxidants",
+        ],
         rating: 4.8,
         isRecommended: true,
         createdAt: Date.now(),
@@ -1335,7 +1419,8 @@ export const seedComprehensiveRecipes = mutation({
       },
       {
         title: "Quinoa Recovery Bowl with Chicken",
-        description: "Complete amino acid profile with quinoa and chicken for optimal muscle protein synthesis.",
+        description:
+          "Complete amino acid profile with quinoa and chicken for optimal muscle protein synthesis.",
         category: "post-workout",
         difficulty: "medium",
         cookingTime: 25,
@@ -1352,7 +1437,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Salsa", amount: "2", unit: "tbsp" },
           { name: "Lime juice", amount: "1", unit: "tbsp" },
           { name: "Cilantro", amount: "2", unit: "tbsp" },
-          { name: "Hot sauce (optional)", amount: "1", unit: "tsp" }
+          { name: "Hot sauce (optional)", amount: "1", unit: "tsp" },
         ],
         instructions: [
           "Grill chicken and slice",
@@ -1360,9 +1445,14 @@ export const seedComprehensiveRecipes = mutation({
           "Heat black beans",
           "Assemble bowl with quinoa base",
           "Top with chicken, beans, avocado",
-          "Finish with salsa and lime"
+          "Finish with salsa and lime",
         ],
-        tags: ["complete-protein", "complex-carbs", "muscle-building", "meal-prep"],
+        tags: [
+          "complete-protein",
+          "complex-carbs",
+          "muscle-building",
+          "meal-prep",
+        ],
         rating: 4.6,
         isRecommended: true,
         createdAt: Date.now(),
@@ -1372,7 +1462,8 @@ export const seedComprehensiveRecipes = mutation({
       // HEALTHY SNACKS
       {
         title: "Protein-Packed Hummus with Veggies",
-        description: "Creamy homemade hummus with extra protein, served with colorful vegetable sticks.",
+        description:
+          "Creamy homemade hummus with extra protein, served with colorful vegetable sticks.",
         category: "snack",
         difficulty: "easy",
         cookingTime: 10,
@@ -1389,7 +1480,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Unflavored protein powder", amount: "1", unit: "scoop" },
           { name: "Mixed vegetables", amount: "2", unit: "cups" },
           { name: "Olive oil", amount: "1", unit: "tbsp" },
-          { name: "Paprika", amount: "1", unit: "tsp" }
+          { name: "Paprika", amount: "1", unit: "tsp" },
         ],
         instructions: [
           "Blend chickpeas until smooth",
@@ -1397,7 +1488,7 @@ export const seedComprehensiveRecipes = mutation({
           "Mix in protein powder gradually",
           "Adjust consistency with water",
           "Cut vegetables into sticks",
-          "Serve with drizzle of olive oil"
+          "Serve with drizzle of olive oil",
         ],
         tags: ["high-fiber", "plant-protein", "meal-prep", "portable"],
         rating: 4.4,
@@ -1407,7 +1498,8 @@ export const seedComprehensiveRecipes = mutation({
       },
       {
         title: "Greek Yogurt Protein Parfait",
-        description: "Layered parfait with Greek yogurt, berries, and protein-rich granola for sustained energy.",
+        description:
+          "Layered parfait with Greek yogurt, berries, and protein-rich granola for sustained energy.",
         category: "snack",
         difficulty: "easy",
         cookingTime: 5,
@@ -1422,7 +1514,7 @@ export const seedComprehensiveRecipes = mutation({
           { name: "Protein granola", amount: "2", unit: "tbsp" },
           { name: "Honey", amount: "1", unit: "tsp" },
           { name: "Chopped walnuts", amount: "1", unit: "tbsp" },
-          { name: "Cinnamon", amount: "1", unit: "pinch" }
+          { name: "Cinnamon", amount: "1", unit: "pinch" },
         ],
         instructions: [
           "Layer half the yogurt in glass",
@@ -1430,14 +1522,14 @@ export const seedComprehensiveRecipes = mutation({
           "Layer remaining yogurt",
           "Top with walnuts and drizzle honey",
           "Sprinkle with cinnamon",
-          "Serve immediately or refrigerate"
+          "Serve immediately or refrigerate",
         ],
         tags: ["probiotics", "antioxidants", "quick", "protein-rich"],
         rating: 4.5,
         isRecommended: true,
         createdAt: Date.now(),
         updatedAt: Date.now(),
-      }
+      },
     ];
 
     // Insert all recipes
@@ -1460,14 +1552,14 @@ export const seedComprehensiveRecipes = mutation({
         isRecommended: recipe.isRecommended,
         createdAt: recipe.createdAt,
         updatedAt: recipe.updatedAt,
-        createdBy: systemUser._id
+        createdBy: systemUser._id,
       });
     }
 
-    return { 
+    return {
       message: `Successfully seeded ${recipes.length} comprehensive recipes`,
-      categories: [...new Set(recipes.map(r => r.category))],
-      totalRecipes: recipes.length
+      categories: [...new Set(recipes.map((r) => r.category))],
+      totalRecipes: recipes.length,
     };
   },
 });
