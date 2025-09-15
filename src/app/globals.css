@@ -115,6 +115,8 @@
   --gym-dark: #0a0a0a;
   --gym-gray: #1f2937;
   --gym-gray-light: #374151;
+  --gym-gray-lighter: #4b5563;
+  --gym-gray-subtle: #1a1a1a;
 
   /* Dark Theme Background */
   --background: var(--gym-black);
@@ -134,9 +136,9 @@
   --secondary: var(--gym-orange);
   --secondary-foreground: #ffffff;
 
-  /* Accent - Orange bright */
-  --accent: var(--gym-orange-bright);
-  --accent-foreground: var(--gym-black);
+  /* Accent - Subtle gray for better dark theme integration */
+  --accent: var(--gym-gray-subtle);
+  --accent-foreground: #ffffff;
 
   /* Muted elements */
   --muted: var(--gym-gray);

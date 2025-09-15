@@ -20,11 +20,11 @@ const HomePage = () => {
     >
       {/* Background Effects */}
       <div
-        className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"
+        className="absolute inset-0 bg-gradient-to-br from-background via-muted/10 to-primary/5"
         suppressHydrationWarning
       ></div>
       <div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb,220,38,38),0.1)_0%,transparent_50%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)] dark:bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15)_0%,transparent_50%)]"
         suppressHydrationWarning
       ></div>
 
@@ -109,24 +109,24 @@ const HomePage = () => {
 
                 {/* Statistics Badges positioned exactly like reference image - Made bigger */}
                 {/* + 300 AI Generations - top right */}
-                <div className="absolute top-6 right-4 bg-background/90 backdrop-blur-sm rounded-xl p-5 border border-secondary/50 shadow-lg">
-                  <div className="text-secondary font-bold text-2xl">+ 300</div>
+                <div className="absolute top-6 right-4 bg-background/95 backdrop-blur-sm rounded-xl p-5 border border-border shadow-lg hover:shadow-primary/20 transition-all duration-300">
+                  <div className="text-primary font-bold text-2xl">+ 300</div>
                   <div className="text-foreground text-sm font-medium">
                     AI Generations
                   </div>
                 </div>
 
                 {/* + 20 Coaches - left side, upper middle */}
-                <div className="absolute top-1/3 -left-6 bg-background/90 backdrop-blur-sm rounded-xl p-5 border border-secondary/50 shadow-lg">
-                  <div className="text-secondary font-bold text-2xl">+ 20</div>
+                <div className="absolute top-1/3 -left-6 bg-background/95 backdrop-blur-sm rounded-xl p-5 border border-border shadow-lg hover:shadow-primary/20 transition-all duration-300">
+                  <div className="text-primary font-bold text-2xl">+ 20</div>
                   <div className="text-foreground text-sm font-medium">
                     Coaches
                   </div>
                 </div>
 
                 {/* + 1000 Community - bottom left, overlapping figure */}
-                <div className="absolute bottom-1/4 left-0 bg-background/90 backdrop-blur-sm rounded-xl p-5 border border-secondary/50 shadow-lg z-10">
-                  <div className="text-secondary font-bold text-2xl">
+                <div className="absolute bottom-1/4 left-0 bg-background/95 backdrop-blur-sm rounded-xl p-5 border border-border shadow-lg z-10 hover:shadow-primary/20 transition-all duration-300">
+                  <div className="text-primary font-bold text-2xl">
                     + 1000
                   </div>
                   <div className="text-foreground text-sm font-medium">
@@ -135,15 +135,15 @@ const HomePage = () => {
                 </div>
 
                 {/* + 30 Trainers - bottom right */}
-                <div className="absolute bottom-4 right-4 bg-background/90 backdrop-blur-sm rounded-xl p-5 border border-secondary/50 shadow-lg">
-                  <div className="text-secondary font-bold text-2xl">+ 30</div>
+                <div className="absolute bottom-4 right-4 bg-background/95 backdrop-blur-sm rounded-xl p-5 border border-border shadow-lg hover:shadow-primary/20 transition-all duration-300">
+                  <div className="text-primary font-bold text-2xl">+ 30</div>
                   <div className="text-foreground text-sm font-medium">
                     Trainers
                   </div>
                 </div>
 
                 {/* Glow effects around the image */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-secondary/10 rounded-3xl blur-3xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-secondary/5 rounded-3xl blur-3xl dark:via-primary/10 dark:to-secondary/10"></div>
               </div>
             </div>
           </div>

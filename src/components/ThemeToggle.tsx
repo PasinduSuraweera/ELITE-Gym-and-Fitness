@@ -23,17 +23,21 @@ export function ThemeToggle() {
     )
   }
 
+  const cycleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light")
+  }
+
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="w-9 h-9 hover:bg-gray-700/50 transition-colors"
+      onClick={cycleTheme}
+      className="w-9 h-9 hover:bg-accent/50 transition-colors"
     >
       {theme === "light" ? (
-        <Moon className="h-4 w-4 text-gray-800 dark:text-gray-200" />
+        <Moon className="h-4 w-4 text-foreground" />
       ) : (
-        <Sun className="h-4 w-4 text-gray-200" />
+        <Sun className="h-4 w-4 text-foreground" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>
