@@ -189,16 +189,16 @@ const MarketplacePage = () => {
 
   return (
     <div
-      className="flex flex-col min-h-screen overflow-hidden relative bg-background"
+      className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background"
       suppressHydrationWarning
     >
       {/* Background Effects */}
       <div
-        className="absolute inset-0 bg-gradient-to-br from-background via-muted/10 to-primary/5"
+        className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"
         suppressHydrationWarning
       ></div>
       <div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb,220,38,38),0.1)_0%,transparent_50%)]"
         suppressHydrationWarning
       ></div>
 

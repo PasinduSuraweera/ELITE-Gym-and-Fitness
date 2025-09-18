@@ -195,8 +195,9 @@ export default function BlogPostPage() {
 
   if (!mounted) {
     return (
-      <div className="flex flex-col min-h-screen overflow-hidden relative bg-background">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/10 to-primary/5"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb,220,38,38),0.1)_0%,transparent_50%)]"></div>
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
           <div className="animate-pulse max-w-4xl mx-auto">
             <div className="h-8 bg-muted rounded w-1/4 mb-8"></div>
@@ -216,8 +217,9 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="flex flex-col min-h-screen overflow-hidden relative bg-background">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/10 to-primary/5"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb,220,38,38),0.1)_0%,transparent_50%)]"></div>
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
           <div className="max-w-2xl mx-auto text-center">
             <h1 className="text-4xl font-bold text-foreground mb-4">Article Not Found</h1>
@@ -239,10 +241,10 @@ export default function BlogPostPage() {
   const isLiked = userLikedPosts?.includes(post._id) || false;
 
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden relative bg-background" suppressHydrationWarning>
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background" suppressHydrationWarning>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/10 to-primary/5" suppressHydrationWarning></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb,220,38,38),0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
       
       <div className="container mx-auto px-4 py-32 relative z-10 flex-1" suppressHydrationWarning>
         <div className="max-w-4xl mx-auto">
