@@ -207,7 +207,7 @@ const MarketplacePage = () => {
         suppressHydrationWarning
       >
         {/* Centered Header */}
-        <div className="text-center mb-16" suppressHydrationWarning>
+        <div className="max-w-4xl mx-auto text-center mb-16" suppressHydrationWarning>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
             <span className="text-primary">Fitness</span> Marketplace
           </h1>
@@ -217,7 +217,7 @@ const MarketplacePage = () => {
           </p>
         </div>
 
-        <div className="flex gap-8">
+        <div className="max-w-7xl mx-auto flex gap-8">
           {/* Sticky Search + Sidebar */}
           <div className="hidden lg:block w-64 flex-shrink-0">
             <div className="sticky top-8 space-y-6">
@@ -606,7 +606,7 @@ const MarketplacePage = () => {
                                   {item.description}
                                 </p>
 
-                                <div className="flex items-center justify-between mt-auto">
+                                <div className="flex items-center justify-between mb-4">
                                   <div className="flex-1">
                                     <div className="text-2xl font-bold text-foreground mb-2">
                                       {formatPrice(item.price)}
@@ -615,37 +615,37 @@ const MarketplacePage = () => {
                                       {item.stock} in stock
                                     </p>
                                   </div>
-
-                                  {user ? (
-                                    <Button
-                                      onClick={() => handleAddToCart(item._id)}
-                                      className="bg-primary hover:bg-primary/90 text-primary-foreground ml-4 flex-shrink-0"
-                                      disabled={
-                                        item.stock === 0 ||
-                                        addingToCart === item._id
-                                      }
-                                    >
-                                      {addingToCart === item._id ? (
-                                        <>Loading...</>
-                                      ) : (
-                                        <>
-                                          <ShoppingCart className="h-4 w-4 mr-2" />
-                                          Add to Cart
-                                        </>
-                                      )}
-                                    </Button>
-                                  ) : (
-                                    <Button
-                                      asChild
-                                      className="bg-primary hover:bg-primary/90 text-primary-foreground ml-4 flex-shrink-0"
-                                    >
-                                      <Link href="/sign-in">
-                                        <ShoppingCart className="h-4 w-4 mr-2" />
-                                        Sign In to Buy
-                                      </Link>
-                                    </Button>
-                                  )}
                                 </div>
+
+                                {user ? (
+                                  <Button
+                                    onClick={() => handleAddToCart(item._id)}
+                                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-base font-medium"
+                                    disabled={
+                                      item.stock === 0 ||
+                                      addingToCart === item._id
+                                    }
+                                  >
+                                    {addingToCart === item._id ? (
+                                      <>Loading...</>
+                                    ) : (
+                                      <>
+                                        <ShoppingCart className="h-5 w-5 mr-2" />
+                                        Add to Cart
+                                      </>
+                                    )}
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    asChild
+                                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-base font-medium"
+                                  >
+                                    <Link href="/sign-in">
+                                      <ShoppingCart className="h-5 w-5 mr-2" />
+                                      Sign In to Buy
+                                    </Link>
+                                  </Button>
+                                )}
                               </div>
                             </div>
                           ))}
@@ -727,7 +727,7 @@ const MarketplacePage = () => {
                           {item.description}
                         </p>
 
-                        <div className="flex items-center justify-between mt-auto">
+                        <div className="flex items-center justify-between mb-4">
                           <div className="flex-1">
                             <div className="text-2xl font-bold text-foreground mb-2">
                               {formatPrice(item.price)}
@@ -736,36 +736,36 @@ const MarketplacePage = () => {
                               {item.stock} in stock
                             </p>
                           </div>
-
-                          {user ? (
-                            <Button
-                              onClick={() => handleAddToCart(item._id)}
-                              className="bg-primary hover:bg-primary/90 text-primary-foreground ml-4 flex-shrink-0"
-                              disabled={
-                                item.stock === 0 || addingToCart === item._id
-                              }
-                            >
-                              {addingToCart === item._id ? (
-                                <>Loading...</>
-                              ) : (
-                                <>
-                                  <ShoppingCart className="h-4 w-4 mr-2" />
-                                  Add to Cart
-                                </>
-                              )}
-                            </Button>
-                          ) : (
-                            <Button
-                              asChild
-                              className="bg-primary hover:bg-primary/90 text-primary-foreground ml-4 flex-shrink-0"
-                            >
-                              <Link href="/sign-in">
-                                <ShoppingCart className="h-4 w-4 mr-2" />
-                                Sign In to Buy
-                              </Link>
-                            </Button>
-                          )}
                         </div>
+
+                        {user ? (
+                          <Button
+                            onClick={() => handleAddToCart(item._id)}
+                            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-base font-medium"
+                            disabled={
+                              item.stock === 0 || addingToCart === item._id
+                            }
+                          >
+                            {addingToCart === item._id ? (
+                              <>Loading...</>
+                            ) : (
+                              <>
+                                <ShoppingCart className="h-5 w-5 mr-2" />
+                                Add to Cart
+                              </>
+                            )}
+                          </Button>
+                        ) : (
+                          <Button
+                            asChild
+                            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-base font-medium"
+                          >
+                            <Link href="/sign-in">
+                              <ShoppingCart className="h-5 w-5 mr-2" />
+                              Sign In to Buy
+                            </Link>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}

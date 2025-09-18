@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { vapi } from "@/lib/vapi";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 
 const GenerateProgramPage = () => {
@@ -15,6 +16,7 @@ const GenerateProgramPage = () => {
   const [callEnded, setCallEnded] = useState(false);
 
   const { user } = useUser();
+  const { theme } = useTheme();
   const router = useRouter();
 
   const messageContainerRef = useRef<HTMLDivElement>(null);
@@ -147,26 +149,26 @@ const GenerateProgramPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background" suppressHydrationWarning>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20" suppressHydrationWarning></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
       
       <div className="container mx-auto px-4 h-full max-w-5xl relative z-10 py-16 pt-32" suppressHydrationWarning>
         {/* Title */}
         <div className="text-center mb-12 space-y-6" suppressHydrationWarning>
           <div className="space-y-4">
-            <h2 className="text-xl md:text-2xl font-normal text-gray-300">
+            <h2 className="text-xl md:text-2xl font-normal text-muted-foreground">
               AI-Powered Fitness Solutions
             </h2>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              <span className="text-white">Generate Your </span>
-              <span className="text-red-500">Fitness Program</span>
+              <span className="text-foreground">Generate Your </span>
+              <span className="text-primary">Fitness Program</span>
             </h1>
           </div>
           
           <div className="max-w-3xl mx-auto">
-            <p className="text-lg text-gray-300 leading-relaxed">
+            <p className="text-lg text-muted-foreground leading-relaxed">
               Engage in an interactive consultation with our advanced AI fitness coach to develop 
               a comprehensive, personalized training and nutrition program tailored to your specific goals.
             </p>
@@ -176,7 +178,7 @@ const GenerateProgramPage = () => {
         {/* VIDEO CALL AREA */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* AI ASSISTANT CARD */}
-          <Card className="bg-black/90 backdrop-blur-sm border border-red-500/30 overflow-hidden relative rounded-xl shadow-2xl">
+          <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl">
             <div className="aspect-video flex flex-col items-center justify-center p-6 relative">
               {/* AI VOICE ANIMATION */}
               <div
@@ -189,7 +191,7 @@ const GenerateProgramPage = () => {
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
-                      className={`mx-1 h-16 w-1 bg-red-500 rounded-full ${
+                      className={`mx-1 h-16 w-1 bg-primary rounded-full ${
                         isSpeaking ? "animate-sound-wave" : ""
                       }`}
                       style={{
@@ -204,37 +206,37 @@ const GenerateProgramPage = () => {
               {/* AI IMAGE */}
               <div className="relative size-32 mb-4">
                 <div
-                  className={`absolute inset-0 bg-red-500 opacity-20 rounded-full blur-lg ${
+                  className={`absolute inset-0 bg-primary opacity-20 rounded-full blur-lg ${
                     isSpeaking ? "animate-pulse" : ""
                   }`}
                 />
 
-                <div className="relative w-full h-full rounded-full bg-gray-900 flex items-center justify-center border border-red-500/50 overflow-hidden shadow-lg">
-                  <div className="absolute inset-0 bg-gradient-to-b from-red-500/10 to-orange-500/10"></div>
+                <div className="relative w-full h-full rounded-full bg-muted flex items-center justify-center border border-primary/50 overflow-hidden shadow-lg">
+                  <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-secondary/10"></div>
                   <img
-                    src="/logo.png"
+                    src={theme === 'light' ? "/logo2.png" : "/logo.png"}
                     alt="AI Assistant"
                     className="w-full h-full object-cover"
                   />
                 </div>
               </div>
 
-              <h2 className="text-xl font-bold text-white">Elite AI</h2>
-              <p className="text-sm text-gray-400 mt-1">Personal Fitness & Diet Coach</p>
+              <h2 className="text-xl font-bold text-foreground">Elite AI</h2>
+              <p className="text-sm text-muted-foreground mt-1">Personal Fitness & Diet Coach</p>
 
               {/* SPEAKING INDICATOR */}
               <div
-                className={`mt-4 flex items-center gap-2 px-3 py-2 rounded-full bg-black/80 border ${
-                  isSpeaking ? "border-red-500" : "border-gray-700"
+                className={`mt-4 flex items-center gap-2 px-3 py-2 rounded-full bg-card/80 border ${
+                  isSpeaking ? "border-primary" : "border-border"
                 }`}
               >
                 <div
                   className={`w-2 h-2 rounded-full ${
-                    isSpeaking ? "bg-red-500 animate-pulse" : "bg-gray-500"
+                    isSpeaking ? "bg-primary animate-pulse" : "bg-muted-foreground"
                   }`}
                 />
 
-                <span className="text-xs text-gray-300 font-medium">
+                <span className="text-xs text-muted-foreground font-medium">
                   {isSpeaking
                     ? "Speaking..."
                     : callActive
@@ -248,27 +250,27 @@ const GenerateProgramPage = () => {
           </Card>
 
           {/* USER CARD */}
-          <Card className="bg-black/90 backdrop-blur-sm border border-orange-500/30 overflow-hidden relative rounded-xl shadow-2xl">
+          <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl">
             <div className="aspect-video flex flex-col items-center justify-center p-6 relative">
               {/* User Image */}
               <div className="relative size-32 mb-4">
-                <div className="absolute inset-0 bg-orange-500 opacity-20 rounded-full blur-lg"></div>
+                <div className="absolute inset-0 bg-secondary opacity-20 rounded-full blur-lg"></div>
                 <img
                   src={user?.imageUrl}
                   alt="User"
-                  className="size-full object-cover rounded-full border border-orange-500/50 shadow-lg relative z-10"
+                  className="size-full object-cover rounded-full border border-secondary/50 shadow-lg relative z-10"
                 />
               </div>
 
-              <h2 className="text-xl font-bold text-white">You</h2>
-              <p className="text-sm text-gray-400 mt-1">
+              <h2 className="text-xl font-bold text-foreground">You</h2>
+              <p className="text-sm text-muted-foreground mt-1">
                 {user ? (user.firstName + " " + (user.lastName || "")).trim() : "Guest"}
               </p>
 
               {/* User Ready Text */}
-              <div className="mt-4 flex items-center gap-2 px-3 py-2 rounded-full bg-black/80 border border-gray-700">
+              <div className="mt-4 flex items-center gap-2 px-3 py-2 rounded-full bg-card/80 border border-border">
                 <div className="w-2 h-2 rounded-full bg-green-500" />
-                <span className="text-xs text-gray-300 font-medium">Ready</span>
+                <span className="text-xs text-muted-foreground font-medium">Ready</span>
               </div>
             </div>
           </Card>
@@ -278,22 +280,22 @@ const GenerateProgramPage = () => {
         {messages.length > 0 && (
           <div
             ref={messageContainerRef}
-            className="w-full bg-black/90 backdrop-blur-sm border border-red-500/30 rounded-xl p-6 mb-8 h-64 overflow-y-auto transition-all duration-300 scroll-smooth shadow-2xl"
+            className="w-full bg-card/90 backdrop-blur-sm border border-border rounded-xl p-6 mb-8 h-64 overflow-y-auto transition-all duration-300 scroll-smooth shadow-2xl"
           >
             <div className="space-y-4">
               {messages.map((msg, index) => (
                 <div key={index} className="message-item animate-fadeIn">
-                  <div className="font-semibold text-xs text-gray-400 mb-2">
+                  <div className="font-semibold text-xs text-muted-foreground mb-2">
                     {msg.role === "assistant" ? "Elite AI" : "You"}:
                   </div>
-                  <p className="text-white bg-gray-900/50 p-3 rounded-lg border border-gray-700">{msg.content}</p>
+                  <p className="text-foreground bg-muted/50 p-3 rounded-lg border border-border">{msg.content}</p>
                 </div>
               ))}
 
               {callEnded && (
                 <div className="message-item animate-fadeIn">
-                  <div className="font-semibold text-xs text-red-500 mb-2">System:</div>
-                  <p className="text-white bg-red-900/20 p-3 rounded-lg border border-red-500/30">
+                  <div className="font-semibold text-xs text-primary mb-2">System:</div>
+                  <p className="text-foreground bg-primary/10 p-3 rounded-lg border border-primary/30">
                     Your fitness program has been created! Redirecting to your profile...
                   </p>
                 </div>
@@ -307,16 +309,16 @@ const GenerateProgramPage = () => {
           <Button
             className={`w-48 text-xl py-6 rounded-full font-semibold transition-all duration-300 shadow-lg ${
               callActive
-                ? "bg-red-600 hover:bg-red-700 text-white shadow-red-500/25"
+                ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-destructive/25"
                 : callEnded
                   ? "bg-green-600 hover:bg-green-700 text-white shadow-green-500/25"
-                  : "bg-red-600 hover:bg-red-700 text-white shadow-red-500/25"
+                  : "bg-primary hover:bg-primary/90 text-primary-foreground shadow-primary/25"
             } relative`}
             onClick={toggleCall}
             disabled={connecting || callEnded}
           >
             {connecting && (
-              <span className="absolute inset-0 rounded-full animate-ping bg-red-500/50 opacity-75"></span>
+              <span className="absolute inset-0 rounded-full animate-ping bg-primary/50 opacity-75"></span>
             )}
 
             <span>

@@ -108,19 +108,17 @@ const BlogPage = () => {
       
       <div className="container mx-auto px-4 py-32 relative z-10 flex-1" suppressHydrationWarning>
         {/* Header */}
-        <div className="flex justify-between items-center mb-16" suppressHydrationWarning>
-          <div className="text-center flex-1">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
-              <span className="text-primary">Fitness</span> Blog
-            </h1>
-            <p className="text-muted-foreground text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed">
-              Expert insights, workout tips, and success stories to power your fitness journey
-            </p>
-          </div>
+        <div className="max-w-4xl mx-auto text-center mb-16" suppressHydrationWarning>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
+            <span className="text-primary">Fitness</span> Blog
+          </h1>
+          <p className="text-muted-foreground text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed">
+            Expert insights, workout tips, and success stories to power your fitness journey
+          </p>
         </div>
 
         {/* Search and Filters */}
-        <div className="mb-12 flex flex-col md:flex-row gap-6 items-center justify-between" suppressHydrationWarning>
+        <div className="max-w-7xl mx-auto mb-12 flex flex-col md:flex-row gap-6 items-center justify-between" suppressHydrationWarning>
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
@@ -161,7 +159,7 @@ const BlogPage = () => {
 
         {/* Featured Posts */}
         {!searchTerm && featuredPosts && featuredPosts.length > 0 && (
-          <div className="mb-16" suppressHydrationWarning>
+          <div className="max-w-7xl mx-auto mb-16" suppressHydrationWarning>
             <h2 className="text-3xl font-bold text-foreground mb-8">Featured Articles</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredPosts.map((post) => {
@@ -226,7 +224,7 @@ const BlogPage = () => {
         )}
 
         {/* Recent/Search Results */}
-        <div className="mb-16" suppressHydrationWarning>
+        <div className="max-w-7xl mx-auto mb-16" suppressHydrationWarning>
           <h2 className="text-3xl font-bold text-foreground mb-8">
             {searchTerm ? `Search Results` : "Recent Articles"}
           </h2>

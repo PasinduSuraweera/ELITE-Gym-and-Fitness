@@ -205,21 +205,21 @@ const MembershipPage = () => {
         suppressHydrationWarning
       >
         {/* Header */}
-        <div className="text-center mb-16" suppressHydrationWarning>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+        <div className="max-w-4xl mx-auto text-center mb-16" suppressHydrationWarning>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
             <span className="text-foreground">Choose Your </span>
             <span className="text-primary bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
               Membership
             </span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Unlock your potential with our comprehensive membership plans
             designed for every fitness level and lifestyle
           </p>
         </div>
         {/* Current Membership Status */}
         {currentMembership && (
-          <div className="mb-12" suppressHydrationWarning>
+          <div className="max-w-7xl mx-auto mb-12" suppressHydrationWarning>
             <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/30 shadow-lg">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
@@ -253,7 +253,7 @@ const MembershipPage = () => {
 
         {/* Membership Plans */}
         <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+          className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
           suppressHydrationWarning
         >
           {membershipPlans && membershipPlans.length > 0 ? (
