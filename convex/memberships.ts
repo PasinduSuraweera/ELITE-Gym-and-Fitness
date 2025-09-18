@@ -59,8 +59,7 @@ export const upsertMembership = mutation({
     membershipType: v.union(
       v.literal("basic"),
       v.literal("premium"),
-      v.literal("couple"),
-      v.literal("beginner")
+      v.literal("couple")
     ),
     stripeCustomerId: v.string(),
     stripeSubscriptionId: v.string(),
@@ -168,8 +167,7 @@ export const createMembership = mutation({
     membershipType: v.union(
       v.literal("basic"),
       v.literal("premium"),
-      v.literal("couple"),
-      v.literal("beginner")
+      v.literal("couple")
     ),
     stripeCustomerId: v.string(),
     stripeSubscriptionId: v.string(),
@@ -482,26 +480,6 @@ export const seedMembershipPlans = mutation({
 
     const plans = [
       {
-        name: "Beginner Gym Membership",
-        description: "Perfect for fitness beginners with basic gym access and guided workouts",
-        price: 2500,
-        currency: "LKR",
-        type: "beginner" as const,
-        stripePriceId: "price_1Rw3x0K3W6wHBRwh4ASknv3g", // You'll need to get this from Stripe
-        stripeProductId: "prod_SrnY1NkNy0wzY9",
-        features: [
-          "Basic gym equipment access",
-          "Beginner-friendly workout plans",
-          "Monthly fitness assessment",
-          "Access during off-peak hours",
-          "Basic locker facilities"
-        ],
-        isActive: true,
-        sortOrder: 1,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      },
-      {
         name: "Basic Gym Membership",
         description: "Essential gym access with standard equipment and facilities",
         price: 2500,
@@ -517,7 +495,7 @@ export const seedMembershipPlans = mutation({
           "Free parking"
         ],
         isActive: true,
-        sortOrder: 2,
+        sortOrder: 1,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       },
@@ -538,7 +516,7 @@ export const seedMembershipPlans = mutation({
           "Free guest passes (2/month)"
         ],
         isActive: true,
-        sortOrder: 3,
+        sortOrder: 2,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       },
@@ -561,7 +539,7 @@ export const seedMembershipPlans = mutation({
           "24/7 gym access"
         ],
         isActive: true,
-        sortOrder: 4,
+        sortOrder: 3,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       }
@@ -603,16 +581,13 @@ export const createMembershipFromSession = mutation({
       const productId = subscription.items.data[0].price.product.id;
 
       // Determine membership type from metadata or product ID
-      let membershipType: "basic" | "premium" | "couple" | "beginner" = "basic";
+      let membershipType: "basic" | "premium" | "couple" = "basic";
       
       if (session.metadata?.membershipType) {
         membershipType = session.metadata.membershipType as any;
       } else {
         // Fallback to product ID mapping
         switch (productId) {
-          case "prod_SrnY1NkNy0wzY9":
-            membershipType = "beginner";
-            break;
           case "prod_SrnVL6NvWMhBm6":
             membershipType = "basic";
             break;

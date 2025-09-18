@@ -212,28 +212,6 @@ export default function AdminMembershipsPage() {
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="flex gap-4 mb-8">
-        <Button 
-          onClick={handleFixPeriods}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          Fix Invalid Periods
-        </Button>
-        <Button 
-          onClick={handleFixDuplicates}
-          className="bg-purple-600 hover:bg-purple-700"
-        >
-          Fix Duplicate Memberships
-        </Button>
-        <Button 
-          onClick={handleCheckExpired}
-          className="bg-yellow-600 hover:bg-yellow-700"
-        >
-          Check Expired Memberships
-        </Button>
-      </div>
-
       {/* All Memberships */}
       {allMemberships && allMemberships.length > 0 && (
         <Card className="bg-gray-900/50 border-gray-700 mb-8">

@@ -7,10 +7,9 @@ async function getProductPrices() {
   console.log('🔍 Fetching your Stripe products and their price IDs...\n');
   
   const productIds = [
-    'prod_SrnY1NkNy0wzY9', // Beginner
-    'prod_SrnVL6NvWMhBm6', // Basic  
+    'prod_SrnVL6NvWMhBm6', // Basic
     'prod_SrnXKx7Lu5TgR8', // Couple
-    'prod_SrnWVw0wWRAnLY'  // Premium
+    'prod_SrnWVw0wWRAnLY', // Premium
   ];
 
   try {

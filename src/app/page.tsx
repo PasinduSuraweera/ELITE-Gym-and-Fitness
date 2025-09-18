@@ -468,54 +468,13 @@ const HomePage = () => {
               <span className="text-primary"> Elite Membership</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-              From beginners to elite athletes, we have the perfect membership plan to match your fitness goals and lifestyle.
+              From fitness enthusiasts to elite athletes, we have the perfect membership plan to match your fitness goals and lifestyle.
               All plans include AI plan generation and trainer booking.
             </p>
           </div>
 
           {/* Pricing Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            {/* Beginner Plan */}
-            <Card className="relative bg-background/50 backdrop-blur-sm border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-xl h-[520px] flex flex-col">
-              <CardHeader className="text-center pb-3 flex-shrink-0">
-                <CardTitle className="text-xl font-semibold mb-2">Beginner</CardTitle>
-                <div className="text-3xl font-bold text-primary mb-1">Rs. 2,500</div>
-                <div className="text-sm text-muted-foreground">per month</div>
-                <CardDescription className="mt-3 text-sm">
-                  Perfect for fitness newcomers starting their journey
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow flex flex-col p-4">
-                <ul className="space-y-2 flex-1">
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                    Basic gym equipment access
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                    Beginner-friendly workout plans
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                    Monthly fitness assessment
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                    Off-peak hours access
-                  </li>
-                  <li className="flex items-center gap-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                    Basic locker facilities
-                  </li>
-                </ul>
-                <div className="mt-4">
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href="/membership">Get Started</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {/* Basic Plan */}
             <Card className="relative bg-background/50 backdrop-blur-sm border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-xl h-[520px] flex flex-col">
               <CardHeader className="text-center pb-3 flex-shrink-0">

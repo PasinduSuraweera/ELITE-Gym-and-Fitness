@@ -82,16 +82,6 @@ const MembershipPage = () => {
 
   const getPlanConfig = (type: string) => {
     switch (type) {
-      case "beginner":
-        return {
-          icon: <Dumbbell className="h-6 w-6" />,
-          color: "text-emerald-500 dark:text-emerald-400",
-          border: "border-emerald-500/30",
-          button:
-            "bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600",
-          gradient: "from-emerald-500/10 to-emerald-600/5",
-          description: "Perfect for beginners",
-        };
       case "basic":
         return {
           icon: <Star className="h-6 w-6" />,
@@ -263,7 +253,7 @@ const MembershipPage = () => {
 
         {/* Membership Plans */}
         <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
           suppressHydrationWarning
         >
           {membershipPlans && membershipPlans.length > 0 ? (
@@ -306,9 +296,9 @@ const MembershipPage = () => {
                     </div>
                   )}
 
-                  <CardHeader className="text-center pb-3 relative z-10 pt-6">
-                    {/* Compact Icon Container */}
-                    <div className="mx-auto mb-4 p-3 rounded-xl bg-background/90 group-hover:bg-background transition-all duration-500 shadow-lg group-hover:shadow-xl w-fit border border-border/50 group-hover:border-emerald-500/30">
+                  <CardHeader className="text-center pb-4 relative z-10 pt-8">
+                    {/* Enhanced Icon Container */}
+                    <div className="mx-auto mb-6 p-4 rounded-xl bg-background/90 group-hover:bg-background transition-all duration-500 shadow-lg group-hover:shadow-xl w-fit border border-border/50 group-hover:border-emerald-500/30">
                       <div
                         className={`${config.color} transition-all group-hover:scale-110 duration-500`}
                       >
@@ -316,51 +306,51 @@ const MembershipPage = () => {
                       </div>
                     </div>
 
-                    {/* Compact Title */}
-                    <CardTitle className="text-xl font-bold text-foreground mb-1 group-hover:text-emerald-600 transition-colors duration-300">
+                    {/* Enhanced Title */}
+                    <CardTitle className="text-2xl font-bold text-foreground mb-2 group-hover:text-emerald-600 transition-colors duration-300">
                       {plan.name}
                     </CardTitle>
 
-                    {/* Compact Description */}
-                    <p className="text-muted-foreground text-xs font-medium">
+                    {/* Enhanced Description */}
+                    <p className="text-muted-foreground text-sm font-medium">
                       {config.description}
                     </p>
                   </CardHeader>
 
-                  <CardContent className="pt-0 flex-1 flex flex-col relative z-10 px-4">
-                    {/* Compact Price Section */}
-                    <div className="text-center mb-4">
-                      <div className="text-3xl font-bold text-foreground mb-1 group-hover:text-emerald-600 transition-colors duration-300">
+                  <CardContent className="pt-0 flex-1 flex flex-col relative z-10 px-6">
+                    {/* Enhanced Price Section */}
+                    <div className="text-center mb-6">
+                      <div className="text-4xl font-bold text-foreground mb-2 group-hover:text-emerald-600 transition-colors duration-300">
                         {formatPrice(plan.price)}
                       </div>
-                      <div className="text-muted-foreground text-xs font-medium mb-1">
+                      <div className="text-muted-foreground text-sm font-medium mb-2">
                         per month
                       </div>
                       {plan.type === "premium" && (
-                        <div className="text-xs text-emerald-600 font-semibold mt-1 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                        <div className="text-sm text-emerald-600 font-semibold mt-2 bg-emerald-500/10 px-3 py-1 rounded-full">
                           Best Value
                         </div>
                       )}
                     </div>
 
-                    {/* Compact Features Section */}
-                    <div className="mb-4 flex-1">
-                      <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                        <Star className="h-3 w-3 text-emerald-500" />
+                    {/* Enhanced Features Section */}
+                    <div className="mb-6 flex-1">
+                      <h4 className="text-base font-semibold text-foreground mb-4 flex items-center gap-2">
+                        <Star className="h-4 w-4 text-emerald-500" />
                         What's Included
                       </h4>
-                      <ul className="space-y-2">
+                      <ul className="space-y-3">
                         {plan.features.map((feature: string, index: number) => (
                           <li
                             key={index}
-                            className="flex items-start gap-2 group/feature"
+                            className="flex items-start gap-3 group/feature"
                           >
                             <div className="mt-0.5">
                               <Check
-                                className={`h-3 w-3 ${config.color} flex-shrink-0 group-hover/feature:scale-110 transition-transform duration-200`}
+                                className={`h-4 w-4 ${config.color} flex-shrink-0 group-hover/feature:scale-110 transition-transform duration-200`}
                               />
                             </div>
-                            <span className="text-muted-foreground text-xs leading-relaxed group-hover/feature:text-foreground transition-colors duration-200">
+                            <span className="text-muted-foreground text-sm leading-relaxed group-hover/feature:text-foreground transition-colors duration-200">
                               {feature}
                             </span>
                           </li>
@@ -368,49 +358,51 @@ const MembershipPage = () => {
                       </ul>
                     </div>
 
-                    {/* Compact Benefits Badge */}
-                    <div className="mb-4">
-                      <div className="bg-gradient-to-r from-emerald-500/10 to-emerald-600/5 border border-emerald-500/20 rounded-lg p-2 text-center">
-                        <p className="text-xs text-emerald-600 font-medium">
+                    {/* Enhanced Benefits Badge */}
+                    <div className="mb-6">
+                      <div className="bg-gradient-to-r from-emerald-500/10 to-emerald-600/5 border border-emerald-500/20 rounded-lg p-3 text-center">
+                        <p className="text-sm text-emerald-600 font-medium">
                           {plan.type === "premium"
                             ? "🏆 Priority + Personal Training"
-                            : "🎯 Basic Access + Support"}
+                            : plan.type === "couple"
+                            ? "💑 Special Couple Benefits"
+                            : "🎯 Complete Gym Access"}
                         </p>
                       </div>
                     </div>
 
-                    {/* Compact Call-to-Action Button */}
+                    {/* Enhanced Call-to-Action Button */}
                     <div className="mt-auto">
                       <Button
-                        className={`w-full ${config.button} text-white font-semibold py-3 text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] group-hover:shadow-2xl`}
+                        className={`w-full ${config.button} text-white font-semibold py-4 text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] group-hover:shadow-2xl`}
                         onClick={() => handleSubscribe(plan)}
                         disabled={loading === plan.type || isCurrentPlan}
                       >
                         {loading === plan.type ? (
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                             Processing...
                           </div>
                         ) : isCurrentPlan ? (
                           <div className="flex items-center gap-2">
-                            <Shield className="h-3 w-3" />
+                            <Shield className="h-4 w-4" />
                             Active Plan
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <Sparkles className="h-3 w-3" />
+                            <Sparkles className="h-4 w-4" />
                             {plan.type === "premium"
-                              ? "Upgrade"
+                              ? "Upgrade Now"
                               : "Get Started"}
                           </div>
                         )}
                       </Button>
 
-                      {/* Compact Additional Info */}
-                      <p className="text-xs text-muted-foreground text-center mt-2">
+                      {/* Enhanced Additional Info */}
+                      <p className="text-sm text-muted-foreground text-center mt-3">
                         {isCurrentPlan
-                          ? "Manage in settings"
-                          : "Cancel anytime"}
+                          ? "Manage in profile settings"
+                          : "Cancel anytime • No setup fees"}
                       </p>
                     </div>
                   </CardContent>

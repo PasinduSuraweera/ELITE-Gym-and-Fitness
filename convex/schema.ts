@@ -130,7 +130,7 @@ export default defineSchema({
       v.literal("basic"),
       v.literal("premium"),
       v.literal("couple"),
-      v.literal("beginner")
+      v.literal("beginner") // Temporary for migration
     ),
     status: v.union(
       v.literal("active"),
@@ -162,7 +162,7 @@ export default defineSchema({
       v.literal("basic"),
       v.literal("premium"),
       v.literal("couple"),
-      v.literal("beginner")
+      v.literal("beginner") // Temporary for migration
     ),
     stripePriceId: v.string(),
     stripeProductId: v.string(),

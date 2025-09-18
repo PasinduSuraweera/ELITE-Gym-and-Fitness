@@ -389,20 +389,17 @@ http.route({
           // Determine membership type from price ID or product ID
           const createdPriceId = createdSubscription.items.data[0].price.id;
           const createdProductId = createdSubscription.items.data[0].price.product;
-          let createdMembershipType: "basic" | "premium" | "couple" | "beginner" = "basic";
+          let createdMembershipType: "basic" | "premium" | "couple" = "basic";
           
           // First try to get from session metadata if available
           if (createdSessionMembershipType) {
-            const validTypes = ["basic", "premium", "couple", "beginner"];
+            const validTypes = ["basic", "premium", "couple"];
             if (validTypes.includes(createdSessionMembershipType)) {
-              createdMembershipType = createdSessionMembershipType as "basic" | "premium" | "couple" | "beginner";
+              createdMembershipType = createdSessionMembershipType as "basic" | "premium" | "couple";
             }
           } else {
             // Fallback to mapping product IDs to membership types
             switch (createdProductId) {
-              case "prod_SrnY1NkNy0wzY9":
-                createdMembershipType = "beginner";
-                break;
               case "prod_SrnVL6NvWMhBm6":
                 createdMembershipType = "basic";
                 break;
