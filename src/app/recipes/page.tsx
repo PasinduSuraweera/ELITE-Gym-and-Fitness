@@ -183,43 +183,43 @@ const RecipesPage = () => {
       >
         {/* Header */}
         <div
-          className="max-w-4xl mx-auto text-center mb-16"
+          className="max-w-4xl mx-auto text-center mb-12"
           suppressHydrationWarning
         >
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
             <span className="text-primary">Healthy</span> Recipes
           </h1>
-          <p className="text-muted-foreground text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-muted-foreground text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
             Fuel your fitness journey with our curated collection of nutritious
             and delicious recipes
           </p>
 
           {/* Search */}
-          <div className="max-w-lg mx-auto mb-12">
+          <div className="max-w-2xl mx-auto mb-10">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+              <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 placeholder="Search recipes..."
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchTerm(e.target.value)
                 }
-                className="pl-12 pr-4 py-4 bg-background border-border text-foreground placeholder-muted-foreground focus:border-primary focus:ring-primary/20 text-base"
+                className="pl-14 pr-6 py-4 bg-background border-border text-foreground placeholder-muted-foreground focus:border-primary focus:ring-primary/20 text-lg shadow-sm"
               />
             </div>
           </div>
 
           {/* Filter Controls */}
-          <div className="flex flex-wrap gap-6 justify-center items-center mb-12">
+          <div className="flex flex-wrap gap-4 justify-center items-center mb-10">
             <div className="flex items-center gap-3">
               <Filter className="h-5 w-5 text-muted-foreground" />
-              <span className="text-base text-muted-foreground">Filters:</span>
+              <span className="text-sm font-medium text-muted-foreground">Filters:</span>
             </div>
 
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-background border border-border rounded-lg px-4 py-3 text-foreground text-base focus:border-primary focus:ring-primary/20"
+              className="bg-background border border-border rounded-lg px-4 py-2.5 text-foreground text-sm focus:border-primary focus:ring-primary/20 min-w-[140px] shadow-sm"
             >
               {categories.map((cat) => (
                 <option key={cat.value} value={cat.value} className="bg-background">
@@ -231,7 +231,7 @@ const RecipesPage = () => {
             <select
               value={selectedDifficulty}
               onChange={(e) => setSelectedDifficulty(e.target.value)}
-              className="bg-background border border-border rounded-lg px-4 py-3 text-foreground text-base focus:border-primary focus:ring-primary/20"
+              className="bg-background border border-border rounded-lg px-4 py-2.5 text-foreground text-sm focus:border-primary focus:ring-primary/20 min-w-[120px] shadow-sm"
             >
               {difficulties.map((diff) => (
                 <option
@@ -249,13 +249,13 @@ const RecipesPage = () => {
               searchTerm) && (
               <Button
                 variant="outline"
-                size="default"
+                size="sm"
                 onClick={() => {
                   setSelectedCategory("all");
                   setSelectedDifficulty("all");
                   setSearchTerm("");
                 }}
-                className="px-6 py-3 border-border text-primary hover:bg-primary/10 text-base font-medium"
+                className="px-4 py-2.5 border-border text-primary hover:bg-primary/10 text-sm font-medium rounded-lg shadow-sm"
               >
                 Clear Filters
               </Button>
@@ -264,40 +264,40 @@ const RecipesPage = () => {
         </div>
 
         <Tabs defaultValue="personalized" className="max-w-7xl mx-auto">
-          <TabsList className="grid w-full grid-cols-4 mb-12 bg-card/50 border border-border p-1 h-14">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-card/50 border border-border p-1 h-12 rounded-lg">
             <TabsTrigger
               value="personalized"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-base font-medium py-3"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Brain className="h-5 w-5 mr-2" />
+              <Brain className="h-4 w-4 mr-2" />
               For You
             </TabsTrigger>
             <TabsTrigger
               value="workout"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-base font-medium py-3"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Target className="h-5 w-5 mr-2" />
+              <Target className="h-4 w-4 mr-2" />
               Workout
             </TabsTrigger>
             <TabsTrigger
               value="recommended"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-base font-medium py-3"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Star className="h-5 w-5 mr-2" />
+              <Star className="h-4 w-4 mr-2" />
               Popular
             </TabsTrigger>
             <TabsTrigger
               value="all"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-base font-medium py-3"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Zap className="h-5 w-5 mr-2" />
+              <Zap className="h-4 w-4 mr-2" />
               All
             </TabsTrigger>
           </TabsList>
 
           {/* Personalized Recipes */}
           <TabsContent value="personalized">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-foreground mb-4">
                 <span className="text-primary">Personalized</span> for Your
                 Goals
@@ -561,7 +561,7 @@ const RecipesPage = () => {
 
           {/* Workout-Based Recipes */}
           <TabsContent value="workout">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-foreground mb-4">
                 <span className="text-primary">Workout</span> Optimized
               </h2>
@@ -692,7 +692,7 @@ const RecipesPage = () => {
 
           {/* Recommended Recipes */}
           <TabsContent value="recommended">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-foreground mb-4">
                 <span className="text-primary">Popular</span> Recipes
               </h2>
@@ -824,7 +824,7 @@ const RecipesPage = () => {
 
           {/* All Recipes */}
           <TabsContent value="all">
-            <div className="text-center mb-12">
+            <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-foreground mb-4">
                 All <span className="text-primary">Recipes</span>
               </h2>

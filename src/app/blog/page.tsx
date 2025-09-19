@@ -108,58 +108,68 @@ const BlogPage = () => {
       
       <div className="container mx-auto px-4 py-32 relative z-10 flex-1" suppressHydrationWarning>
         {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-16" suppressHydrationWarning>
+        <div className="max-w-4xl mx-auto text-center mb-12" suppressHydrationWarning>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
             <span className="text-primary">Fitness</span> Blog
           </h1>
-          <p className="text-muted-foreground text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed">
+          <p className="text-muted-foreground text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
             Expert insights, workout tips, and success stories to power your fitness journey
           </p>
+
+          {/* Search */}
+          <div className="max-w-2xl mx-auto mb-10">
+            <div className="relative">
+              <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-14 pr-6 py-4 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-lg shadow-sm"
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Search and Filters */}
-        <div className="max-w-7xl mx-auto mb-12 flex flex-col md:flex-row gap-6 items-center justify-between" suppressHydrationWarning>
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search articles..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary text-base"
-            />
+        {/* Category Filters */}
+        <div className="max-w-7xl mx-auto mb-10" suppressHydrationWarning>
+          <div className="flex items-center justify-center mb-6">
+            <span className="text-sm font-medium text-muted-foreground">Categories:</span>
           </div>
-
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 justify-center">
             <button
               onClick={() => setSelectedCategory(undefined)}
-              className={`px-5 py-3 rounded-lg text-base font-medium transition-colors ${
+              className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm ${
                 selectedCategory === undefined
                   ? "bg-primary text-primary-foreground"
-                  : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  : "bg-card/50 border border-border text-muted-foreground hover:bg-primary/10 hover:text-foreground hover:border-primary/30"
               }`}
             >
               All Categories
             </button>
-            {Object.entries(categoryConfig).map(([key, config]) => (
-              <button
-                key={key}
-                onClick={() => setSelectedCategory(selectedCategory === key ? undefined : key)}
-                className={`px-5 py-3 rounded-lg text-base font-medium transition-colors ${
-                  selectedCategory === key
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                {config.label}
-              </button>
-            ))}
+            {Object.entries(categoryConfig).map(([key, config]) => {
+              const Icon = config.icon;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedCategory(selectedCategory === key ? undefined : key)}
+                  className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm flex items-center gap-2 ${
+                    selectedCategory === key
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card/50 border border-border text-muted-foreground hover:bg-primary/10 hover:text-foreground hover:border-primary/30"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {config.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Featured Posts */}
         {!searchTerm && featuredPosts && featuredPosts.length > 0 && (
-          <div className="max-w-7xl mx-auto mb-16" suppressHydrationWarning>
+          <div className="max-w-7xl mx-auto mb-12" suppressHydrationWarning>
             <h2 className="text-3xl font-bold text-foreground mb-8">Featured Articles</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredPosts.map((post) => {
@@ -224,7 +234,7 @@ const BlogPage = () => {
         )}
 
         {/* Recent/Search Results */}
-        <div className="max-w-7xl mx-auto mb-16" suppressHydrationWarning>
+        <div className="max-w-7xl mx-auto mb-12" suppressHydrationWarning>
           <h2 className="text-3xl font-bold text-foreground mb-8">
             {searchTerm ? `Search Results` : "Recent Articles"}
           </h2>
@@ -301,7 +311,7 @@ const BlogPage = () => {
               {searchTerm && (
                 <button 
                   onClick={() => setSearchTerm("")} 
-                  className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors text-base font-medium"
+                  className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors text-sm font-medium shadow-sm"
                 >
                   Clear Search
                 </button>
