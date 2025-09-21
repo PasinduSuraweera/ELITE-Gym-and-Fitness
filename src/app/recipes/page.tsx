@@ -79,16 +79,29 @@ const RecipesPage = () => {
     limit: 6,
   });
 
+  // Get user's local time
+  const userHour = new Date().getHours();
+  const userDay = new Date().toLocaleDateString("en-US", { weekday: "long" });
+
   // Get personalized recommendations based on user's plan
   const personalizedRecipes = useQuery(
     api.recipes.getPersonalizedRecipes,
-    user?.id ? { clerkId: user.id, limit: 8 } : "skip"
+    user?.id ? { 
+      clerkId: user.id, 
+      limit: 8,
+      userHour,
+      userDay
+    } : "skip"
   );
 
   // Get workout-based recommendations
   const workoutBasedRecipes = useQuery(
     api.recipes.getWorkoutBasedRecipes,
-    user?.id ? { clerkId: user.id } : "skip"
+    user?.id ? { 
+      clerkId: user.id,
+      userHour,
+      userDay
+    } : "skip"
   );
 
   // Get meal prep suggestions

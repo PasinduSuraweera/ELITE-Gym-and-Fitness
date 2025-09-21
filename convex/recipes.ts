@@ -105,6 +105,8 @@ export const getPersonalizedRecipes = query({
     clerkId: v.string(),
     limit: v.optional(v.number()),
     mealType: v.optional(v.string()), // "breakfast", "lunch", "dinner", "pre-workout", "post-workout"
+    userHour: v.optional(v.number()), // User's current hour (0-23)
+    userDay: v.optional(v.string()), // User's current day ("Monday", "Tuesday", etc.)
   },
   handler: async (ctx, args) => {
     // Get user's active plan
@@ -166,7 +168,7 @@ export const getPersonalizedRecipes = query({
       else if (recipe.protein > 10) score += 5;
 
       // Workout day considerations
-      const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+      const today = args.userDay || new Date().toLocaleDateString("en-US", { weekday: "long" });
       const isWorkoutDay = workoutPlan.schedule.includes(today);
 
       if (isWorkoutDay) {
@@ -200,7 +202,7 @@ export const getPersonalizedRecipes = query({
         if (recipe.category === args.mealType) score += 25;
 
         // Time-based suggestions
-        const hour = new Date().getHours();
+        const hour = args.userHour !== undefined ? args.userHour : new Date().getHours();
         if (
           args.mealType === "breakfast" &&
           (recipe.category === "breakfast" || recipe.cookingTime <= 15)
@@ -240,6 +242,8 @@ export const getWorkoutBasedRecipes = query({
   args: {
     clerkId: v.string(),
     timeOfDay: v.optional(v.string()), // "morning", "afternoon", "evening"
+    userHour: v.optional(v.number()), // User's current hour (0-23)
+    userDay: v.optional(v.string()), // User's current day ("Monday", "Tuesday", etc.)
   },
   handler: async (ctx, args) => {
     const userPlan = await ctx.db
@@ -250,9 +254,9 @@ export const getWorkoutBasedRecipes = query({
 
     if (!userPlan) return [];
 
-    const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+    const today = args.userDay || new Date().toLocaleDateString("en-US", { weekday: "long" });
     const isWorkoutDay = userPlan.workoutPlan.schedule.includes(today);
-    const hour = new Date().getHours();
+    const hour = args.userHour !== undefined ? args.userHour : new Date().getHours();
 
     let targetCategories: string[] = [];
 
