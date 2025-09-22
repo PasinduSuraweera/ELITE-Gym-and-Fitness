@@ -5,20 +5,20 @@ import { ArrowRightIcon } from "lucide-react";
 
 const NoFitnessPlan = () => {
   return (
-    <div className="relative bg-black/90 backdrop-blur-sm border border-red-500/30 rounded-xl p-12 text-center shadow-2xl">
+    <div className="relative bg-card/50 backdrop-blur-sm border border-border rounded-xl p-12 text-center shadow-2xl">
       <CornerElements />
 
       <h2 className="text-3xl font-bold mb-6 font-mono">
-        <span className="text-red-500">No</span> <span className="text-white">fitness plans yet</span>
+        <span className="text-primary">No</span> <span className="text-foreground">fitness plans yet</span>
       </h2>
-      <p className="text-gray-300 mb-8 max-w-md mx-auto text-lg leading-relaxed">
+      <p className="text-muted-foreground mb-8 max-w-md mx-auto text-lg leading-relaxed">
         Start by creating a personalized fitness and diet plan tailored to your specific goals and
         needs
       </p>
       <Button
         size="lg"
         asChild
-        className="relative overflow-hidden bg-red-600 hover:bg-red-700 text-white px-10 py-6 text-lg font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-red-500/25"
+        className="relative overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-6 text-lg font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-primary/25"
       >
         <Link href="/generate-program">
           <span className="relative flex items-center">
