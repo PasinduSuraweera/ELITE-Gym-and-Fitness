@@ -196,13 +196,13 @@ const Navbar = () => {
           {userRole === "user" && (
             <Link
               href="/become-trainer"
-              className={`text-accent hover:text-accent/80 transition-colors text-sm font-medium relative pb-2 ${
+              className={`text-foreground hover:text-primary transition-colors text-sm font-medium relative pb-2 ${
                 pathname === "/become-trainer" ? "" : ""
               }`}
             >
               <span>Become Trainer</span>
               {pathname === "/become-trainer" && (
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-accent"></div>
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-primary"></div>
               )}
             </Link>
           )}
