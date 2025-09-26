@@ -64,49 +64,49 @@ export function UserLayout({
         <div className="container mx-auto px-4">
           <div className="flex gap-8">
             {/* Sidebar */}
-            <aside className="w-64 bg-card/50 border border-border rounded-xl flex-shrink-0 h-fit sticky top-8">
+            <aside className="w-72 bg-card/60 border-2 border-border rounded-xl flex-shrink-0 h-fit sticky top-8 shadow-lg backdrop-blur-sm">
               <div className="p-6">
                 <div className="mb-6">
                   <h2 className="text-xl font-semibold text-foreground">{title}</h2>
                   {subtitle && <p className="text-muted-foreground text-sm mt-1">{subtitle}</p>}
                 </div>
 
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4 px-4">
                   Dashboard
                 </h3>
-                <nav className="space-y-2">
+                <nav className="space-y-3">
                   {sidebarItems.slice(0, 7).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-all duration-200 ${
                         item.active
-                          ? "bg-primary/20 text-primary border border-primary/30"
-                          : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                          ? "bg-primary text-primary-foreground shadow-lg border-2 border-primary/20"
+                          : "text-foreground hover:text-foreground hover:bg-accent/20 hover:scale-105 hover:shadow-md border-2 border-transparent"
                       }`}
                     >
-                      <item.icon className="h-4 w-4" />
-                      {item.label}
+                      <item.icon className={`h-4 w-4 ${item.active ? "text-primary-foreground" : "text-foreground"}`} />
+                      <span className="font-bold">{item.label}</span>
                     </Link>
                   ))}
                 </nav>
 
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4 mt-8">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4 mt-8 px-4">
                   Services
                 </h3>
-                <nav className="space-y-2">
+                <nav className="space-y-3">
                   {sidebarItems.slice(7).map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-all duration-200 ${
                         item.active
-                          ? "bg-primary/20 text-primary border border-primary/30"
-                          : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                          ? "bg-primary text-primary-foreground shadow-lg border-2 border-primary/20"
+                          : "text-foreground hover:text-foreground hover:bg-accent/20 hover:scale-105 hover:shadow-md border-2 border-transparent"
                       }`}
                     >
-                      <item.icon className="h-4 w-4" />
-                      {item.label}
+                      <item.icon className={`h-4 w-4 ${item.active ? "text-primary-foreground" : "text-foreground"}`} />
+                      <span className="font-bold">{item.label}</span>
                     </Link>
                   ))}
                 </nav>
