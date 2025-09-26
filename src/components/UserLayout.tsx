@@ -14,7 +14,8 @@ import {
   Activity,
   Package,
   Star,
-  Settings
+  Settings,
+  Receipt
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -44,6 +45,7 @@ export function UserLayout({
     { href: "/profile/training-sessions", icon: Activity, label: "Training Sessions", active: pathname === "/profile/training-sessions" },
     { href: "/reviews", icon: Star, label: "Reviews", active: pathname === "/reviews" },
     { href: "/profile/orders", icon: Package, label: "Orders", active: pathname === "/profile/orders" },
+    { href: "/profile/payment-slips", icon: Receipt, label: "Payment Slips", active: pathname === "/profile/payment-slips" },
     { href: "/profile/settings", icon: Settings, label: "Settings", active: pathname === "/profile/settings" },
     { href: "/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/recipes" },
     { href: "/generate-program", icon: Target, label: "Generate Program", active: pathname === "/generate-program" },

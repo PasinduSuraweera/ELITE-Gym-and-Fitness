@@ -20,7 +20,9 @@ import {
   Edit,
   Plus,
   Trash2,
-  Eye
+  Eye,
+  Receipt,
+  Download
 } from "lucide-react";
 import Link from "next/link";
 
@@ -69,6 +71,12 @@ export default function TrainerDashboard() {
   const trainerReviews = useQuery(
     api.reviews.getTrainerReviews,
     trainerProfile ? { trainerId: trainerProfile._id, limit: 20 } : "skip"
+  );
+
+  // Get trainer payroll records
+  const trainerPayrollRecords = useQuery(
+    api.salary.getEmployeePayrollRecords,
+    user?.id ? { employeeClerkId: user.id } : "skip"
   );
 
   const updateBookingStatus = useMutation(api.bookings.updateBookingStatus);
@@ -247,6 +255,174 @@ export default function TrainerDashboard() {
     });
   };
 
+  const formatCurrency = (amount: number) => {
+    if (!mounted) return 'Rs. 0';
+    return new Intl.NumberFormat("en-LK", {
+      style: "currency",
+      currency: "LKR",
+      minimumFractionDigits: 0,
+    }).format(amount || 0);
+  };
+
+  const handleDownloadPaySlip = (payrollRecord: any) => {
+    const paySlipHTML = generatePaySlipHTML(payrollRecord);
+    const blob = new Blob([paySlipHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `PaySlip_${payrollRecord.employeeName}_${payrollRecord.payrollPeriod.month}_${payrollRecord.payrollPeriod.year}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const generatePaySlipHTML = (record: any) => {
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Pay Slip - ${record.employeeName}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+          .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px; }
+          .company-name { font-size: 24px; font-weight: bold; color: #2563eb; }
+          .pay-slip-title { font-size: 18px; margin-top: 10px; }
+          .employee-info { display: flex; justify-content: space-between; margin-bottom: 30px; }
+          .info-section { flex: 1; }
+          .info-title { font-weight: bold; margin-bottom: 10px; color: #374151; }
+          .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+          .table th, .table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+          .table th { background-color: #f8f9fa; font-weight: bold; }
+          .total-row { background-color: #f0f9ff; font-weight: bold; }
+          .net-salary { background-color: #dcfce7; font-weight: bold; font-size: 18px; }
+          .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #666; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="company-name">ELITE Gym & Fitness</div>
+          <div class="pay-slip-title">SALARY SLIP</div>
+          <div>Pay Period: ${record.payrollPeriod.periodLabel}</div>
+        </div>
+
+        <div class="employee-info">
+          <div class="info-section">
+            <div class="info-title">Employee Details</div>
+            <div><strong>Name:</strong> ${record.employeeName}</div>
+            <div><strong>Employee ID:</strong> ${record.employeeClerkId}</div>
+            <div><strong>Role:</strong> ${record.employeeRole}</div>
+          </div>
+          <div class="info-section">
+            <div class="info-title">Pay Period</div>
+            <div><strong>Month:</strong> ${record.payrollPeriod.month} ${record.payrollPeriod.year}</div>
+            <div><strong>Status:</strong> ${record.status}</div>
+            <div><strong>Generated:</strong> ${new Date(record.createdAt).toLocaleDateString()}</div>
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2" style="text-align: center; background-color: #dbeafe;">EARNINGS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Base Salary</td>
+              <td style="text-align: right;">${formatCurrency(record.earnings.baseSalary)}</td>
+            </tr>
+            <tr>
+              <td>Allowances</td>
+              <td style="text-align: right;">${formatCurrency(record.earnings.allowances)}</td>
+            </tr>
+            <tr>
+              <td>Performance Bonus</td>
+              <td style="text-align: right;">${formatCurrency(record.earnings.performanceBonus || 0)}</td>
+            </tr>
+            <tr>
+              <td>Session Earnings</td>
+              <td style="text-align: right;">${formatCurrency(record.earnings.sessionEarnings || 0)}</td>
+            </tr>
+            <tr class="total-row">
+              <td><strong>Total Earnings</strong></td>
+              <td style="text-align: right;"><strong>${formatCurrency(record.earnings.totalEarnings)}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2" style="text-align: center; background-color: #fef3c7;">DEDUCTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Income Tax (PAYE)</td>
+              <td style="text-align: right;">${formatCurrency(record.deductions.incomeTax)}</td>
+            </tr>
+            <tr>
+              <td>EPF Employee (8%)</td>
+              <td style="text-align: right;">${formatCurrency(record.deductions.epfEmployee)}</td>
+            </tr>
+            <tr>
+              <td>Insurance</td>
+              <td style="text-align: right;">${formatCurrency(record.deductions.insurance || 0)}</td>
+            </tr>
+            <tr>
+              <td>Other Deductions</td>
+              <td style="text-align: right;">${formatCurrency(record.deductions.otherDeductions || 0)}</td>
+            </tr>
+            <tr class="total-row">
+              <td><strong>Total Deductions</strong></td>
+              <td style="text-align: right;"><strong>${formatCurrency(record.deductions.totalDeductions)}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2" style="text-align: center; background-color: #fecaca;">EMPLOYER CONTRIBUTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EPF Employer (12%)</td>
+              <td style="text-align: right;">${formatCurrency(record.deductions.epfEmployer)}</td>
+            </tr>
+            <tr>
+              <td>ETF Employer (3%)</td>
+              <td style="text-align: right;">${formatCurrency(record.deductions.etfEmployer)}</td>
+            </tr>
+            <tr class="total-row">
+              <td><strong>Total Employer Cost</strong></td>
+              <td style="text-align: right;"><strong>${formatCurrency(record.totalEmployerCost)}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="table">
+          <tbody>
+            <tr class="net-salary">
+              <td><strong>NET SALARY</strong></td>
+              <td style="text-align: right;"><strong>${formatCurrency(record.netSalary)}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="footer">
+          <p>This is a computer-generated pay slip. No signature required.</p>
+          <p>ELITE Gym & Fitness - Payroll System</p>
+          <p>Generated on: ${new Date().toLocaleDateString()}</p>
+        </div>
+      </body>
+      </html>
+    `;
+  };
+
   if (!mounted) {
     return (
       <RoleGuard allowedRoles={["trainer", "admin"]}>
@@ -360,7 +536,7 @@ export default function TrainerDashboard() {
 
           {/* Main Content Tabs */}
           <Tabs defaultValue="bookings" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 bg-gray-900/50 border border-gray-800">
+            <TabsList className="grid w-full grid-cols-6 bg-gray-900/50 border border-gray-800">
               <TabsTrigger value="bookings" className="data-[state=active]:bg-blue-600">
                 Today's Bookings
               </TabsTrigger>
@@ -372,6 +548,9 @@ export default function TrainerDashboard() {
               </TabsTrigger>
               <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-600">
                 Reviews
+              </TabsTrigger>
+              <TabsTrigger value="payslips" className="data-[state=active]:bg-blue-600">
+                Payment Slips
               </TabsTrigger>
               <TabsTrigger value="settings" className="data-[state=active]:bg-blue-600">
                 Profile Settings
@@ -736,6 +915,102 @@ export default function TrainerDashboard() {
                       <p className="text-gray-500 text-sm max-w-md mx-auto">
                         You haven't received any reviews yet. Complete some training sessions 
                         and encourage your clients to leave feedback about their experience.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Payment Slips */}
+            <TabsContent value="payslips" className="space-y-6">
+              <Card className="bg-gray-900/50 border border-gray-800">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Receipt className="h-5 w-5" />
+                    Payment Slips
+                  </CardTitle>
+                  <CardDescription>
+                    Download your salary payment slips
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {trainerPayrollRecords && trainerPayrollRecords.length > 0 ? (
+                    <div className="space-y-4">
+                      {trainerPayrollRecords.map((record) => (
+                        <div
+                          key={record._id}
+                          className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+                        >
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                                <Receipt className="h-5 w-5 text-white" />
+                              </div>
+                              <div>
+                                <h3 className="text-white font-medium">
+                                  Salary for {record.payrollPeriod.periodLabel}
+                                </h3>
+                                <p className="text-gray-400 text-sm">
+                                  Status: 
+                                  <span className={`ml-2 px-2 py-1 rounded text-xs ${
+                                    record.status === 'approved' ? 'bg-green-500/20 text-green-400' :
+                                    record.status === 'paid' ? 'bg-blue-500/20 text-blue-400' :
+                                    'bg-yellow-500/20 text-yellow-400'
+                                  }`}>
+                                    {record.status === 'pending_approval' ? 'Pending' : record.status}
+                                  </span>
+                                </p>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                              <div>
+                                <p className="text-gray-400">Gross Pay</p>
+                                <p className="text-white font-medium">
+                                  {formatCurrency(record.earnings.totalEarnings)}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-gray-400">Deductions</p>
+                                <p className="text-white font-medium">
+                                  {formatCurrency(record.deductions.totalDeductions)}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-gray-400">Net Salary</p>
+                                <p className="text-green-400 font-bold">
+                                  {formatCurrency(record.netSalary)}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-gray-400">Generated</p>
+                                <p className="text-white">
+                                  {new Date(record.createdAt).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex gap-2 ml-4">
+                            <Button
+                              onClick={() => handleDownloadPaySlip(record)}
+                              size="sm"
+                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                            >
+                              <Download className="h-4 w-4 mr-2" />
+                              Download
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <Receipt className="h-12 w-12 text-gray-600 mx-auto mb-4" />
+                      <h3 className="text-gray-400 text-lg font-medium mb-2">No Payment Slips</h3>
+                      <p className="text-gray-500 text-sm max-w-md mx-auto">
+                        You don't have any payment slips yet. Payment slips will appear here 
+                        after your salary is processed by the admin.
                       </p>
                     </div>
                   )}

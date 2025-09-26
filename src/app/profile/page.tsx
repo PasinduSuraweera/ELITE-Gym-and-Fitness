@@ -9,6 +9,7 @@ import ProfileHeader from "@/components/ProfileHeader";
 import NoFitnessPlan from "@/components/NoFitnessPlan";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Shield, Activity, Target, Clock } from "lucide-react";
 import { useMembershipExpiryCheck, getMembershipStatusInfo, formatMembershipDate } from "@/lib/membership-utils";
 
@@ -31,6 +32,12 @@ const ProfilePage = () => {
   const userBookings = useQuery(
     api.bookings.getUserBookings,
     user?.id ? { userClerkId: user.id } : "skip"
+  );
+  
+  // Get user's own payroll records (for all users including admins)
+  const userPayrollRecords = useQuery(
+    api.salary.getEmployeePayrollRecords,
+    user?.id ? { employeeClerkId: user.id } : "skip"
   );
   
   const cancelMembership = useMutation(api.memberships.cancelMembership);
@@ -105,7 +112,228 @@ const ProfilePage = () => {
     }
   };
 
+  const formatCurrency = (amount: number) => {
+    if (!mounted) return 'Rs. 0';
+    return new Intl.NumberFormat("en-LK", {
+      style: "currency",
+      currency: "LKR",
+      minimumFractionDigits: 0,
+    }).format(amount || 0);
+  };
+
   const activePlan = allPlans?.find((plan) => plan.isActive);
+
+  // Shared profile content for both admin and regular users
+  const profileContentForUser = () => (
+    <>
+      {/* Membership Status - Always show this regardless of plans */}
+      {currentMembership && (
+        <Card className={`bg-card/50 mb-6 ${
+          (currentMembership.status === 'cancelled' || 
+           (currentMembership.status === 'active' && currentMembership.cancelAtPeriodEnd)) ? 'border-orange-500/50' : 
+          currentMembership.status === 'expired' ? 'border-red-500/50' : 
+          'border-green-500/50'
+        }`}>
+          <CardHeader>
+            <CardTitle className="text-foreground flex items-center gap-2">
+              <Shield className={`h-6 w-6 ${
+                (currentMembership.status === 'cancelled' || 
+                 (currentMembership.status === 'active' && currentMembership.cancelAtPeriodEnd)) ? 'text-orange-500' : 
+                currentMembership.status === 'expired' ? 'text-red-500' : 
+                'text-green-500'
+              }`} />
+              {(currentMembership.status === 'active' && currentMembership.cancelAtPeriodEnd) ? 'Cancelling Membership' :
+               currentMembership.status === 'cancelled' ? 'Cancelled Membership' : 
+               currentMembership.status === 'expired' ? 'Expired Membership' : 
+               'Current Membership'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <div>
+                <p className="text-sm text-muted-foreground">Plan Type</p>
+                <p className="text-foreground font-semibold capitalize">
+                  {currentMembership.membershipType} Plan
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Status</p>
+                {(() => {
+                  const statusInfo = getMembershipStatusInfo(currentMembership);
+                  if (!statusInfo) return <span className="text-muted-foreground">Loading...</span>;
+                  
+                  const colorClasses = {
+                    green: 'text-green-400',
+                    yellow: 'text-yellow-400', 
+                    orange: 'text-orange-400',
+                    red: 'text-red-400'
+                  };
+
+                  return (
+                    <p className={`font-semibold ${colorClasses[statusInfo.color as keyof typeof colorClasses] || 'text-muted-foreground'}`}>
+                      {statusInfo.message}
+                    </p>
+                  );
+                })()}
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Start Date</p>
+                <p className="text-foreground font-semibold">
+                  {formatMembershipDate(currentMembership.currentPeriodStart)}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">End Date</p>
+                <p className="text-foreground font-semibold">
+                  {formatMembershipDate(currentMembership.currentPeriodEnd)}
+                </p>
+              </div>
+            </div>
+            
+            {/* Progress Bar for Active Memberships */}
+            {(() => {
+              if (currentMembership.status !== 'active') return null;
+              
+              const now = new Date().getTime();
+              const start = new Date(currentMembership.currentPeriodStart).getTime();
+              const end = new Date(currentMembership.currentPeriodEnd).getTime();
+              const total = end - start;
+              const elapsed = now - start;
+              const progress = Math.max(0, Math.min(100, (elapsed / total) * 100));
+              
+              return (
+                <div className="mb-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm text-muted-foreground">Membership Progress</span>
+                    <span className="text-sm text-muted-foreground">{Math.round(progress)}%</span>
+                  </div>
+                  <div className="w-full bg-muted rounded-full h-2">
+                    <div
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        progress > 80 ? 'bg-red-500' :
+                        progress > 60 ? 'bg-orange-500' :
+                        progress > 40 ? 'bg-yellow-500' :
+                        'bg-green-500'
+                      }`}
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              );
+            })()}
+            
+            {/* Cancel Membership Button or Status Info */}
+            {currentMembership.status === 'active' && !currentMembership.cancelAtPeriodEnd && (
+              <div className="mt-6 pt-4 border-t border-border">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Need to cancel your membership?</p>
+                    <p className="text-xs text-muted-foreground">Your membership will remain active until the end of your billing period</p>
+                  </div>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleCancelMembership}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    Cancel Membership
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {!currentMembership && (
+        <Card className="bg-card/50 border-yellow-500/50 mb-6">
+          <CardContent className="p-6 text-center">
+            <Shield className="h-12 w-12 text-yellow-500 mx-auto mb-3" />
+            <h3 className="text-xl font-semibold text-foreground mb-2">No Active Membership</h3>
+            <p className="text-muted-foreground mb-4">
+              Get access to premium features and facilities with our membership plans
+            </p>
+            <Button 
+              onClick={() => window.location.href = '/membership'}
+              className="bg-primary hover:bg-primary/90"
+            >
+              View Membership Plans
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Fitness Plans Section */}
+      {allPlans && allPlans.length > 0 ? (
+        <>
+          {/* Active Plan Preview */}
+          {activePlan ? (
+            <Card className="bg-card/50 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-green-500" />
+                  Active Fitness Plan
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Your current active fitness program
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-background/50 rounded-lg border border-border">
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground">{activePlan.name}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Schedule: {activePlan.workoutPlan.schedule.join(", ")}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-muted-foreground">Daily Calories</p>
+                      <p className="text-xl font-bold text-primary">{activePlan.dietPlan.dailyCalories}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <Button 
+                      asChild 
+                      className=""
+                    >
+                      <a href="/profile/fitness-plans">View Workout Plan</a>
+                    </Button>
+                    <Button 
+                      asChild 
+                      variant="outline" 
+                      className=""
+                    >
+                      <a href="/profile/diet-plans">View Diet Plan</a>
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="bg-card/50 border-border">
+              <CardContent className="p-8 text-center">
+                <Target className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-foreground mb-2">No Active Plan</h3>
+                <p className="text-muted-foreground mb-6">
+                  Get started with a personalized fitness and diet plan tailored to your goals.
+                </p>
+                <Button 
+                  asChild 
+                  className=""
+                >
+                  <a href="/generate-program">Generate Your Plan</a>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </>
+      ) : (
+        /* Show NoFitnessPlan when user has no plans */
+        <NoFitnessPlan />
+      )}
+    </>
+  );
 
   // Show loading state during hydration
   if (!mounted) {
@@ -133,7 +361,6 @@ const ProfilePage = () => {
         <ProfileHeader user={user} />
 
         {/* User Profile Card - Always show this */}
-                {/* User Profile Card - Always show this */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="bg-card/50 border-border">
             <CardContent className="p-6">
@@ -172,212 +399,8 @@ const ProfilePage = () => {
           </Card>
         </div>
 
-        {/* Membership Status - Always show this regardless of plans */}
-        {currentMembership && (
-          <Card className={`bg-card/50 mb-6 ${
-            (currentMembership.status === 'cancelled' || 
-             (currentMembership.status === 'active' && currentMembership.cancelAtPeriodEnd)) ? 'border-orange-500/50' : 
-            currentMembership.status === 'expired' ? 'border-red-500/50' : 
-            'border-green-500/50'
-          }`}>
-            <CardHeader>
-              <CardTitle className="text-foreground flex items-center gap-2">
-                <Shield className={`h-6 w-6 ${
-                  (currentMembership.status === 'cancelled' || 
-                   (currentMembership.status === 'active' && currentMembership.cancelAtPeriodEnd)) ? 'text-orange-500' : 
-                  currentMembership.status === 'expired' ? 'text-red-500' : 
-                  'text-green-500'
-                }`} />
-                {(currentMembership.status === 'active' && currentMembership.cancelAtPeriodEnd) ? 'Cancelling Membership' :
-                 currentMembership.status === 'cancelled' ? 'Cancelled Membership' : 
-                 currentMembership.status === 'expired' ? 'Expired Membership' : 
-                 'Current Membership'}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Plan Type</p>
-                  <p className="text-foreground font-semibold capitalize">
-                    {currentMembership.membershipType} Plan
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Status</p>
-                  {(() => {
-                    const statusInfo = getMembershipStatusInfo(currentMembership);
-                    if (!statusInfo) return <span className="text-muted-foreground">Loading...</span>;
-                    
-                    const colorClasses = {
-                      green: 'text-green-400',
-                      yellow: 'text-yellow-400', 
-                      orange: 'text-orange-400',
-                      red: 'text-red-400'
-                    };
-
-                    return (
-                      <p className={`font-semibold ${colorClasses[statusInfo.color as keyof typeof colorClasses] || 'text-muted-foreground'}`}>
-                        {statusInfo.message}
-                      </p>
-                    );
-                  })()}
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Start Date</p>
-                  <p className="text-foreground font-semibold">
-                    {formatMembershipDate(currentMembership.currentPeriodStart)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">End Date</p>
-                  <p className="text-foreground font-semibold">
-                    {formatMembershipDate(currentMembership.currentPeriodEnd)}
-                  </p>
-                </div>
-              </div>
-              
-              {/* Progress Bar for Active Memberships */}
-              {(() => {
-                if (currentMembership.status !== 'active') return null;
-                
-                const now = new Date().getTime();
-                const start = new Date(currentMembership.currentPeriodStart).getTime();
-                const end = new Date(currentMembership.currentPeriodEnd).getTime();
-                const total = end - start;
-                const elapsed = now - start;
-                const progress = Math.max(0, Math.min(100, (elapsed / total) * 100));
-                
-                return (
-                  <div className="mb-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-muted-foreground">Membership Progress</span>
-                      <span className="text-sm text-muted-foreground">{Math.round(progress)}%</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          progress > 80 ? 'bg-red-500' :
-                          progress > 60 ? 'bg-orange-500' :
-                          progress > 40 ? 'bg-yellow-500' :
-                          'bg-green-500'
-                        }`}
-                        style={{ width: `${progress}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                );
-              })()}
-              
-              {/* Cancel Membership Button or Status Info */}
-              {currentMembership.status === 'active' && !currentMembership.cancelAtPeriodEnd && (
-                <div className="mt-6 pt-4 border-t border-border">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Need to cancel your membership?</p>
-                      <p className="text-xs text-muted-foreground">Your membership will remain active until the end of your billing period</p>
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={handleCancelMembership}
-                      className="bg-red-600 hover:bg-red-700"
-                    >
-                      Cancel Membership
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
-
-        {!currentMembership && (
-          <Card className="bg-card/50 border-yellow-500/50 mb-6">
-            <CardContent className="p-6 text-center">
-              <Shield className="h-12 w-12 text-yellow-500 mx-auto mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">No Active Membership</h3>
-              <p className="text-muted-foreground mb-4">
-                Get access to premium features and facilities with our membership plans
-              </p>
-              <Button 
-                onClick={() => window.location.href = '/membership'}
-                className="bg-primary hover:bg-primary/90"
-              >
-                View Membership Plans
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Fitness Plans Section */}
-        {allPlans && allPlans.length > 0 ? (
-          <>
-            {/* Active Plan Preview */}
-            {activePlan ? (
-              <Card className="bg-card/50 border-border">
-                <CardHeader>
-                  <CardTitle className="text-foreground flex items-center gap-2">
-                    <Activity className="h-5 w-5 text-green-500" />
-                    Active Fitness Plan
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    Your current active fitness program
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-background/50 rounded-lg border border-border">
-                      <div>
-                        <h3 className="text-lg font-semibold text-foreground">{activePlan.name}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          Schedule: {activePlan.workoutPlan.schedule.join(", ")}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-muted-foreground">Daily Calories</p>
-                        <p className="text-xl font-bold text-primary">{activePlan.dietPlan.dailyCalories}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <Button 
-                        asChild 
-                        className=""
-                      >
-                        <a href="/profile/fitness-plans">View Workout Plan</a>
-                      </Button>
-                      <Button 
-                        asChild 
-                        variant="outline" 
-                        className=""
-                      >
-                        <a href="/profile/diet-plans">View Diet Plan</a>
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <Card className="bg-card/50 border-border">
-                <CardContent className="p-8 text-center">
-                  <Target className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-foreground mb-2">No Active Plan</h3>
-                  <p className="text-muted-foreground mb-6">
-                    Get started with a personalized fitness and diet plan tailored to your goals.
-                  </p>
-                  <Button 
-                    asChild 
-                    className=""
-                  >
-                    <a href="/generate-program">Generate Your Plan</a>
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-          </>
-        ) : (
-          /* Show NoFitnessPlan when user has no plans */
-          <NoFitnessPlan />
-        )}
+        {/* Rest of profile content */}
+        {profileContentForUser()}
       </div>
     </UserLayout>
   );

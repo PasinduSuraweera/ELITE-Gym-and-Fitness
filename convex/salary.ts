@@ -474,6 +474,35 @@ export const getPayrollRecords = query({
   },
 });
 
+// Get payroll records for a specific employee (for payment slips)
+export const getEmployeePayrollRecords = query({
+  args: {
+    employeeClerkId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+    
+    const currentUser = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .first();
+
+    // Allow employee to see their own records or admin to see any
+    if (!currentUser || (currentUser.role !== "admin" && currentUser.clerkId !== args.employeeClerkId)) {
+      throw new Error("Unauthorized: Can only view your own payroll records");
+    }
+
+    const payrollRecords = await ctx.db
+      .query("payrollRecords")
+      .withIndex("by_employee_clerk", (q) => q.eq("employeeClerkId", args.employeeClerkId))
+      .order("desc")
+      .collect();
+
+    return payrollRecords;
+  },
+});
+
 // Approve payroll records
 export const approvePayrollRecords = mutation({
   args: {
