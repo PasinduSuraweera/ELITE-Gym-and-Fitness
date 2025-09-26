@@ -61,13 +61,13 @@
 
   /* Light Theme */
   --background: var(--gym-white);
-  --foreground: #0f172a;
+  --foreground: #000000;
 
   /* Card and popover elements */
   --card: var(--gym-white);
-  --card-foreground: #0f172a;
+  --card-foreground: #000000;
   --popover: var(--gym-white);
-  --popover-foreground: #0f172a;
+  --popover-foreground: #000000;
 
   /* Primary - Red */
   --primary: var(--gym-red);
@@ -78,17 +78,17 @@
   --secondary-foreground: #ffffff;
 
   /* Accent - Orange bright */
-  --accent: var(--gym-light-gray);
-  --accent-foreground: #0f172a;
+  --accent: #f1f5f9;
+  --accent-foreground: #000000;
 
   /* Muted elements */
-  --muted: var(--gym-medium-gray);
-  --muted-foreground: var(--gym-dark-gray);
+  --muted: #cbd5e1;
+  --muted-foreground: #475569;
 
   /* System colors */
-  --destructive: #ef4444;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
+  --destructive: #dc2626;
+  --border: #cbd5e1;
+  --input: #cbd5e1;
   --ring: var(--gym-red);
 
   /* Chart colors - light theme */
@@ -99,13 +99,13 @@
   --chart-5: #f97316;
 
   /* Sidebar colors */
-  --sidebar: var(--gym-light-gray);
-  --sidebar-foreground: #0f172a;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #000000;
   --sidebar-primary: var(--gym-red);
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: var(--gym-orange);
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #e2e8f0;
+  --sidebar-border: #cbd5e1;
   --sidebar-ring: var(--gym-red);
 }
 
@@ -123,9 +123,9 @@
   --foreground: #ffffff;
 
   /* Card and popover elements */
-  --card: #111111;
+  --card: #1a1a1a;
   --card-foreground: #ffffff;
-  --popover: #111111;
+  --popover: #1a1a1a;
   --popover-foreground: #ffffff;
 
   /* Primary - Red */
@@ -137,17 +137,17 @@
   --secondary-foreground: #ffffff;
 
   /* Accent - Subtle gray for better dark theme integration */
-  --accent: var(--gym-gray-subtle);
+  --accent: #262626;
   --accent-foreground: #ffffff;
 
   /* Muted elements */
-  --muted: var(--gym-gray);
-  --muted-foreground: #9ca3af;
+  --muted: #404040;
+  --muted-foreground: #d1d5db;
 
   /* System colors */
-  --destructive: #ef4444;
-  --border: rgba(220, 38, 38, 0.2);
-  --input: rgba(220, 38, 38, 0.2);
+  --destructive: #f87171;
+  --border: rgba(220, 38, 38, 0.3);
+  --input: rgba(220, 38, 38, 0.3);
   --ring: var(--gym-red);
 
   /* Chart colors - dark theme */
@@ -158,13 +158,13 @@
   --chart-5: #f97316;
 
   /* Sidebar colors */
-  --sidebar: var(--gym-dark);
-  --sidebar-foreground: #f2f2f2;
+  --sidebar: #1a1a1a;
+  --sidebar-foreground: #ffffff;
   --sidebar-primary: var(--gym-red);
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: var(--gym-orange);
   --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(220, 38, 38, 0.2);
+  --sidebar-border: rgba(220, 38, 38, 0.3);
   --sidebar-ring: var(--gym-red);
 }
 

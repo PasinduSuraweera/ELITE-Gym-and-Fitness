@@ -28,15 +28,15 @@ export default function TrainingSessionsPage() {
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case "confirmed":
-        return "bg-green-900/30 text-green-300 border-green-600/30";
+        return "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-600/30";
       case "pending":
-        return "bg-yellow-900/30 text-yellow-300 border-yellow-600/30";
+        return "bg-yellow-100 text-yellow-700 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-600/30";
       case "cancelled":
-        return "bg-red-900/30 text-red-300 border-red-600/30";
+        return "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-600/30";
       case "completed":
-        return "bg-blue-900/30 text-blue-300 border-blue-600/30";
+        return "bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-600/30";
       default:
-        return "bg-gray-900/30 text-gray-300 border-gray-600/30";
+        return "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-900/30 dark:text-gray-300 dark:border-gray-600/30";
     }
   };
 
@@ -50,13 +50,13 @@ export default function TrainingSessionsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-white">Training Sessions</h1>
-            <p className="text-gray-400 mt-2">
+            <h1 className="text-3xl font-bold text-foreground">Training Sessions</h1>
+            <p className="text-muted-foreground mt-2">
               Manage your training sessions and view session history
             </p>
           </div>
           <Button 
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-primary hover:bg-primary/90"
             onClick={() => window.location.href = '/trainer-booking'}
           >
             Book New Session
@@ -69,19 +69,19 @@ export default function TrainingSessionsPage() {
             {userBookings.map((booking) => (
               <Card 
                 key={booking._id} 
-                className="bg-gray-900/50 border-gray-800 hover:border-red-500/30 transition-all duration-200"
+                className="bg-card/50 border-border hover:border-primary/30 transition-all duration-200"
               >
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-white flex items-center gap-2">
-                      <User className="h-5 w-5 text-red-500" />
+                    <CardTitle className="text-foreground flex items-center gap-2">
+                      <User className="h-5 w-5 text-primary" />
                       {booking.trainerName}
                     </CardTitle>
                     <span className={`px-3 py-1 rounded-full text-xs border ${getStatusBadgeColor(booking.status)}`}>
                       {booking.status}
                     </span>
                   </div>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-muted-foreground">
                     {booking.sessionType.replace('_', ' ')}
                   </CardDescription>
                 </CardHeader>
@@ -90,14 +90,14 @@ export default function TrainingSessionsPage() {
                   {/* Date and Time */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
-                      <Calendar className="h-4 w-4 text-red-500" />
-                      <span className="text-white">
+                      <Calendar className="h-4 w-4 text-primary" />
+                      <span className="text-foreground">
                         {formatDate(new Date(booking.sessionDate))}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Clock className="h-4 w-4 text-red-500" />
-                      <span className="text-gray-300">
+                      <Clock className="h-4 w-4 text-primary" />
+                      <span className="text-muted-foreground">
                         {new Date(`2000-01-01T${booking.startTime}`).toLocaleTimeString('en-US', {
                           hour: 'numeric',
                           minute: '2-digit',
@@ -108,23 +108,23 @@ export default function TrainingSessionsPage() {
                   </div>
 
                   {/* Duration */}
-                  <div className="text-sm text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     Duration: {booking.duration} minutes
                   </div>
 
                   {/* Special Notes */}
                   {booking.notes && (
                     <div className="text-sm">
-                      <span className="text-gray-400">Notes: </span>
-                      <span className="text-gray-300">{booking.notes}</span>
+                      <span className="text-muted-foreground">Notes: </span>
+                      <span className="text-foreground">{booking.notes}</span>
                     </div>
                   )}
 
                   {/* Status Indicators */}
                   {booking.status === "confirmed" && isUpcoming(booking.sessionDate) && (
-                    <div className="flex items-center gap-2 p-2 bg-green-900/20 rounded-lg border border-green-600/30">
-                      <Clock className="h-4 w-4 text-green-400" />
-                      <span className="text-green-400 text-sm font-medium">Upcoming Session</span>
+                    <div className="flex items-center gap-2 p-2 bg-green-500/10 rounded-lg border border-green-500/20">
+                      <Clock className="h-4 w-4 text-green-600" />
+                      <span className="text-green-600 text-sm font-medium">Upcoming Session</span>
                     </div>
                   )}
 
@@ -134,7 +134,7 @@ export default function TrainingSessionsPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+                        className="flex-1 border-border text-foreground hover:bg-muted"
                         onClick={() => window.location.href = '/reviews'}
                       >
                         <Star className="h-4 w-4 mr-1" />
@@ -146,7 +146,7 @@ export default function TrainingSessionsPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="flex-1 border-red-600/50 text-red-400 hover:bg-red-900/20"
+                        className="flex-1 border-red-500/50 text-red-500 hover:bg-red-500/10"
                         onClick={async () => {
                           if (confirm(`Are you sure you want to cancel your training session with ${booking.trainerName}?\n\nSession: ${booking.sessionType.replace('_', ' ')}\nDate: ${formatDate(new Date(booking.sessionDate))}\n\nThis action cannot be undone.`)) {
                             try {
@@ -170,7 +170,7 @@ export default function TrainingSessionsPage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+                      className="flex-1 border-border text-foreground hover:bg-muted"
                       onClick={() => window.location.href = `/trainer-profile/${booking.trainerId}`}
                     >
                       View Trainer
@@ -182,15 +182,15 @@ export default function TrainingSessionsPage() {
           </div>
         ) : (
           /* Empty State */
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-card/50 border-border">
             <CardContent className="text-center py-12">
-              <Calendar className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No Training Sessions Yet</h3>
-              <p className="text-gray-400 mb-6 max-w-md mx-auto">
+              <Calendar className="h-16 w-16 text-muted-foreground/60 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Training Sessions Yet</h3>
+              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                 Start your fitness journey by booking your first training session with one of our certified trainers.
               </p>
               <Button 
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-primary hover:bg-primary/90"
                 onClick={() => window.location.href = '/trainer-booking'}
               >
                 Browse Trainers

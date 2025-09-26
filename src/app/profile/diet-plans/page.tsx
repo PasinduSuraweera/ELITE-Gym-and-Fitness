@@ -31,13 +31,13 @@ const DietPlansPage = () => {
         {allPlans && allPlans?.length > 0 ? (
           <>
             {/* Plan Selector */}
-            <Card className="bg-gray-900/50 border-gray-700">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Target className="h-5 w-5 text-red-500" />
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
                   Your Diet Plans
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Select a plan to view detailed nutrition and meal information
                 </CardDescription>
               </CardHeader>
@@ -47,10 +47,10 @@ const DietPlansPage = () => {
                     <Button
                       key={plan._id}
                       onClick={() => setSelectedPlanId(plan._id)}
-                      className={`text-white border transition-all duration-300 rounded-lg ${
+                      className={`text-foreground border transition-all duration-300 rounded-lg ${
                         selectedPlanId === plan._id
-                          ? "bg-red-600/20 text-red-400 border-red-500 shadow-red-500/25"
-                          : "bg-gray-900/50 border-gray-700 hover:border-red-500/50 hover:bg-red-900/20"
+                          ? "bg-primary/20 text-primary border-primary shadow-primary/25"
+                          : "bg-card/50 border-border hover:border-primary/50 hover:bg-primary/10"
                       }`}
                     >
                       {plan.name}
@@ -67,15 +67,15 @@ const DietPlansPage = () => {
 
             {/* Diet Plan Details */}
             {currentPlan && (
-              <Card className="bg-gray-900/50 border-gray-700">
+              <Card className="bg-card/50 border-border">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-white flex items-center gap-2">
-                        <AppleIcon className="h-5 w-5 text-red-500" />
+                      <CardTitle className="text-foreground flex items-center gap-2">
+                        <AppleIcon className="h-5 w-5 text-primary" />
                         {currentPlan.name} - Diet Plan
                       </CardTitle>
-                      <CardDescription className="text-gray-400 flex items-center gap-2 mt-2">
+                      <CardDescription className="text-muted-foreground flex items-center gap-2 mt-2">
                         <Calculator className="h-4 w-4" />
                         Daily Target: {currentPlan.dietPlan.dailyCalories} calories
                       </CardDescription>
@@ -91,47 +91,47 @@ const DietPlansPage = () => {
                   <div className="space-y-6">
                     {/* Nutrition Overview */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="flex items-center gap-3 p-4 bg-black/50 rounded-lg border border-gray-700">
-                        <Calculator className="h-8 w-8 text-red-500" />
+                      <div className="flex items-center gap-3 p-4 bg-card/30 rounded-lg border border-border">
+                        <Calculator className="h-8 w-8 text-primary" />
                         <div>
-                          <p className="text-sm text-gray-400">Daily Calories</p>
-                          <p className="text-white font-semibold">{currentPlan.dietPlan.dailyCalories}</p>
+                          <p className="text-sm text-muted-foreground">Daily Calories</p>
+                          <p className="text-foreground font-semibold">{currentPlan.dietPlan.dailyCalories}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-black/50 rounded-lg border border-gray-700">
+                      <div className="flex items-center gap-3 p-4 bg-card/30 rounded-lg border border-border">
                         <Utensils className="h-8 w-8 text-blue-500" />
                         <div>
-                          <p className="text-sm text-gray-400">Meals per Day</p>
-                          <p className="text-white font-semibold">{currentPlan.dietPlan.meals.length}</p>
+                          <p className="text-sm text-muted-foreground">Meals per Day</p>
+                          <p className="text-foreground font-semibold">{currentPlan.dietPlan.meals.length}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-black/50 rounded-lg border border-gray-700">
+                      <div className="flex items-center gap-3 p-4 bg-card/30 rounded-lg border border-border">
                         <Clock className="h-8 w-8 text-green-500" />
                         <div>
-                          <p className="text-sm text-gray-400">Avg. Calories/Meal</p>
-                          <p className="text-white font-semibold">
+                          <p className="text-sm text-muted-foreground">Avg. Calories/Meal</p>
+                          <p className="text-foreground font-semibold">
                             {Math.round(currentPlan.dietPlan.dailyCalories / currentPlan.dietPlan.meals.length)}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-black/50 rounded-lg border border-gray-700">
+                      <div className="flex items-center gap-3 p-4 bg-card/30 rounded-lg border border-border">
                         <Target className="h-8 w-8 text-orange-500" />
                         <div>
-                          <p className="text-sm text-gray-400">Goal</p>
-                          <p className="text-white font-semibold">Fitness</p>
+                          <p className="text-sm text-muted-foreground">Goal</p>
+                          <p className="text-foreground font-semibold">Fitness</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Calorie Breakdown Chart */}
-                    <Card className="bg-black/50 border-gray-700">
+                    <Card className="bg-card/30 border-border">
                       <CardHeader>
-                        <CardTitle className="text-white text-lg">Daily Calorie Target</CardTitle>
+                        <CardTitle className="text-foreground text-lg">Daily Calorie Target</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className="flex justify-between items-center p-6 bg-gray-900/50 rounded-lg border border-gray-700">
-                          <span className="font-mono text-lg text-gray-300">TARGET</span>
-                          <div className="font-mono text-3xl text-red-500 font-bold">
+                        <div className="flex justify-between items-center p-6 bg-card/50 rounded-lg border border-border">
+                          <span className="font-mono text-lg text-muted-foreground">TARGET</span>
+                          <div className="font-mono text-3xl text-primary font-bold">
                             {currentPlan.dietPlan.dailyCalories} KCAL
                           </div>
                         </div>
@@ -139,10 +139,10 @@ const DietPlansPage = () => {
                     </Card>
 
                     {/* Meal Plan */}
-                    <Card className="bg-black/50 border-gray-700">
+                    <Card className="bg-card/30 border-border">
                       <CardHeader>
-                        <CardTitle className="text-white text-lg">Meal Schedule</CardTitle>
-                        <CardDescription className="text-gray-400">
+                        <CardTitle className="text-foreground text-lg">Meal Schedule</CardTitle>
+                        <CardDescription className="text-muted-foreground">
                           Your daily meal plan with recommended foods
                         </CardDescription>
                       </CardHeader>
@@ -151,16 +151,16 @@ const DietPlansPage = () => {
                           {currentPlan.dietPlan.meals.map((meal, index) => (
                             <div
                               key={index}
-                              className="border border-gray-700 rounded-lg p-6 bg-gray-900/30 shadow-lg"
+                              className="border border-border rounded-lg p-6 bg-card/50 shadow-lg"
                             >
                               <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-3">
-                                  <div className="w-4 h-4 rounded-full bg-red-500"></div>
-                                  <h4 className="font-mono text-red-500 text-xl font-bold">{meal.name}</h4>
+                                  <div className="w-4 h-4 rounded-full bg-primary"></div>
+                                  <h4 className="font-mono text-primary text-xl font-bold">{meal.name}</h4>
                                 </div>
                                 <div className="text-right">
-                                  <p className="text-sm text-gray-400">Estimated</p>
-                                  <p className="text-lg font-bold text-white">
+                                  <p className="text-sm text-muted-foreground">Estimated</p>
+                                  <p className="text-lg font-bold text-foreground">
                                     {Math.round(currentPlan.dietPlan.dailyCalories / currentPlan.dietPlan.meals.length)} cal
                                   </p>
                                 </div>
@@ -170,12 +170,12 @@ const DietPlansPage = () => {
                                 {meal.foods.map((food, foodIndex) => (
                                   <div
                                     key={foodIndex}
-                                    className="flex items-center gap-3 p-3 bg-black/50 rounded-lg border border-gray-700 hover:border-red-500/30 transition-colors"
+                                    className="flex items-center gap-3 p-3 bg-card/30 rounded-lg border border-border hover:border-primary/30 transition-colors"
                                   >
-                                    <span className="text-xs text-red-500 font-mono bg-red-900/20 px-2 py-1 rounded border border-red-500/30 min-w-[2rem] text-center">
+                                    <span className="text-xs text-primary font-mono bg-primary/10 px-2 py-1 rounded border border-primary/30 min-w-[2rem] text-center">
                                       {String(foodIndex + 1).padStart(2, "0")}
                                     </span>
-                                    <span className="text-sm text-gray-300 flex-1">{food}</span>
+                                    <span className="text-sm text-foreground flex-1">{food}</span>
                                   </div>
                                 ))}
                               </div>
@@ -189,7 +189,7 @@ const DietPlansPage = () => {
                     <div className="flex gap-4">
                       <Button 
                         onClick={() => window.location.href = '/recipes'}
-                        className="bg-red-600 hover:bg-red-700"
+                        className="bg-primary hover:bg-primary/90"
                       >
                         Browse Recipes
                       </Button>
@@ -200,16 +200,16 @@ const DietPlansPage = () => {
             )}
           </>
         ) : (
-          <Card className="bg-gray-900/50 border-gray-700">
+          <Card className="bg-card/50 border-border">
             <CardContent className="p-8 text-center">
-              <AppleIcon className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No Diet Plans</h3>
-              <p className="text-gray-400 mb-6">
+              <AppleIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Diet Plans</h3>
+              <p className="text-muted-foreground mb-6">
                 Get started with a personalized nutrition plan tailored to your dietary goals.
               </p>
               <Button 
                 onClick={() => window.location.href = '/generate-program'}
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 Generate Your First Plan
               </Button>

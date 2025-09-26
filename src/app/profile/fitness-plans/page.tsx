@@ -37,13 +37,13 @@ const FitnessPlansPage = () => {
         {allPlans && allPlans?.length > 0 ? (
           <>
             {/* Plan Selector */}
-            <Card className="bg-gray-900/50 border-gray-700">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Target className="h-5 w-5 text-red-500" />
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
                   Your Fitness Plans
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Select a plan to view detailed workout routines
                 </CardDescription>
               </CardHeader>
@@ -53,10 +53,10 @@ const FitnessPlansPage = () => {
                     <Button
                       key={plan._id}
                       onClick={() => setSelectedPlanId(plan._id)}
-                      className={`text-white border transition-all duration-300 rounded-lg ${
+                      className={`text-foreground border transition-all duration-300 rounded-lg ${
                         selectedPlanId === plan._id
-                          ? "bg-red-600/20 text-red-400 border-red-500 shadow-red-500/25"
-                          : "bg-gray-900/50 border-gray-700 hover:border-red-500/50 hover:bg-red-900/20"
+                          ? "bg-primary/20 text-primary border-primary shadow-primary/25"
+                          : "bg-card/50 border-border hover:border-primary/50 hover:bg-primary/10"
                       }`}
                     >
                       {plan.name}
@@ -73,15 +73,15 @@ const FitnessPlansPage = () => {
 
             {/* Plan Details */}
             {currentPlan && (
-              <Card className="bg-gray-900/50 border-gray-700">
+              <Card className="bg-card/50 border-border">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-white flex items-center gap-2">
-                        <DumbbellIcon className="h-5 w-5 text-red-500" />
+                      <CardTitle className="text-foreground flex items-center gap-2">
+                        <DumbbellIcon className="h-5 w-5 text-primary" />
                         {currentPlan.name}
                       </CardTitle>
-                      <CardDescription className="text-gray-400 flex items-center gap-2 mt-2">
+                      <CardDescription className="text-muted-foreground flex items-center gap-2 mt-2">
                         <CalendarIcon className="h-4 w-4" />
                         Schedule: {currentPlan.workoutPlan.schedule.join(", ")}
                       </CardDescription>
@@ -97,45 +97,45 @@ const FitnessPlansPage = () => {
                   <div className="space-y-6">
                     {/* Schedule Overview */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="flex items-center gap-3 p-4 bg-black/50 rounded-lg border border-gray-700">
+                      <div className="flex items-center gap-3 p-4 bg-card/30 rounded-lg border border-border">
                         <Calendar className="h-8 w-8 text-blue-500" />
                         <div>
-                          <p className="text-sm text-gray-400">Workout Days</p>
-                          <p className="text-white font-semibold">{currentPlan.workoutPlan.schedule.length}</p>
+                          <p className="text-sm text-muted-foreground">Workout Days</p>
+                          <p className="text-foreground font-semibold">{currentPlan.workoutPlan.schedule.length}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-black/50 rounded-lg border border-gray-700">
+                      <div className="flex items-center gap-3 p-4 bg-card/30 rounded-lg border border-border">
                         <Activity className="h-8 w-8 text-green-500" />
                         <div>
-                          <p className="text-sm text-gray-400">Total Exercises</p>
-                          <p className="text-white font-semibold">
+                          <p className="text-sm text-muted-foreground">Total Exercises</p>
+                          <p className="text-foreground font-semibold">
                             {currentPlan.workoutPlan.exercises.reduce((total, day) => total + day.routines.length, 0)}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-4 bg-black/50 rounded-lg border border-gray-700">
+                      <div className="flex items-center gap-3 p-4 bg-card/30 rounded-lg border border-border">
                         <Clock className="h-8 w-8 text-orange-500" />
                         <div>
-                          <p className="text-sm text-gray-400">Est. Duration</p>
-                          <p className="text-white font-semibold">45-60 min</p>
+                          <p className="text-sm text-muted-foreground">Est. Duration</p>
+                          <p className="text-foreground font-semibold">45-60 min</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Workout Details */}
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-4">Workout Schedule</h3>
+                      <h3 className="text-lg font-semibold text-foreground mb-4">Workout Schedule</h3>
                       <Accordion type="multiple" className="space-y-4">
                         {currentPlan.workoutPlan.exercises.map((exerciseDay, index) => (
                           <AccordionItem
                             key={index}
                             value={exerciseDay.day}
-                            className="border border-gray-700 rounded-lg overflow-hidden bg-gray-900/30"
+                            className="border border-border rounded-lg overflow-hidden bg-card/30"
                           >
-                            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-red-600/10 font-mono text-white">
+                            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-primary/10 font-mono text-foreground">
                               <div className="flex justify-between w-full items-center">
-                                <span className="text-red-500 font-bold">{exerciseDay.day}</span>
-                                <div className="text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded">
+                                <span className="text-primary font-bold">{exerciseDay.day}</span>
+                                <div className="text-xs text-muted-foreground bg-card/50 px-2 py-1 rounded">
                                   {exerciseDay.routines.length} EXERCISES
                                 </div>
                               </div>
@@ -146,15 +146,15 @@ const FitnessPlansPage = () => {
                                 {exerciseDay.routines.map((routine, routineIndex) => (
                                   <div
                                     key={routineIndex}
-                                    className="border border-gray-700 rounded-lg p-4 bg-black/50 shadow-lg"
+                                    className="border border-border rounded-lg p-4 bg-card/50 shadow-lg"
                                   >
                                     <div className="flex justify-between items-start mb-3">
-                                      <h4 className="font-semibold text-white text-lg">
+                                      <h4 className="font-semibold text-foreground text-lg">
                                         {routine.name}
                                       </h4>
                                       <div className="flex items-center gap-3">
                                         {routine.sets && (
-                                          <div className="px-3 py-1 rounded-full bg-red-600/20 text-red-400 text-sm font-mono border border-red-500/30">
+                                          <div className="px-3 py-1 rounded-full bg-primary/20 text-primary text-sm font-mono border border-primary/30">
                                             {routine.sets} SETS
                                           </div>
                                         )}
@@ -171,18 +171,18 @@ const FitnessPlansPage = () => {
                                       </div>
                                     </div>
                                     {routine.description && (
-                                      <p className="text-sm text-gray-300 mt-2 bg-gray-900/30 p-3 rounded border border-gray-700">
+                                      <p className="text-sm text-foreground mt-2 bg-card/30 p-3 rounded border border-border">
                                         {routine.description}
                                       </p>
                                     )}
                                     {routine.exercises && routine.exercises.length > 0 && (
                                       <div className="mt-3">
-                                        <p className="text-sm text-gray-400 mb-2">Exercises:</p>
+                                        <p className="text-sm text-muted-foreground mb-2">Exercises:</p>
                                         <div className="flex flex-wrap gap-2">
                                           {routine.exercises.map((exercise, exerciseIndex) => (
                                             <span
                                               key={exerciseIndex}
-                                              className="text-xs bg-gray-800/50 text-gray-300 px-2 py-1 rounded border border-gray-600"
+                                              className="text-xs bg-card/50 text-foreground px-2 py-1 rounded border border-border"
                                             >
                                               {exercise}
                                             </span>
@@ -204,16 +204,16 @@ const FitnessPlansPage = () => {
             )}
           </>
         ) : (
-          <Card className="bg-gray-900/50 border-gray-700">
+          <Card className="bg-card/50 border-border">
             <CardContent className="p-8 text-center">
-              <DumbbellIcon className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No Fitness Plans</h3>
-              <p className="text-gray-400 mb-6">
+              <DumbbellIcon className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Fitness Plans</h3>
+              <p className="text-muted-foreground mb-6">
                 Get started with a personalized workout plan tailored to your fitness goals.
               </p>
               <Button 
                 onClick={() => window.location.href = '/generate-program'}
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 Generate Your First Plan
               </Button>

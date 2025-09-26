@@ -86,7 +86,7 @@ export default function ReviewsPage() {
           <Star
             key={star}
             className={`w-6 h-6 cursor-pointer transition-colors ${
-              star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-400 hover:text-yellow-300"
+              star <= rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground hover:text-yellow-300"
             }`}
             onClick={() => interactive && onRatingChange && onRatingChange(star)}
           />
@@ -110,7 +110,7 @@ export default function ReviewsPage() {
         subtitle="Please sign in to view and write reviews"
       >
         <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="text-white text-xl">Please sign in to view reviews.</div>
+          <div className="text-foreground text-xl">Please sign in to view reviews.</div>
         </div>
       </UserLayout>
     );
@@ -124,7 +124,7 @@ export default function ReviewsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Reviewable Sessions */}
           <div>
-            <h2 className="text-2xl font-semibold text-white mb-6">Sessions to Review</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-6">Sessions to Review</h2>
             {userBookings && userBookings.filter(booking => 
               booking.status === "completed" && 
               !userReviews?.some(review => review.bookingId === booking._id)
@@ -136,7 +136,7 @@ export default function ReviewsPage() {
                     !userReviews?.some(review => review.bookingId === booking._id)
                   )
                   .map((booking) => (
-                  <Card key={booking._id} className="bg-gray-900/50 border border-gray-700/50 hover:border-red-500/50 transition-colors">
+                  <Card key={booking._id} className="bg-card/50 border-border hover:border-primary/50 transition-colors">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-4">
                         <img
@@ -145,8 +145,8 @@ export default function ReviewsPage() {
                           className="w-12 h-12 rounded-full object-cover"
                         />
                         <div className="flex-1">
-                          <h3 className="text-white font-medium">{booking.trainerName}</h3>
-                          <div className="flex items-center gap-4 text-sm text-gray-400">
+                          <h3 className="text-foreground font-medium">{booking.trainerName}</h3>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
                               <Calendar className="h-4 w-4" />
                               <span>{new Date(booking.sessionDate).toLocaleDateString()}</span>
@@ -156,13 +156,13 @@ export default function ReviewsPage() {
                               <span>{booking.startTime}</span>
                             </div>
                           </div>
-                          <p className="text-xs text-gray-500 capitalize mt-1">
+                          <p className="text-xs text-muted-foreground/70 capitalize mt-1">
                             {booking.sessionType.replace('_', ' ')} • LKR {booking.totalAmount.toLocaleString()}
                           </p>
                         </div>
                         <Button
                           onClick={() => setSelectedBooking(booking)}
-                          className="bg-red-600 hover:bg-red-700 text-white"
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground"
                         >
                           Review
                         </Button>
@@ -172,11 +172,11 @@ export default function ReviewsPage() {
                 ))}
               </div>
             ) : (
-              <Card className="bg-gray-900/50 border border-gray-700/50">
+              <Card className="bg-card/50 border-border">
                 <CardContent className="p-8 text-center">
-                  <Trophy className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No sessions to review</p>
-                  <p className="text-gray-500 text-sm mt-2">Complete a training session to leave a review</p>
+                  <Trophy className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
+                  <p className="text-muted-foreground">No sessions to review</p>
+                  <p className="text-muted-foreground/70 text-sm mt-2">Complete a training session to leave a review</p>
                 </CardContent>
               </Card>
             )}
@@ -184,11 +184,11 @@ export default function ReviewsPage() {
 
           {/* Your Reviews */}
           <div>
-            <h2 className="text-2xl font-semibold text-white mb-6">Your Reviews</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-6">Your Reviews</h2>
             {userReviews && userReviews.length > 0 ? (
               <div className="space-y-4">
                 {userReviews.map((review) => (
-                  <Card key={review._id} className="bg-gray-900/50 border border-gray-700/50">
+                  <Card key={review._id} className="bg-card/50 border-border">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
                         <img
@@ -198,15 +198,15 @@ export default function ReviewsPage() {
                         />
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-2">
-                            <h3 className="text-white font-medium">{review.trainerName}</h3>
+                            <h3 className="text-foreground font-medium">{review.trainerName}</h3>
                             <div className="flex items-center gap-1">
                               {renderStars(review.rating)}
                             </div>
                           </div>
                           {review.comment && (
-                            <p className="text-gray-300 text-sm mb-2">{review.comment}</p>
+                            <p className="text-foreground/80 text-sm mb-2">{review.comment}</p>
                           )}
-                          <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground/70">
                             <span>{formatDate(review.createdAt)}</span>
                             <span className="capitalize">{review.sessionType?.replace('_', ' ')}</span>
                           </div>
@@ -217,11 +217,11 @@ export default function ReviewsPage() {
                 ))}
               </div>
             ) : (
-              <Card className="bg-gray-900/50 border border-gray-700/50">
+              <Card className="bg-card/50 border-border">
                 <CardContent className="p-8 text-center">
-                  <MessageCircle className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-400">No reviews yet</p>
-                  <p className="text-gray-500 text-sm mt-2">Your reviews will appear here after you submit them</p>
+                  <MessageCircle className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
+                  <p className="text-muted-foreground">No reviews yet</p>
+                  <p className="text-muted-foreground/70 text-sm mt-2">Your reviews will appear here after you submit them</p>
                 </CardContent>
               </Card>
             )}
@@ -230,7 +230,7 @@ export default function ReviewsPage() {
 
         {/* All Bookings Section */}
         <div className="mt-12">
-          <h2 className="text-2xl font-semibold text-white mb-6">All Your Bookings</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-6">All Your Bookings</h2>
           {userBookings && userBookings.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {userBookings.map((booking) => {
@@ -238,7 +238,7 @@ export default function ReviewsPage() {
                 const canReview = booking.status === "completed" && !hasReview;
                 
                 return (
-                  <Card key={booking._id} className="bg-gray-900/50 border border-gray-700/50">
+                  <Card key={booking._id} className="bg-card/50 border-border">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <img
@@ -247,51 +247,51 @@ export default function ReviewsPage() {
                           className="w-10 h-10 rounded-full object-cover"
                         />
                         <div className="flex-1">
-                          <h3 className="text-white font-medium text-sm">{booking.trainerName}</h3>
-                          <p className="text-xs text-gray-400">
+                          <h3 className="text-foreground font-medium text-sm">{booking.trainerName}</h3>
+                          <p className="text-xs text-muted-foreground">
                             {new Date(booking.sessionDate).toLocaleDateString()} • {booking.startTime}
                           </p>
                         </div>
                         <span className={`px-2 py-1 rounded-full text-xs ${
-                          booking.status === "confirmed" ? "bg-green-900/30 text-green-300" :
-                          booking.status === "pending" ? "bg-yellow-900/30 text-yellow-300" :
-                          booking.status === "cancelled" ? "bg-red-900/30 text-red-300" :
-                          booking.status === "completed" ? "bg-blue-900/30 text-blue-300" :
-                          "bg-gray-900/30 text-gray-300"
+                          booking.status === "confirmed" ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-600/30" :
+                          booking.status === "pending" ? "bg-yellow-100 text-yellow-700 border-yellow-300 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-600/30" :
+                          booking.status === "cancelled" ? "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-600/30" :
+                          booking.status === "completed" ? "bg-blue-100 text-blue-700 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-600/30" :
+                          "bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-900/30 dark:text-gray-300 dark:border-gray-600/30"
                         }`}>
                           {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                         </span>
                       </div>
                       
-                      <p className="text-xs text-gray-500 capitalize mb-2">
+                      <p className="text-xs text-muted-foreground/70 capitalize mb-2">
                         {booking.sessionType.replace('_', ' ')} • LKR {booking.totalAmount.toLocaleString()}
                       </p>
                       
                       {booking.notes && (
-                        <p className="text-xs text-gray-400 mb-3 italic">"{booking.notes}"</p>
+                        <p className="text-xs text-muted-foreground mb-3 italic">"{booking.notes}"</p>
                       )}
                       
                       <div className="flex items-center justify-between">
                         {hasReview ? (
                           <div className="flex items-center gap-1">
                             <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                            <span className="text-xs text-gray-400">Reviewed</span>
+                            <span className="text-xs text-muted-foreground">Reviewed</span>
                           </div>
                         ) : canReview ? (
                           <Button
                             size="sm"
                             onClick={() => setSelectedBooking(booking)}
-                            className="bg-red-600 hover:bg-red-700 text-white text-xs h-7 px-3"
+                            className="bg-primary hover:bg-primary/90 text-primary-foreground text-xs h-7 px-3"
                           >
                             Review
                           </Button>
                         ) : (
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-muted-foreground/70">
                             {booking.status === "completed" ? "Session completed" : `Status: ${booking.status}`}
                           </span>
                         )}
                         
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground/70">
                           {booking.duration} min
                         </div>
                       </div>
@@ -301,12 +301,12 @@ export default function ReviewsPage() {
               })}
             </div>
           ) : (
-            <Card className="bg-gray-900/50 border border-gray-700/50">
+            <Card className="bg-card/50 border-border">
               <CardContent className="p-8 text-center">
-                <Calendar className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                <p className="text-gray-400">No bookings yet</p>
-                <p className="text-gray-500 text-sm mt-2">
-                  <a href="/trainer-booking" className="text-red-400 hover:text-red-300">
+                <Calendar className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
+                <p className="text-muted-foreground">No bookings yet</p>
+                <p className="text-muted-foreground/70 text-sm mt-2">
+                  <a href="/trainer-booking" className="text-primary hover:text-primary/80">
                     Book your first training session
                   </a>
                 </p>
@@ -318,7 +318,7 @@ export default function ReviewsPage() {
         {/* Review Modal */}
         {selectedBooking && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <Card className="bg-gray-900/95 border border-gray-700/50 max-w-md w-full">
+            <Card className="bg-card/95 border-border max-w-md w-full">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
                   <img
@@ -326,8 +326,8 @@ export default function ReviewsPage() {
                     alt={selectedBooking.trainerName}
                     className="w-16 h-16 rounded-full object-cover mx-auto mb-4"
                   />
-                  <h3 className="text-xl font-semibold text-white">{selectedBooking.trainerName}</h3>
-                  <p className="text-gray-400">
+                  <h3 className="text-xl font-semibold text-foreground">{selectedBooking.trainerName}</h3>
+                  <p className="text-muted-foreground">
                     {new Date(selectedBooking.sessionDate).toLocaleDateString()} • {selectedBooking.startTime}
                   </p>
                 </div>
@@ -335,7 +335,7 @@ export default function ReviewsPage() {
                 <div className="space-y-4">
                   {/* Rating */}
                   <div>
-                    <label className="block text-white font-medium mb-2">Rating</label>
+                    <label className="block text-foreground font-medium mb-2">Rating</label>
                     <div className="flex justify-center">
                       {renderStars(reviewForm.rating, true, (rating) => 
                         setReviewForm(prev => ({ ...prev, rating }))
@@ -345,12 +345,12 @@ export default function ReviewsPage() {
 
                   {/* Comment */}
                   <div>
-                    <label className="block text-white font-medium mb-2">Comment (Optional)</label>
+                    <label className="block text-foreground font-medium mb-2">Comment (Optional)</label>
                     <Textarea
                       value={reviewForm.comment}
                       onChange={(e) => setReviewForm(prev => ({ ...prev, comment: e.target.value }))}
                       placeholder="Share your experience with this trainer..."
-                      className="w-full p-3 bg-gray-800/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-500 resize-none h-24 focus:outline-none focus:border-red-500"
+                      className="w-full p-3 bg-muted/50 border-border rounded-lg text-foreground placeholder-muted-foreground resize-none h-24 focus:outline-none focus:border-primary"
                     />
                   </div>
 
@@ -359,14 +359,14 @@ export default function ReviewsPage() {
                     <Button
                       onClick={() => setSelectedBooking(null)}
                       variant="outline"
-                      className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
+                      className="flex-1 border-border text-foreground hover:bg-muted"
                     >
                       Cancel
                     </Button>
                     <Button
                       onClick={handleSubmitReview}
                       disabled={isSubmitting}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                       {isSubmitting ? "Submitting..." : "Submit Review"}
                     </Button>

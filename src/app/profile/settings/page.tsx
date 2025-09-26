@@ -9,8 +9,8 @@ export default function SettingsPage() {
       subtitle="Manage your account settings"
     >
       <div className="text-center py-16">
-        <h2 className="text-2xl font-bold text-white mb-4">Settings Page</h2>
-        <p className="text-gray-400">Coming Soon...</p>
+        <h2 className="text-2xl font-bold text-foreground mb-4">Settings Page</h2>
+        <p className="text-muted-foreground">Coming Soon...</p>
       </div>
     </UserLayout>
   );

@@ -47,6 +47,9 @@ export function UserLayout({
     { href: "/profile/orders", icon: Package, label: "Orders", active: pathname === "/profile/orders" },
     { href: "/profile/payment-slips", icon: Receipt, label: "Payment Slips", active: pathname === "/profile/payment-slips" },
     { href: "/profile/settings", icon: Settings, label: "Settings", active: pathname === "/profile/settings" },
+  ];
+
+  const serviceItems = [
     { href: "/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/recipes" },
     { href: "/generate-program", icon: Target, label: "Generate Program", active: pathname === "/generate-program" },
     { href: "/marketplace", icon: ShoppingBag, label: "Marketplace", active: pathname === "/marketplace" },
@@ -75,7 +78,7 @@ export function UserLayout({
                   Dashboard
                 </h3>
                 <nav className="space-y-3">
-                  {sidebarItems.slice(0, 7).map((item) => (
+                  {sidebarItems.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -95,7 +98,7 @@ export function UserLayout({
                   Services
                 </h3>
                 <nav className="space-y-3">
-                  {sidebarItems.slice(7).map((item) => (
+                  {serviceItems.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
@@ -116,7 +119,7 @@ export function UserLayout({
                   <div className="mt-8">
                     <Button
                       onClick={onAddClick}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white"
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       {addButtonText}

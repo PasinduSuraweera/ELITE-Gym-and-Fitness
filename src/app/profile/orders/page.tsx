@@ -90,37 +90,37 @@ const OrdersPage = () => {
           <>
             {/* Orders Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-gray-900/50 border-gray-700">
+              <Card className="bg-card/50 border-border">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3">
                     <Package className="h-8 w-8 text-blue-500" />
                     <div>
-                      <p className="text-sm text-gray-400">Total Orders</p>
-                      <p className="text-white font-semibold">{userOrders.length}</p>
+                      <p className="text-sm text-muted-foreground">Total Orders</p>
+                      <p className="text-foreground font-semibold">{userOrders.length}</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-gray-900/50 border-gray-700">
+              <Card className="bg-card/50 border-border">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3">
                     <CreditCard className="h-8 w-8 text-green-500" />
                     <div>
-                      <p className="text-sm text-gray-400">Total Spent</p>
-                      <p className="text-white font-semibold">
+                      <p className="text-sm text-muted-foreground">Total Spent</p>
+                      <p className="text-foreground font-semibold">
                         {formatCurrency(userOrders.reduce((total, order) => total + order.totalAmount, 0))}
                       </p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-              <Card className="bg-gray-900/50 border-gray-700">
+              <Card className="bg-card/50 border-border">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3">
                     <Truck className="h-8 w-8 text-orange-500" />
                     <div>
-                      <p className="text-sm text-gray-400">Delivered</p>
-                      <p className="text-white font-semibold">
+                      <p className="text-sm text-muted-foreground">Delivered</p>
+                      <p className="text-foreground font-semibold">
                         {userOrders.filter(order => order.status === 'delivered').length}
                       </p>
                     </div>
@@ -134,15 +134,15 @@ const OrdersPage = () => {
               {userOrders
                 .sort((a, b) => b.createdAt - a.createdAt) // Sort by newest first
                 .map((order) => (
-                <Card key={order._id} className="bg-gray-900/50 border-gray-700">
+                <Card key={order._id} className="bg-card/50 border-border">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div>
-                        <CardTitle className="text-white flex items-center gap-2">
+                        <CardTitle className="text-foreground flex items-center gap-2">
                           <Package className="h-5 w-5 text-blue-500" />
                           Order #{order.orderNumber}
                         </CardTitle>
-                        <CardDescription className="text-gray-400">
+                        <CardDescription className="text-muted-foreground">
                           Placed on {formatDate(order.createdAt)}
                         </CardDescription>
                       </div>
@@ -160,15 +160,15 @@ const OrdersPage = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                       {/* Order Items */}
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-3">Order Items</h4>
+                        <h4 className="text-sm font-semibold text-muted-foreground mb-3">Order Items</h4>
                         <div className="space-y-2">
                           {order.items.map((item, index) => (
-                            <div key={index} className="flex justify-between items-center p-3 bg-black/50 rounded-lg">
+                            <div key={index} className="flex justify-between items-center p-3 bg-card/30 rounded-lg">
                               <div>
-                                <p className="text-white font-medium">{item.productName}</p>
-                                <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
+                                <p className="text-foreground font-medium">{item.productName}</p>
+                                <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                               </div>
-                              <p className="text-white font-semibold">
+                              <p className="text-foreground font-semibold">
                                 {formatCurrency(item.totalPrice)}
                               </p>
                             </div>
@@ -176,23 +176,23 @@ const OrdersPage = () => {
                         </div>
                         
                         {/* Order Total */}
-                        <div className="mt-4 pt-4 border-t border-gray-700">
+                        <div className="mt-4 pt-4 border-t border-border">
                           <div className="space-y-1">
                             <div className="flex justify-between text-sm">
-                              <span className="text-gray-400">Subtotal:</span>
-                              <span className="text-white">{formatCurrency(order.subtotal)}</span>
+                              <span className="text-muted-foreground">Subtotal:</span>
+                              <span className="text-foreground">{formatCurrency(order.subtotal)}</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                              <span className="text-gray-400">Shipping:</span>
-                              <span className="text-white">{formatCurrency(order.shippingCost)}</span>
+                              <span className="text-muted-foreground">Shipping:</span>
+                              <span className="text-foreground">{formatCurrency(order.shippingCost)}</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                              <span className="text-gray-400">Tax:</span>
-                              <span className="text-white">{formatCurrency(order.tax)}</span>
+                              <span className="text-muted-foreground">Tax:</span>
+                              <span className="text-foreground">{formatCurrency(order.tax)}</span>
                             </div>
-                            <div className="flex justify-between font-semibold text-lg pt-2 border-t border-gray-600">
-                              <span className="text-white">Total:</span>
-                              <span className="text-red-500">{formatCurrency(order.totalAmount)}</span>
+                            <div className="flex justify-between font-semibold text-lg pt-2 border-t border-border">
+                              <span className="text-foreground">Total:</span>
+                              <span className="text-primary">{formatCurrency(order.totalAmount)}</span>
                             </div>
                           </div>
                         </div>
@@ -200,25 +200,25 @@ const OrdersPage = () => {
 
                       {/* Shipping & Tracking */}
                       <div>
-                        <h4 className="text-sm font-semibold text-gray-400 mb-3">Shipping Information</h4>
+                        <h4 className="text-sm font-semibold text-muted-foreground mb-3">Shipping Information</h4>
                         <div className="space-y-3">
                           {/* Shipping Address */}
-                          <div className="p-3 bg-black/50 rounded-lg">
+                          <div className="p-3 bg-card/30 rounded-lg">
                             <div className="flex items-start gap-2 mb-2">
-                              <MapPin className="h-4 w-4 text-gray-400 mt-0.5" />
+                              <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
                               <div>
-                                <p className="text-white font-medium">{order.shippingAddress.name}</p>
-                                <p className="text-sm text-gray-400">
+                                <p className="text-foreground font-medium">{order.shippingAddress.name}</p>
+                                <p className="text-sm text-muted-foreground">
                                   {order.shippingAddress.addressLine1}
                                   {order.shippingAddress.addressLine2 && `, ${order.shippingAddress.addressLine2}`}
                                 </p>
-                                <p className="text-sm text-gray-400">
+                                <p className="text-sm text-muted-foreground">
                                   {order.shippingAddress.city}, {order.shippingAddress.postalCode}
                                 </p>
-                                <p className="text-sm text-gray-400">{order.shippingAddress.country}</p>
+                                <p className="text-sm text-muted-foreground">{order.shippingAddress.country}</p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-4 text-sm text-gray-400">
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <Phone className="h-3 w-3" />
                                 <span>{order.shippingAddress.phone}</span>
@@ -234,12 +234,12 @@ const OrdersPage = () => {
 
                           {/* Tracking Info */}
                           {order.trackingNumber && (
-                            <div className="p-3 bg-black/50 rounded-lg">
+                            <div className="p-3 bg-card/30 rounded-lg">
                               <div className="flex items-center gap-2">
                                 <Truck className="h-4 w-4 text-orange-500" />
                                 <div>
-                                  <p className="text-white font-medium">Tracking Number</p>
-                                  <p className="text-sm text-gray-400">{order.trackingNumber}</p>
+                                  <p className="text-foreground font-medium">Tracking Number</p>
+                                  <p className="text-sm text-muted-foreground">{order.trackingNumber}</p>
                                 </div>
                               </div>
                             </div>
@@ -247,12 +247,12 @@ const OrdersPage = () => {
 
                           {/* Estimated Delivery */}
                           {order.estimatedDelivery && (
-                            <div className="p-3 bg-black/50 rounded-lg">
+                            <div className="p-3 bg-card/30 rounded-lg">
                               <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4 text-green-500" />
                                 <div>
-                                  <p className="text-white font-medium">Estimated Delivery</p>
-                                  <p className="text-sm text-gray-400">
+                                  <p className="text-foreground font-medium">Estimated Delivery</p>
+                                  <p className="text-sm text-muted-foreground">
                                     {formatDate(order.estimatedDelivery)}
                                   </p>
                                 </div>
@@ -265,9 +265,9 @@ const OrdersPage = () => {
 
                     {/* Order Notes */}
                     {order.notes && (
-                      <div className="mt-6 pt-4 border-t border-gray-700">
-                        <h4 className="text-sm font-semibold text-gray-400 mb-2">Order Notes</h4>
-                        <p className="text-sm text-gray-300 bg-black/50 p-3 rounded-lg">
+                      <div className="mt-6 pt-4 border-t border-border">
+                        <h4 className="text-sm font-semibold text-muted-foreground mb-2">Order Notes</h4>
+                        <p className="text-sm text-foreground bg-card/30 p-3 rounded-lg">
                           {order.notes}
                         </p>
                       </div>
@@ -279,17 +279,17 @@ const OrdersPage = () => {
           </>
         ) : (
           /* No Orders State */
-          <Card className="bg-gray-900/50 border-gray-700">
+          <Card className="bg-card/50 border-border">
             <CardContent className="p-12 text-center">
-              <Package className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-white mb-2">No Orders Yet</h3>
-              <p className="text-gray-400 mb-6">
+              <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">No Orders Yet</h3>
+              <p className="text-muted-foreground mb-6">
                 You haven't placed any orders yet. Browse our marketplace to find great fitness products!
               </p>
               <div className="flex gap-4 justify-center">
                 <a 
                   href="/marketplace"
-                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-lg font-medium transition-colors"
                 >
                   Browse Marketplace
                 </a>
