@@ -27,6 +27,7 @@ import type * as orders from "../orders.js";
 import type * as plans from "../plans.js";
 import type * as recipes from "../recipes.js";
 import type * as reviews from "../reviews.js";
+import type * as salary from "../salary.js";
 import type * as seedBlog from "../seedBlog.js";
 import type * as seedBlogTest from "../seedBlogTest.js";
 import type * as trainerProfiles from "../trainerProfiles.js";
@@ -56,6 +57,7 @@ declare const fullApi: ApiFromModules<{
   plans: typeof plans;
   recipes: typeof recipes;
   reviews: typeof reviews;
+  salary: typeof salary;
   seedBlog: typeof seedBlog;
   seedBlogTest: typeof seedBlogTest;
   trainerProfiles: typeof trainerProfiles;

@@ -355,6 +355,20 @@ export default function AdminDashboard() {
         </Link>
 
         <Link 
+          href="/admin/salary"
+          className="group bg-card/50 border border-border rounded-lg p-6 hover:border-green-500/50 transition-all duration-300"
+        >
+          <div className="flex items-center mb-4">
+            <DollarSign className="h-6 w-6 text-green-500 mr-3" />
+            <h3 className="text-xl font-semibold text-foreground group-hover:text-green-500">Salary Management</h3>
+          </div>
+          <p className="text-muted-foreground mb-4">Comprehensive payroll and compensation system</p>
+          <div className="text-green-500 text-sm font-medium">
+            {trainerCount + adminCount} employees →
+          </div>
+        </Link>
+
+        <Link 
           href="/admin/recipes"
           className="group bg-card/50 border border-border rounded-lg p-6 hover:border-orange-500/50 transition-all duration-300"
         >
@@ -367,7 +381,10 @@ export default function AdminDashboard() {
             {totalRecipes} recipes ({recommendedRecipesCount} recommended) →
           </div>
         </Link>
+      </div>
 
+      {/* Second Row for Additional Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Link 
           href="/admin/marketplace"
           className="group bg-card/50 border border-border rounded-lg p-6 hover:border-blue-500/50 transition-all duration-300"

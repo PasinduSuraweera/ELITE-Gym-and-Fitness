@@ -13,7 +13,8 @@ import {
   Search,
   Plus,
   ChefHat,
-  FileText
+  FileText,
+  DollarSign
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,7 @@ export function AdminLayout({
     { href: "/admin", icon: Home, label: "Dashboard", active: pathname === "/admin" },
     { href: "/admin/users", icon: Users, label: "Members", active: pathname === "/admin/users" },
     { href: "/admin/trainer-applications", icon: UserCheck, label: "Trainers", active: pathname === "/admin/trainer-applications" },
+    { href: "/admin/salary", icon: DollarSign, label: "Salary", active: pathname.startsWith("/admin/salary") },
     { href: "/admin/memberships", icon: Settings, label: "Memberships", active: pathname === "/admin/memberships" },
     { href: "/admin/recipes", icon: ChefHat, label: "Recipes", active: pathname === "/admin/recipes" },
     { href: "/admin/blog", icon: FileText, label: "Blog", active: pathname.startsWith("/admin/blog") },

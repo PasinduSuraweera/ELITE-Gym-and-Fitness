@@ -448,4 +448,307 @@ export default defineSchema({
   })
     .index("by_email", ["email"])
     .index("by_status", ["status"]),
+
+  // Salary Management System
+  salaryStructures: defineTable({
+    employeeId: v.id("users"),
+    employeeClerkId: v.string(),
+    employeeName: v.string(), // Cached for quick display
+    employeeRole: v.string(), // "admin", "trainer", "user"
+    
+    // Basic salary information
+    baseSalary: v.number(),
+    currency: v.literal("LKR"),
+    paymentFrequency: v.union(
+      v.literal("monthly"), 
+      v.literal("bi-weekly"), 
+      v.literal("weekly")
+    ),
+    effectiveDate: v.number(),
+    status: v.union(
+      v.literal("active"), 
+      v.literal("inactive"), 
+      v.literal("pending")
+    ),
+    
+    // Performance-based earnings
+    performanceBonus: v.optional(v.number()),
+    membershipCommissionRate: v.optional(v.number()), // Percentage for membership sales
+    trainerSessionRate: v.optional(v.number()), // Per session rate for trainers
+    overtimeRate: v.optional(v.number()), // Per hour overtime rate
+    
+    // Allowances
+    allowances: v.array(v.object({
+      type: v.string(), // "transport", "meal", "housing", "phone"
+      amount: v.number(),
+      isPercentage: v.boolean(),
+    })),
+    
+    // Standard deductions
+    deductions: v.array(v.object({
+      type: v.string(), // "tax", "epf", "etf", "insurance", "loan"
+      amount: v.number(),
+      isPercentage: v.boolean(),
+    })),
+    
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    createdBy: v.id("users"),
+    updatedBy: v.optional(v.id("users")),
+  })
+    .index("by_employee", ["employeeId"])
+    .index("by_employee_clerk", ["employeeClerkId"])
+    .index("by_status", ["status"])
+    .index("by_role", ["employeeRole"])
+    .index("by_effective_date", ["effectiveDate"]),
+
+  payrollRecords: defineTable({
+    employeeId: v.id("users"),
+    employeeClerkId: v.string(),
+    employeeName: v.string(), // Cached for display
+    employeeRole: v.string(),
+    
+    // Payroll period
+    payrollPeriod: v.object({
+      startDate: v.number(),
+      endDate: v.number(),
+      month: v.string(), // "January", "February", etc.
+      year: v.number(),
+      periodLabel: v.string(), // "January 2025", "Week 1 Jan 2025"
+    }),
+    
+    // Detailed earnings breakdown
+    earnings: v.object({
+      baseSalary: v.number(),
+      performanceBonus: v.number(),
+      membershipCommissions: v.number(),
+      sessionEarnings: v.number(), // For trainers
+      overtimeEarnings: v.number(),
+      allowances: v.number(),
+      totalEarnings: v.number(),
+    }),
+    
+    // Detailed deductions breakdown
+    deductions: v.object({
+      incomeTax: v.number(), // PAYE tax (Sri Lanka)
+      epfEmployee: v.number(), // Employee Provident Fund - Employee (8%)
+      epfEmployer: v.number(), // Employee Provident Fund - Employer (12%)
+      etfEmployer: v.number(), // Employee Trust Fund - Employer (3%)
+      insurance: v.number(),
+      loanDeductions: v.number(),
+      advanceDeductions: v.number(),
+      otherDeductions: v.number(),
+      totalDeductions: v.number(),
+    }),
+    
+    // Final calculations
+    netSalary: v.number(),
+    totalEmployerCost: v.number(), // Including employer contributions
+    
+    // Workflow status
+    status: v.union(
+      v.literal("draft"), 
+      v.literal("pending_approval"),
+      v.literal("approved"), 
+      v.literal("paid"), 
+      v.literal("cancelled")
+    ),
+    
+    // Approval workflow
+    createdBy: v.id("users"),
+    approvedBy: v.optional(v.id("users")),
+    approvedAt: v.optional(v.number()),
+    paidAt: v.optional(v.number()),
+    
+    // Payment details
+    paymentMethod: v.optional(v.string()), // "bank_transfer", "cash", "cheque"
+    paymentReference: v.optional(v.string()),
+    
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_employee", ["employeeId"])
+    .index("by_employee_clerk", ["employeeClerkId"])
+    .index("by_period", ["payrollPeriod.year", "payrollPeriod.month"])
+    .index("by_status", ["status"])
+    .index("by_created_date", ["createdAt"])
+    .index("by_paid_date", ["paidAt"]),
+
+  salaryAdvances: defineTable({
+    employeeId: v.id("users"),
+    employeeClerkId: v.string(),
+    employeeName: v.string(),
+    employeeRole: v.string(),
+    
+    // Advance details
+    requestedAmount: v.number(),
+    approvedAmount: v.optional(v.number()),
+    reason: v.string(),
+    urgency: v.union(
+      v.literal("low"), 
+      v.literal("medium"), 
+      v.literal("high"), 
+      v.literal("emergency")
+    ),
+    
+    // Repayment terms
+    repaymentPeriodMonths: v.number(),
+    monthlyDeductionAmount: v.number(),
+    remainingBalance: v.number(),
+    
+    // Status and workflow
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"), 
+      v.literal("rejected"), 
+      v.literal("paid"),
+      v.literal("repaying"), 
+      v.literal("completed"),
+      v.literal("cancelled")
+    ),
+    
+    // Workflow tracking
+    requestedBy: v.id("users"),
+    requestedAt: v.number(),
+    reviewedBy: v.optional(v.id("users")),
+    reviewedAt: v.optional(v.number()),
+    paidAt: v.optional(v.number()),
+    
+    // Comments and notes
+    employeeNotes: v.optional(v.string()),
+    adminNotes: v.optional(v.string()),
+    rejectionReason: v.optional(v.string()),
+    
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_employee", ["employeeId"])
+    .index("by_employee_clerk", ["employeeClerkId"])
+    .index("by_status", ["status"])
+    .index("by_urgency", ["urgency"])
+    .index("by_request_date", ["requestedAt"]),
+
+  salaryAdjustments: defineTable({
+    employeeId: v.id("users"),
+    employeeClerkId: v.string(),
+    employeeName: v.string(),
+    
+    // Adjustment details
+    adjustmentType: v.union(
+      v.literal("salary_increase"),
+      v.literal("salary_decrease"),
+      v.literal("promotion"),
+      v.literal("bonus"),
+      v.literal("penalty"),
+      v.literal("allowance_change")
+    ),
+    
+    // Financial impact
+    previousAmount: v.number(),
+    newAmount: v.number(),
+    adjustmentAmount: v.number(), // Positive or negative
+    adjustmentPercentage: v.number(),
+    
+    // Timing
+    effectiveDate: v.number(),
+    isOneTime: v.boolean(), // One-time adjustment or permanent change
+    
+    // Justification
+    reason: v.string(),
+    description: v.optional(v.string()),
+    performanceScore: v.optional(v.number()), // 1-5 rating if performance-based
+    
+    // Approval workflow
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("rejected"),
+      v.literal("applied")
+    ),
+    
+    requestedBy: v.id("users"),
+    approvedBy: v.optional(v.id("users")),
+    approvedAt: v.optional(v.number()),
+    
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_employee", ["employeeId"])
+    .index("by_type", ["adjustmentType"])
+    .index("by_status", ["status"])
+    .index("by_effective_date", ["effectiveDate"]),
+
+  attendanceRecords: defineTable({
+    employeeId: v.id("users"),
+    employeeClerkId: v.string(),
+    employeeName: v.string(),
+    
+    // Date and timing
+    date: v.string(), // "YYYY-MM-DD" format
+    checkIn: v.optional(v.number()), // Timestamp
+    checkOut: v.optional(v.number()), // Timestamp
+    breakStart: v.optional(v.number()),
+    breakEnd: v.optional(v.number()),
+    
+    // Calculated hours
+    hoursWorked: v.number(),
+    overtimeHours: v.number(),
+    breakHours: v.number(),
+    
+    // Status
+    status: v.union(
+      v.literal("present"),
+      v.literal("absent"),
+      v.literal("late"),
+      v.literal("half_day"),
+      v.literal("leave")
+    ),
+    
+    leaveType: v.optional(v.union(
+      v.literal("sick"),
+      v.literal("annual"),
+      v.literal("personal"),
+      v.literal("emergency")
+    )),
+    
+    // Notes
+    notes: v.optional(v.string()),
+    approvedBy: v.optional(v.id("users")),
+    
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_employee", ["employeeId"])
+    .index("by_employee_clerk", ["employeeClerkId"])
+    .index("by_date", ["date"])
+    .index("by_status", ["status"])
+    .index("by_employee_date", ["employeeId", "date"]),
+
+  // Generated Reports Tracking
+  generatedReports: defineTable({
+    title: v.string(),
+    description: v.string(),
+    type: v.union(v.literal("payroll"), v.literal("advances"), v.literal("tax"), v.literal("comparative")),
+    dateRange: v.string(),
+    status: v.union(v.literal("generated"), v.literal("generating"), v.literal("scheduled")),
+    fileSize: v.optional(v.string()),
+    fileName: v.optional(v.string()),
+    generatedBy: v.id("users"),
+    generatedAt: v.number(),
+    parameters: v.object({
+      year: v.optional(v.number()),
+      month: v.optional(v.string()),
+      startDate: v.optional(v.number()),
+      endDate: v.optional(v.number()),
+    }),
+  })
+    .index("by_type", ["type"])
+    .index("by_status", ["status"])
+    .index("by_generated_by", ["generatedBy"])
+    .index("by_generated_date", ["generatedAt"]),
 });
