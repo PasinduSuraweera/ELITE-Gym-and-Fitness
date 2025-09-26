@@ -41,6 +41,7 @@ export default function PayrollProcessingPage() {
   const [filterRole, setFilterRole] = useState("all");
   const [showPaySlipModal, setShowPaySlipModal] = useState(false);
   const [selectedPaySlip, setSelectedPaySlip] = useState<any>(null);
+  const [approvingRecords, setApprovingRecords] = useState<Set<string>>(new Set());
 
   // Utility functions
   const getMonthName = (monthNumber: number) => {
@@ -157,6 +158,30 @@ export default function PayrollProcessingPage() {
       console.log("Records approved:", result);
     } catch (error) {
       console.error("Error approving payroll records:", error);
+    }
+  };
+
+  const handleApproveIndividual = async (recordId: any) => {
+    try {
+      setApprovingRecords(prev => new Set([...prev, recordId]));
+      
+      const result = await approvePayrollRecords({
+        recordIds: [recordId],
+      });
+      
+      console.log("Record approved:", result);
+      setApprovingRecords(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(recordId);
+        return newSet;
+      });
+    } catch (error) {
+      console.error("Error approving payroll record:", error);
+      setApprovingRecords(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(recordId);
+        return newSet;
+      });
     }
   };
 
@@ -591,6 +616,10 @@ export default function PayrollProcessingPage() {
 
         <div className="bg-card/50 border border-border rounded-lg p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
+          <div className="mb-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+            <p className="text-sm text-blue-400 mb-1">💡 Individual Approval Available</p>
+            <p className="text-xs text-blue-300">Click the check icon next to any pending record to approve individually, or use "Approve All" below.</p>
+          </div>
           <div className="space-y-3">
             <button
               onClick={handleApproveAll}
@@ -738,6 +767,20 @@ export default function PayrollProcessingPage() {
                     </td>
                     <td className="p-4">
                       <div className="flex gap-2">
+                        {record.status === "pending_approval" && (
+                          <button
+                            onClick={() => handleApproveIndividual(record._id)}
+                            disabled={approvingRecords.has(record._id)}
+                            className="p-2 text-muted-foreground hover:text-green-400 hover:bg-green-500/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            title="Approve Payment"
+                          >
+                            {approvingRecords.has(record._id) ? (
+                              <RefreshCw className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <CheckCircle className="h-4 w-4" />
+                            )}
+                          </button>
+                        )}
                         <button
                           onClick={() => handleViewPaySlip(record)}
                           className="p-2 text-muted-foreground hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
