@@ -55,15 +55,15 @@ export function AdminLayout({
       {/* Full Screen Admin Layout - Override main layout */}
       <div className="fixed inset-0 bg-background text-foreground z-50 flex flex-col">
         {/* Admin Header */}
-        <header className="h-16 bg-card/95 border-b border-border flex items-center justify-between px-6 flex-shrink-0">
+        <header className="h-18 bg-card/95 border-b-2 border-border shadow-lg flex items-center justify-between px-6 flex-shrink-0 backdrop-blur-sm">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">EG</span>
+              <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-lg">
+                <span className="text-primary-foreground font-bold text-lg">EG</span>
               </div>
               <div>
-                <h1 className="text-foreground font-bold text-lg">ELITE GYM</h1>
-                <p className="text-muted-foreground text-xs">Admin Dashboard</p>
+                <h1 className="text-foreground font-bold text-xl">ELITE GYM</h1>
+                <p className="text-muted-foreground text-sm font-medium">Admin Dashboard</p>
               </div>
             </div>
             {title && (
@@ -125,22 +125,27 @@ export function AdminLayout({
         {/* Main Content Area */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar */}
-          <aside className="w-64 bg-card/50 border-r border-border flex flex-col flex-shrink-0">
+          <aside className="w-72 bg-card/60 border-r-2 border-border shadow-lg flex flex-col flex-shrink-0 backdrop-blur-sm">
             {/* Navigation */}
             <nav className="flex-1 p-4 overflow-y-auto">
-              <ul className="space-y-2">
+              <div className="mb-6">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4 px-4">
+                  Administration
+                </h3>
+              </div>
+              <ul className="space-y-3">
                 {sidebarItems.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold transition-all duration-200 ${
                         item.active
-                          ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground hover:text-foreground hover:bg-accent/10"
+                          ? "bg-primary text-primary-foreground shadow-lg border-2 border-primary/20"
+                          : "text-foreground hover:text-foreground hover:bg-accent/20 hover:scale-105 hover:shadow-md border-2 border-transparent"
                       }`}
                     >
-                      <item.icon className="h-4 w-4" />
-                      {item.label}
+                      <item.icon className={`h-4 w-4 ${item.active ? "text-primary-foreground" : "text-foreground"}`} />
+                      <span className="font-bold">{item.label}</span>
                     </Link>
                   </li>
                 ))}
