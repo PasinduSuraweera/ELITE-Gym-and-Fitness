@@ -128,11 +128,6 @@ export function AdminLayout({
           <aside className="w-72 bg-card/60 border-r-2 border-border shadow-lg flex flex-col flex-shrink-0 backdrop-blur-sm">
             {/* Navigation */}
             <nav className="flex-1 p-4 overflow-y-auto">
-              <div className="mb-6">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4 px-4">
-                  Administration
-                </h3>
-              </div>
               <ul className="space-y-3">
                 {sidebarItems.map((item) => (
                   <li key={item.href}>
