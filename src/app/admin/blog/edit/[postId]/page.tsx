@@ -163,8 +163,8 @@ const EditBlogPostPage = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-red-500 mx-auto mb-4" />
-              <p className="text-gray-400">Loading blog post...</p>
+              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading blog post...</p>
             </div>
           </div>
         </div>
@@ -178,10 +178,10 @@ const EditBlogPostPage = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <h1 className="text-2xl font-bold text-white mb-4">Post Not Found</h1>
-              <p className="text-gray-400 mb-6">The blog post you're looking for doesn't exist.</p>
+              <h1 className="text-2xl font-bold text-foreground mb-4">Post Not Found</h1>
+              <p className="text-muted-foreground mb-6">The blog post you're looking for doesn't exist.</p>
               <Link href="/admin/blog">
-                <Button className="bg-red-600 hover:bg-red-700 text-white">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Blog Management
                 </Button>
@@ -200,14 +200,14 @@ const EditBlogPostPage = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/admin/blog">
-              <Button variant="outline" className="border-gray-600 text-gray-300 hover:border-red-500">
+              <Button variant="outline" className="border-border text-foreground hover:border-primary">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-white">Edit Blog Post</h1>
-              <p className="text-gray-400">Update your article content and settings</p>
+              <h1 className="text-3xl font-bold text-foreground">Edit Blog Post</h1>
+              <p className="text-muted-foreground">Update your article content and settings</p>
             </div>
           </div>
           
@@ -216,7 +216,7 @@ const EditBlogPostPage = () => {
               type="button"
               onClick={() => setShowPreview(!showPreview)}
               variant="outline"
-              className="border-gray-600 text-gray-300 hover:border-blue-500 hover:text-blue-500"
+              className="border-border text-foreground hover:border-blue-500 hover:text-blue-500"
             >
               <Eye className="h-4 w-4 mr-2" />
               {showPreview ? 'Hide Preview' : 'Show Preview'}
@@ -224,7 +224,7 @@ const EditBlogPostPage = () => {
             <Button
               onClick={handleSaveAsDraft}
               variant="outline"
-              className="border-gray-600 text-gray-300 hover:border-yellow-500 hover:text-yellow-500"
+              className="border-border text-foreground hover:border-yellow-500 hover:text-yellow-500"
               disabled={isSubmitting}
             >
               <Save className="h-4 w-4 mr-2" />
@@ -235,7 +235,7 @@ const EditBlogPostPage = () => {
               <Button
                 onClick={handleArchive}
                 variant="outline"
-                className="border-gray-600 text-gray-300 hover:border-orange-500 hover:text-orange-500"
+                className="border-border text-foreground hover:border-orange-500 hover:text-orange-500"
                 disabled={isSubmitting}
               >
                 Archive
@@ -244,7 +244,7 @@ const EditBlogPostPage = () => {
             
             <Button
               onClick={handlePublish}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -259,19 +259,19 @@ const EditBlogPostPage = () => {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Main Content */}
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <FileText className="h-5 w-5" />
                 Post Content
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 The main content of your blog post
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Title *
                 </label>
                 <Input
@@ -279,32 +279,32 @@ const EditBlogPostPage = () => {
                   value={formData.title}
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="Enter post title..."
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-background border-border text-foreground"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Excerpt *
-                  <span className="text-gray-500 font-normal ml-2">(Brief description for blog listing)</span>
+                  <span className="text-muted-foreground font-normal ml-2">(Brief description for blog listing)</span>
                 </label>
                 <Textarea
                   value={formData.excerpt}
                   onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
                   placeholder="Write a compelling excerpt that will appear on the blog listing page and in search results..."
-                  className="bg-gray-800 border-gray-700 text-white min-h-[120px] resize-none"
+                  className="bg-background border-border text-foreground min-h-[120px] resize-none"
                   required
                 />
-                <div className="text-xs text-gray-500 mt-1">
+                <div className="text-xs text-muted-foreground mt-1">
                   {formData.excerpt.length}/300 characters recommended
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Content *
-                  <span className="text-gray-500 font-normal ml-2">(Rich text editor with formatting)</span>
+                  <span className="text-muted-foreground font-normal ml-2">(Rich text editor with formatting)</span>
                 </label>
                 <RichTextEditor
                   value={formData.content}
@@ -312,16 +312,16 @@ const EditBlogPostPage = () => {
                   placeholder="Write your full article content here. Use the toolbar to format text, add headings, lists, links, and more..."
                   minHeight="400px"
                 />
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   💡 Use the toolbar above to format your content with headings, bold text, lists, quotes, and links. 
                   The editor supports rich formatting that will display beautifully on your blog.
                 </p>
 
                 {/* Content Preview */}
                 {showPreview && formData.content && (
-                  <div className="mt-6 border-t border-gray-700 pt-6">
-                    <h4 className="text-sm font-medium text-gray-300 mb-3">Content Preview:</h4>
-                    <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
+                  <div className="mt-6 border-t border-border pt-6">
+                    <h4 className="text-sm font-medium text-foreground mb-3">Content Preview:</h4>
+                    <div className="bg-muted/50 border border-border rounded-lg p-4 max-h-96 overflow-y-auto">
                       <RichTextPreview content={formData.content} />
                     </div>
                   </div>
@@ -331,19 +331,19 @@ const EditBlogPostPage = () => {
           </Card>
 
           {/* Media & Categorization */}
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <ImageIcon className="h-5 w-5" />
                 Media & Category
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Add images and categorize your post
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Featured Image URL
                 </label>
                 <Input
@@ -351,19 +351,19 @@ const EditBlogPostPage = () => {
                   value={formData.featuredImage}
                   onChange={(e) => setFormData(prev => ({ ...prev, featuredImage: e.target.value }))}
                   placeholder="https://example.com/image.jpg"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-background border-border text-foreground"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Category *
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value as any }))}
-                    className="w-full bg-gray-800 border border-gray-700 text-white rounded-md px-3 py-2"
+                    className="w-full bg-background border border-border text-foreground rounded-md px-3 py-2"
                     required
                   >
                     {categories.map(category => (
@@ -375,7 +375,7 @@ const EditBlogPostPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Tags
                   </label>
                   <Input
@@ -383,7 +383,7 @@ const EditBlogPostPage = () => {
                     value={formData.tags}
                     onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
                     placeholder="fitness, workout, nutrition (comma separated)"
-                    className="bg-gray-800 border-gray-700 text-white"
+                    className="bg-background border-border text-foreground"
                   />
                 </div>
               </div>
@@ -394,9 +394,9 @@ const EditBlogPostPage = () => {
                   id="featured"
                   checked={formData.isFeatured}
                   onChange={(e) => setFormData(prev => ({ ...prev, isFeatured: e.target.checked }))}
-                  className="rounded border-gray-700 bg-gray-800 text-red-600 focus:ring-red-500"
+                  className="rounded border-border bg-background text-primary focus:ring-primary"
                 />
-                <label htmlFor="featured" className="text-sm text-gray-300">
+                <label htmlFor="featured" className="text-sm text-foreground">
                   Mark as featured post
                 </label>
               </div>
@@ -404,19 +404,19 @@ const EditBlogPostPage = () => {
           </Card>
 
           {/* SEO Settings */}
-          <Card className="bg-gray-900/50 border-gray-800">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Settings className="h-5 w-5" />
                 SEO Settings
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 Optimize your post for search engines
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   SEO Title
                 </label>
                 <Input
@@ -424,26 +424,26 @@ const EditBlogPostPage = () => {
                   value={formData.seoTitle}
                   onChange={(e) => setFormData(prev => ({ ...prev, seoTitle: e.target.value }))}
                   placeholder="SEO optimized title (will use post title if empty)"
-                  className="bg-gray-800 border-gray-700 text-white"
+                  className="bg-background border-border text-foreground"
                   maxLength={60}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {formData.seoTitle.length}/60 characters
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Meta Description
                 </label>
                 <Textarea
                   value={formData.seoDescription}
                   onChange={(e) => setFormData(prev => ({ ...prev, seoDescription: e.target.value }))}
                   placeholder="SEO meta description (will use excerpt if empty)"
-                  className="bg-gray-800 border-gray-700 text-white min-h-[80px]"
+                  className="bg-background border-border text-foreground min-h-[80px]"
                   maxLength={160}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {formData.seoDescription.length}/160 characters
                 </p>
               </div>

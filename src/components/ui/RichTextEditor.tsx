@@ -121,8 +121,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       title={title}
       className={`p-2 rounded transition-colors ${
         isActive 
-          ? 'bg-red-600 text-white' 
-          : 'text-gray-400 hover:text-white hover:bg-gray-700'
+          ? 'bg-primary text-primary-foreground' 
+          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
       }`}
     >
       {children}
@@ -130,11 +130,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   );
 
   return (
-    <div className={`border border-gray-700 rounded-lg overflow-hidden bg-gray-800 ${className}`}>
+    <div className={`border border-border rounded-lg overflow-hidden bg-background ${className}`}>
       {/* Toolbar */}
-      <div className="border-b border-gray-700 p-2 flex flex-wrap gap-1 bg-gray-900/50">
+      <div className="border-b border-border p-2 flex flex-wrap gap-1 bg-muted/50">
         {/* Text Formatting */}
-        <div className="flex gap-1 border-r border-gray-700 pr-2 mr-2">
+        <div className="flex gap-1 border-r border-border pr-2 mr-2">
           <ToolbarButton
             onClick={() => executeCommand('bold')}
             isActive={isActive.bold}
@@ -159,7 +159,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Headings */}
-        <div className="flex gap-1 border-r border-gray-700 pr-2 mr-2">
+        <div className="flex gap-1 border-r border-border pr-2 mr-2">
           <ToolbarButton
             onClick={() => executeCommand('formatBlock', 'h2')}
             title="Heading 2"
@@ -175,7 +175,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Lists */}
-        <div className="flex gap-1 border-r border-gray-700 pr-2 mr-2">
+        <div className="flex gap-1 border-r border-border pr-2 mr-2">
           <ToolbarButton
             onClick={() => executeCommand('insertUnorderedList')}
             title="Bullet List"
@@ -191,7 +191,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Alignment */}
-        <div className="flex gap-1 border-r border-gray-700 pr-2 mr-2">
+        <div className="flex gap-1 border-r border-border pr-2 mr-2">
           <ToolbarButton
             onClick={() => executeCommand('justifyLeft')}
             title="Align Left"
@@ -213,7 +213,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Special */}
-        <div className="flex gap-1 border-r border-gray-700 pr-2 mr-2">
+        <div className="flex gap-1 border-r border-border pr-2 mr-2">
           <ToolbarButton
             onClick={insertLink}
             title="Insert Link"
@@ -259,7 +259,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         onKeyDown={handleKeyDown}
         onMouseUp={updateActiveStates}
         onKeyUp={updateActiveStates}
-        className="p-4 text-white bg-gray-800 focus:outline-none prose prose-invert max-w-none"
+        className="p-4 text-foreground bg-background focus:outline-none prose prose-foreground dark:prose-invert max-w-none"
         style={{ minHeight }}
         suppressContentEditableWarning={true}
         data-placeholder={placeholder}
@@ -268,45 +268,50 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       <style jsx>{`
         [contenteditable]:empty:before {
           content: attr(data-placeholder);
-          color: #6b7280;
+          color: hsl(var(--muted-foreground));
           font-style: italic;
         }
         [contenteditable] h1 {
           font-size: 2em;
           font-weight: bold;
           margin: 0.5em 0;
-          color: white;
+          color: hsl(var(--foreground));
         }
         [contenteditable] h2 {
           font-size: 1.5em;
           font-weight: bold;
           margin: 0.5em 0;
-          color: white;
+          color: hsl(var(--foreground));
         }
         [contenteditable] h3 {
           font-size: 1.2em;
           font-weight: bold;
           margin: 0.5em 0;
-          color: white;
+          color: hsl(var(--foreground));
         }
         [contenteditable] p {
           margin: 0.5em 0;
           line-height: 1.6;
+          color: hsl(var(--foreground));
         }
         [contenteditable] blockquote {
-          border-left: 4px solid #ef4444;
+          border-left: 4px solid hsl(var(--primary));
           padding-left: 1em;
           margin: 1em 0;
           font-style: italic;
-          color: #d1d5db;
+          color: hsl(var(--muted-foreground));
+          background: hsl(var(--muted) / 0.5);
+          border-radius: 0.375rem;
+          padding: 1em;
         }
         [contenteditable] pre {
-          background: #1f2937;
+          background: hsl(var(--muted));
           padding: 1em;
           border-radius: 0.375rem;
           overflow-x: auto;
           margin: 1em 0;
-          border: 1px solid #374151;
+          border: 1px solid hsl(var(--border));
+          color: hsl(var(--foreground));
         }
         [contenteditable] ul, [contenteditable] ol {
           margin: 0.5em 0;
@@ -314,19 +319,22 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         }
         [contenteditable] li {
           margin: 0.25em 0;
+          color: hsl(var(--foreground));
         }
         [contenteditable] a {
-          color: #ef4444;
+          color: hsl(var(--primary));
           text-decoration: underline;
         }
         [contenteditable] a:hover {
-          color: #dc2626;
+          color: hsl(var(--primary) / 0.8);
         }
         [contenteditable] strong {
           font-weight: bold;
+          color: hsl(var(--foreground));
         }
         [contenteditable] em {
           font-style: italic;
+          color: hsl(var(--foreground));
         }
       `}</style>
     </div>
