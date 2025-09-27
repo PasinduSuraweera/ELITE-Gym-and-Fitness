@@ -269,60 +269,69 @@ export default function AdminDashboard() {
 
       {/* Quick Insights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border border-blue-800/50 rounded-lg p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Clock className="h-6 w-6 text-blue-400" />
-            <h3 className="text-lg font-semibold text-foreground">Pending Actions</h3>
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground text-sm">Trainer Applications</span>
-              <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full text-xs font-medium">
-                {pendingApplications}
-              </span>
+        <div className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-blue-600/10 -z-10"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <Clock className="h-6 w-6 text-blue-400" />
+              <h3 className="text-lg font-semibold text-foreground">Pending Actions</h3>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground text-sm">Expired Memberships</span>
-              <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs font-medium">
-                {expiredMemberships}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 border border-green-800/50 rounded-lg p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <TrendingUp className="h-6 w-6 text-green-400" />
-            <h3 className="text-lg font-semibold text-foreground">Revenue Overview</h3>
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground text-sm">Total Active Revenue</span>
-              <span className="text-green-400 font-medium">{formatCurrency(totalRevenue)}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground text-sm">This Month</span>
-              <span className="text-green-400 font-medium">{formatCurrency(monthlyRevenue)}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-r from-purple-900/20 to-purple-800/20 border border-purple-800/50 rounded-lg p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Award className="h-6 w-6 text-purple-400" />
-            <h3 className="text-lg font-semibold text-foreground">Performance</h3>
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground text-sm">Avg Trainer Rating</span>
-              <div className="flex items-center gap-1">
-                <Star className="h-3 w-3 text-yellow-500 fill-current" />
-                <span className="text-purple-400 font-medium">{averageTrainerRating.toFixed(1)}/5</span>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">Trainer Applications</span>
+                <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full text-xs font-medium">
+                  {pendingApplications}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">Expired Memberships</span>
+                <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs font-medium">
+                  {expiredMemberships}
+                </span>
               </div>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground text-sm">Member Retention</span>
-              <span className="text-purple-400 font-medium">{((activeMemberships/totalMemberships)*100 || 0).toFixed(1)}%</span>
+          </div>
+        </div>
+
+        <div className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-green-600/10 -z-10"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <TrendingUp className="h-6 w-6 text-green-400" />
+              <h3 className="text-lg font-semibold text-foreground">Revenue Overview</h3>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">Total Active Revenue</span>
+                <span className="text-green-400 font-medium">{formatCurrency(totalRevenue)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">This Month</span>
+                <span className="text-green-400 font-medium">{formatCurrency(monthlyRevenue)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-card/50 border border-border rounded-lg p-6 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-purple-600/10 -z-10"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <Award className="h-6 w-6 text-purple-400" />
+              <h3 className="text-lg font-semibold text-foreground">Performance</h3>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">Avg Trainer Rating</span>
+                <div className="flex items-center gap-1">
+                  <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                  <span className="text-purple-400 font-medium">{averageTrainerRating.toFixed(1)}/5</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground text-sm">Member Retention</span>
+                <span className="text-purple-400 font-medium">{((activeMemberships/totalMemberships)*100 || 0).toFixed(1)}%</span>
+              </div>
             </div>
           </div>
         </div>
