@@ -28,7 +28,7 @@ import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { useAuth } from "@clerk/nextjs";
 
-// Simple Badge component (same as in main recipes page)
+// Theme-compatible Badge component
 const Badge = ({
   children,
   className = "",
@@ -42,8 +42,8 @@ const Badge = ({
     "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors";
   const variantClasses =
     variant === "outline"
-      ? "border-gray-600 text-gray-400 bg-transparent"
-      : "border-transparent bg-red-600/20 text-red-400";
+      ? "border-border text-muted-foreground bg-transparent"
+      : "border-transparent bg-primary/20 text-primary";
 
   return (
     <div className={`${baseClasses} ${variantClasses} ${className}`}>
@@ -127,7 +127,7 @@ const AdminRecipesPage = () => {
       case "hard":
         return "bg-red-900/50 text-red-400 border-red-500/30";
       default:
-        return "bg-gray-900/50 text-gray-400 border-gray-500/30";
+        return "bg-accent/50 text-muted-foreground border-border";
     }
   };
 
@@ -150,7 +150,7 @@ const AdminRecipesPage = () => {
       case "healthy":
         return "bg-emerald-900/50 text-emerald-400 border-emerald-500/30";
       default:
-        return "bg-gray-900/50 text-gray-400 border-gray-500/30";
+        return "bg-accent/50 text-muted-foreground border-border";
     }
   };
 
@@ -408,7 +408,7 @@ const AdminRecipesPage = () => {
     return (
       <AdminLayout title="Recipe Management" subtitle="Loading recipes...">
         <div className="flex items-center justify-center py-12">
-          <div className="text-white">Loading recipes...</div>
+          <div className="text-foreground">Loading recipes...</div>
         </div>
       </AdminLayout>
     );
@@ -422,53 +422,53 @@ const AdminRecipesPage = () => {
       <div className="space-y-8">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="bg-black/50 border-red-500/30">
+          <Card className="bg-card/50 border border-border hover:border-primary/30 transition-all duration-300">
             <CardContent className="p-6 text-center">
-              <ChefHat className="h-8 w-8 text-red-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">
+              <ChefHat className="h-8 w-8 text-primary mx-auto mb-2" />
+              <div className="text-2xl font-bold text-foreground">
                 {totalRecipes}
               </div>
-              <div className="text-sm text-gray-400">Total Recipes</div>
+              <div className="text-sm text-muted-foreground">Total Recipes</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-black/50 border-yellow-500/30">
+          <Card className="bg-card/50 border border-border hover:border-yellow-500/30 transition-all duration-300">
             <CardContent className="p-6 text-center">
               <Star className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-foreground">
                 {recommendedRecipes}
               </div>
-              <div className="text-sm text-gray-400">Recommended</div>
+              <div className="text-sm text-muted-foreground">Recommended</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-black/50 border-blue-500/30">
+          <Card className="bg-card/50 border border-border hover:border-blue-500/30 transition-all duration-300">
             <CardContent className="p-6 text-center">
               <Clock className="h-8 w-8 text-blue-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">
+              <div className="text-2xl font-bold text-foreground">
                 {avgCookingTime}
               </div>
-              <div className="text-sm text-gray-400">Avg Cook Time (min)</div>
+              <div className="text-sm text-muted-foreground">Avg Cook Time (min)</div>
             </CardContent>
           </Card>
 
-          <Card className="bg-black/50 border-green-500/30">
+          <Card className="bg-card/50 border border-border hover:border-green-500/30 transition-all duration-300">
             <CardContent className="p-6 text-center">
               <Zap className="h-8 w-8 text-green-400 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-white">{avgProtein}g</div>
-              <div className="text-sm text-gray-400">Avg Protein</div>
+              <div className="text-2xl font-bold text-foreground">{avgProtein}g</div>
+              <div className="text-sm text-muted-foreground">Avg Protein</div>
             </CardContent>
           </Card>
         </div>
 
         {/* Action Buttons */}
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold text-white">
+          <h2 className="text-2xl font-semibold text-foreground">
             All Recipes ({totalRecipes})
           </h2>
           <Button
             onClick={() => setShowAddModal(true)}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add New Recipe
@@ -480,7 +480,7 @@ const AdminRecipesPage = () => {
           {recipes.map((recipe: any) => (
             <div
               key={recipe._id}
-              className="bg-black/50 border border-red-500/30 hover:border-red-400/50 transition-colors rounded-lg overflow-hidden flex flex-col h-full"
+              className="bg-card/50 border border-border hover:border-primary/50 transition-colors rounded-lg overflow-hidden flex flex-col h-full"
             >
               {/* Recipe Image */}
               {recipe.imageUrl && (
@@ -502,13 +502,13 @@ const AdminRecipesPage = () => {
               <div className="p-4 pb-3 flex-1 flex flex-col">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="text-white text-lg mb-2 flex items-center gap-2">
+                    <h3 className="text-foreground text-lg mb-2 flex items-center gap-2">
                       {recipe.title}
                       {!recipe.imageUrl && recipe.isRecommended && (
                         <Star className="h-4 w-4 text-yellow-400" />
                       )}
                     </h3>
-                    <p className="text-gray-400 text-sm line-clamp-2">
+                    <p className="text-muted-foreground text-sm line-clamp-2">
                       {recipe.description}
                     </p>
                   </div>
@@ -526,45 +526,45 @@ const AdminRecipesPage = () => {
                 {/* Recipe Stats */}
                 <div className="grid grid-cols-3 gap-4 mb-4 text-center mt-4">
                   <div>
-                    <Clock className="h-4 w-4 text-gray-400 mx-auto mb-1" />
-                    <div className="text-sm font-semibold text-white">
+                    <Clock className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
+                    <div className="text-sm font-semibold text-foreground">
                       {recipe.cookingTime}m
                     </div>
                   </div>
                   <div>
-                    <Users className="h-4 w-4 text-gray-400 mx-auto mb-1" />
-                    <div className="text-sm font-semibold text-white">
+                    <Users className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
+                    <div className="text-sm font-semibold text-foreground">
                       {recipe.servings}
                     </div>
                   </div>
                   <div>
-                    <Flame className="h-4 w-4 text-gray-400 mx-auto mb-1" />
-                    <div className="text-sm font-semibold text-white">
+                    <Flame className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
+                    <div className="text-sm font-semibold text-foreground">
                       {recipe.calories}
                     </div>
                   </div>
                 </div>
 
                 {/* Nutrition Info */}
-                <div className="bg-gray-900/50 rounded-lg p-3 mb-4">
+                <div className="bg-accent/50 rounded-lg p-3 mb-4">
                   <div className="grid grid-cols-3 gap-2 text-xs text-center">
                     <div>
                       <div className="text-red-400 font-semibold">
                         {recipe.protein}g
                       </div>
-                      <div className="text-gray-500">Protein</div>
+                      <div className="text-muted-foreground">Protein</div>
                     </div>
                     <div>
                       <div className="text-blue-400 font-semibold">
                         {recipe.carbs}g
                       </div>
-                      <div className="text-gray-500">Carbs</div>
+                      <div className="text-muted-foreground">Carbs</div>
                     </div>
                     <div>
                       <div className="text-yellow-400 font-semibold">
                         {recipe.fats}g
                       </div>
-                      <div className="text-gray-500">Fats</div>
+                      <div className="text-muted-foreground">Fats</div>
                     </div>
                   </div>
                 </div>
@@ -574,7 +574,7 @@ const AdminRecipesPage = () => {
                   <Link href={`/recipes/${recipe._id}`} className="flex-1">
                     <Button
                       variant="outline"
-                      className="w-full border-gray-600 text-gray-300 hover:bg-gray-800"
+                      className="w-full border-border text-muted-foreground hover:bg-accent"
                     >
                       View
                     </Button>
@@ -618,54 +618,20 @@ const AdminRecipesPage = () => {
           ))}
         </div>
 
-        {/* Quick Actions */}
-        <Card className="bg-black/50 border-red-500/30">
-          <CardHeader>
-            <CardTitle className="text-white">Quick Actions</CardTitle>
-            <CardDescription className="text-gray-400">
-              Common recipe management tasks
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Button
-                variant="outline"
-                className="border-green-500/50 text-green-400 hover:bg-green-500/10"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Recipe
-              </Button>
-              <Button
-                variant="outline"
-                className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
-              >
-                <Star className="h-4 w-4 mr-2" />
-                Mark as Recommended
-              </Button>
-              <Button
-                variant="outline"
-                className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
-              >
-                <ChefHat className="h-4 w-4 mr-2" />
-                Bulk Import
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
+        
         {/* Add Recipe Modal */}
         {showAddModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-red-500/30 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-6 border-b border-red-500/30">
-                <h3 className="text-xl font-semibold text-white">
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 pt-20 pb-4">
+            <div className="bg-card border border-border rounded-lg w-full max-w-2xl max-h-[85vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-border">
+                <h3 className="text-xl font-semibold text-foreground">
                   Add New Recipe
                 </h3>
                 <Button
                   onClick={() => setShowAddModal(false)}
                   variant="outline"
                   size="sm"
-                  className="border-gray-600 text-gray-400 hover:bg-gray-800"
+                  className="border-border text-muted-foreground hover:bg-accent"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -675,7 +641,7 @@ const AdminRecipesPage = () => {
                 {/* Basic Info */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Title *
                     </label>
                     <input
@@ -687,13 +653,13 @@ const AdminRecipesPage = () => {
                           title: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       placeholder="Recipe title"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Description *
                     </label>
                     <textarea
@@ -704,7 +670,7 @@ const AdminRecipesPage = () => {
                           description: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       rows={3}
                       placeholder="Recipe description"
                     />
@@ -712,7 +678,7 @@ const AdminRecipesPage = () => {
 
                   {/* Image URL */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Image URL
                     </label>
                     <input
@@ -724,10 +690,10 @@ const AdminRecipesPage = () => {
                           imageUrl: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       placeholder="https://example.com/recipe-image.jpg"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Enter a direct URL to an image (jpg, png, webp)
                     </p>
 
@@ -735,8 +701,8 @@ const AdminRecipesPage = () => {
                     {newRecipe.imageUrl &&
                       newRecipe.imageUrl !== "/api/placeholder/400/300" && (
                         <div className="mt-3">
-                          <p className="text-sm text-gray-400 mb-2">Preview:</p>
-                          <div className="relative w-32 h-24 rounded-lg overflow-hidden border border-gray-600">
+                          <p className="text-sm text-muted-foreground mb-2">Preview:</p>
+                          <div className="relative w-32 h-24 rounded-lg overflow-hidden border border-border">
                             <img
                               src={newRecipe.imageUrl}
                               alt="Recipe preview"
@@ -749,7 +715,7 @@ const AdminRecipesPage = () => {
                                 if (errorDiv) errorDiv.style.display = "flex";
                               }}
                             />
-                            <div className="absolute inset-0 bg-red-900/20 border border-red-500/30 rounded-lg hidden items-center justify-center text-red-400 text-xs">
+                            <div className="absolute inset-0 bg-destructive/20 border border-destructive/30 rounded-lg hidden items-center justify-center text-destructive text-xs">
                               Invalid Image
                             </div>
                           </div>
@@ -759,7 +725,7 @@ const AdminRecipesPage = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Category
                       </label>
                       <select
@@ -770,7 +736,7 @@ const AdminRecipesPage = () => {
                             category: e.target.value as any,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       >
                         <option value="breakfast">Breakfast</option>
                         <option value="lunch">Lunch</option>
@@ -784,7 +750,7 @@ const AdminRecipesPage = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Difficulty
                       </label>
                       <select
@@ -795,7 +761,7 @@ const AdminRecipesPage = () => {
                             difficulty: e.target.value as any,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       >
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
@@ -806,7 +772,7 @@ const AdminRecipesPage = () => {
 
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Cooking Time (min)
                       </label>
                       <input
@@ -818,13 +784,13 @@ const AdminRecipesPage = () => {
                             cookingTime: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="1"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Servings
                       </label>
                       <input
@@ -836,13 +802,13 @@ const AdminRecipesPage = () => {
                             servings: parseInt(e.target.value) || 1,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="1"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Calories
                       </label>
                       <input
@@ -854,7 +820,7 @@ const AdminRecipesPage = () => {
                             calories: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
@@ -862,7 +828,7 @@ const AdminRecipesPage = () => {
 
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Protein (g)
                       </label>
                       <input
@@ -874,13 +840,13 @@ const AdminRecipesPage = () => {
                             protein: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Carbs (g)
                       </label>
                       <input
@@ -892,13 +858,13 @@ const AdminRecipesPage = () => {
                             carbs: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Fats (g)
                       </label>
                       <input
@@ -910,7 +876,7 @@ const AdminRecipesPage = () => {
                             fats: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
@@ -919,7 +885,7 @@ const AdminRecipesPage = () => {
 
                 {/* Ingredients */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Ingredients
                   </label>
                   {newRecipe.ingredients.map((ingredient, index) => (
@@ -930,7 +896,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateIngredient(index, "name", e.target.value)
                         }
-                        className="flex-1 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="flex-1 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder="Ingredient name"
                       />
                       <input
@@ -939,7 +905,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateIngredient(index, "amount", e.target.value)
                         }
-                        className="w-24 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="w-24 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder="Amount"
                       />
                       <input
@@ -948,7 +914,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateIngredient(index, "unit", e.target.value)
                         }
-                        className="w-20 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="w-20 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder="Unit"
                       />
                       {newRecipe.ingredients.length > 1 && (
@@ -976,12 +942,12 @@ const AdminRecipesPage = () => {
 
                 {/* Instructions */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Instructions
                   </label>
                   {newRecipe.instructions.map((instruction, index) => (
                     <div key={index} className="flex gap-2 mb-2">
-                      <span className="w-8 h-10 bg-red-600/20 border border-red-500/30 rounded-md flex items-center justify-center text-red-400 text-sm font-medium">
+                      <span className="w-8 h-10 bg-primary/20 border border-primary/30 rounded-md flex items-center justify-center text-primary text-sm font-medium">
                         {index + 1}
                       </span>
                       <textarea
@@ -989,7 +955,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateInstruction(index, e.target.value)
                         }
-                        className="flex-1 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="flex-1 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         rows={2}
                         placeholder={`Step ${index + 1}`}
                       />
@@ -1028,28 +994,28 @@ const AdminRecipesPage = () => {
                         isRecommended: e.target.checked,
                       }))
                     }
-                    className="w-4 h-4 text-red-600 bg-black/50 border-gray-600 rounded focus:ring-red-500"
+                    className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary/20"
                   />
                   <label
                     htmlFor="recommended"
-                    className="text-sm text-gray-300"
+                    className="text-sm text-foreground"
                   >
                     Mark as recommended recipe
                   </label>
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 p-6 border-t border-red-500/30">
+              <div className="flex justify-end gap-3 p-6 border-t border-border">
                 <Button
                   onClick={() => setShowAddModal(false)}
                   variant="outline"
-                  className="border-gray-600 text-gray-400 hover:bg-gray-800"
+                  className="border-border text-muted-foreground hover:bg-accent"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleCreateRecipe}
-                  className="bg-red-600 hover:bg-red-700 text-white"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Create Recipe
                 </Button>
@@ -1060,17 +1026,17 @@ const AdminRecipesPage = () => {
 
         {/* Edit Recipe Modal */}
         {showEditModal && editingRecipe && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-red-500/30 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between p-6 border-b border-red-500/30">
-                <h3 className="text-xl font-semibold text-white">
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 pt-20 pb-4">
+            <div className="bg-card border border-border rounded-lg w-full max-w-2xl max-h-[85vh] overflow-y-auto">
+              <div className="flex items-center justify-between p-6 border-b border-border">
+                <h3 className="text-xl font-semibold text-foreground">
                   Edit Recipe: {editingRecipe.title}
                 </h3>
                 <Button
                   onClick={() => setShowEditModal(false)}
                   variant="outline"
                   size="sm"
-                  className="border-gray-600 text-gray-400 hover:bg-gray-800"
+                  className="border-border text-muted-foreground hover:bg-accent"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -1080,7 +1046,7 @@ const AdminRecipesPage = () => {
                 {/* Basic Info */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Title *
                     </label>
                     <input
@@ -1092,13 +1058,13 @@ const AdminRecipesPage = () => {
                           title: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       placeholder="Recipe title"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Description *
                     </label>
                     <textarea
@@ -1109,7 +1075,7 @@ const AdminRecipesPage = () => {
                           description: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       rows={3}
                       placeholder="Recipe description"
                     />
@@ -1117,7 +1083,7 @@ const AdminRecipesPage = () => {
 
                   {/* Image URL */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Image URL
                     </label>
                     <input
@@ -1129,10 +1095,10 @@ const AdminRecipesPage = () => {
                           imageUrl: e.target.value,
                         }))
                       }
-                      className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                      className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       placeholder="https://example.com/recipe-image.jpg"
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Enter a direct URL to an image (jpg, png, webp)
                     </p>
 
@@ -1140,8 +1106,8 @@ const AdminRecipesPage = () => {
                     {editRecipe.imageUrl &&
                       editRecipe.imageUrl !== "/api/placeholder/400/300" && (
                         <div className="mt-3">
-                          <p className="text-sm text-gray-400 mb-2">Preview:</p>
-                          <div className="relative w-32 h-24 rounded-lg overflow-hidden border border-gray-600">
+                          <p className="text-sm text-muted-foreground mb-2">Preview:</p>
+                          <div className="relative w-32 h-24 rounded-lg overflow-hidden border border-border">
                             <img
                               src={editRecipe.imageUrl}
                               alt="Recipe preview"
@@ -1154,7 +1120,7 @@ const AdminRecipesPage = () => {
                                 if (errorDiv) errorDiv.style.display = "flex";
                               }}
                             />
-                            <div className="absolute inset-0 bg-red-900/20 border border-red-500/30 rounded-lg hidden items-center justify-center text-red-400 text-xs">
+                            <div className="absolute inset-0 bg-destructive/20 border border-destructive/30 rounded-lg hidden items-center justify-center text-destructive text-xs">
                               Invalid Image
                             </div>
                           </div>
@@ -1164,7 +1130,7 @@ const AdminRecipesPage = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Category
                       </label>
                       <select
@@ -1175,7 +1141,7 @@ const AdminRecipesPage = () => {
                             category: e.target.value as any,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       >
                         <option value="breakfast">Breakfast</option>
                         <option value="lunch">Lunch</option>
@@ -1189,7 +1155,7 @@ const AdminRecipesPage = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Difficulty
                       </label>
                       <select
@@ -1200,7 +1166,7 @@ const AdminRecipesPage = () => {
                             difficulty: e.target.value as any,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                       >
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
@@ -1211,7 +1177,7 @@ const AdminRecipesPage = () => {
 
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Cooking Time (min)
                       </label>
                       <input
@@ -1223,13 +1189,13 @@ const AdminRecipesPage = () => {
                             cookingTime: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="1"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Servings
                       </label>
                       <input
@@ -1241,13 +1207,13 @@ const AdminRecipesPage = () => {
                             servings: parseInt(e.target.value) || 1,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="1"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Calories
                       </label>
                       <input
@@ -1259,7 +1225,7 @@ const AdminRecipesPage = () => {
                             calories: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
@@ -1267,7 +1233,7 @@ const AdminRecipesPage = () => {
 
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Protein (g)
                       </label>
                       <input
@@ -1279,13 +1245,13 @@ const AdminRecipesPage = () => {
                             protein: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Carbs (g)
                       </label>
                       <input
@@ -1297,13 +1263,13 @@ const AdminRecipesPage = () => {
                             carbs: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-foreground mb-2">
                         Fats (g)
                       </label>
                       <input
@@ -1315,7 +1281,7 @@ const AdminRecipesPage = () => {
                             fats: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white focus:border-red-500 focus:outline-none"
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         min="0"
                       />
                     </div>
@@ -1324,7 +1290,7 @@ const AdminRecipesPage = () => {
 
                 {/* Ingredients */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Ingredients
                   </label>
                   {editRecipe.ingredients.map((ingredient, index) => (
@@ -1335,7 +1301,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateEditIngredient(index, "name", e.target.value)
                         }
-                        className="flex-1 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="flex-1 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder="Ingredient name"
                       />
                       <input
@@ -1344,7 +1310,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateEditIngredient(index, "amount", e.target.value)
                         }
-                        className="w-24 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="w-24 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder="Amount"
                       />
                       <input
@@ -1353,7 +1319,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateEditIngredient(index, "unit", e.target.value)
                         }
-                        className="w-20 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="w-20 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         placeholder="Unit"
                       />
                       {editRecipe.ingredients.length > 1 && (
@@ -1381,12 +1347,12 @@ const AdminRecipesPage = () => {
 
                 {/* Instructions */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Instructions
                   </label>
                   {editRecipe.instructions.map((instruction, index) => (
                     <div key={index} className="flex gap-2 mb-2">
-                      <span className="w-8 h-10 bg-red-600/20 border border-red-500/30 rounded-md flex items-center justify-center text-red-400 text-sm font-medium">
+                      <span className="w-8 h-10 bg-primary/20 border border-primary/30 rounded-md flex items-center justify-center text-primary text-sm font-medium">
                         {index + 1}
                       </span>
                       <textarea
@@ -1394,7 +1360,7 @@ const AdminRecipesPage = () => {
                         onChange={(e) =>
                           updateEditInstruction(index, e.target.value)
                         }
-                        className="flex-1 px-3 py-2 bg-black/50 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:outline-none"
+                        className="flex-1 px-3 py-2 bg-background border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                         rows={2}
                         placeholder={`Step ${index + 1}`}
                       />
@@ -1433,28 +1399,28 @@ const AdminRecipesPage = () => {
                         isRecommended: e.target.checked,
                       }))
                     }
-                    className="w-4 h-4 text-red-600 bg-black/50 border-gray-600 rounded focus:ring-red-500"
+                    className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary/20"
                   />
                   <label
                     htmlFor="edit-recommended"
-                    className="text-sm text-gray-300"
+                    className="text-sm text-foreground"
                   >
                     Mark as recommended recipe
                   </label>
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 p-6 border-t border-red-500/30">
+              <div className="flex justify-end gap-3 p-6 border-t border-border">
                 <Button
                   onClick={() => setShowEditModal(false)}
                   variant="outline"
-                  className="border-gray-600 text-gray-400 hover:bg-gray-800"
+                  className="border-border text-muted-foreground hover:bg-accent"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleUpdateRecipe}
-                  className="bg-red-600 hover:bg-red-700 text-white"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Update Recipe
                 </Button>
