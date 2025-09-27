@@ -163,51 +163,51 @@ export default function AdminMembershipsPage() {
     >
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Total Memberships</p>
-              <p className="text-3xl font-bold text-white">{membershipStats.total}</p>
+              <p className="text-muted-foreground text-sm">Total Memberships</p>
+              <p className="text-3xl font-bold text-foreground">{membershipStats.total}</p>
             </div>
-            <Users className="h-8 w-8 text-blue-500" />
+            <Users className="h-8 w-8 text-primary" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Active Members</p>
-              <p className="text-3xl font-bold text-white">{membershipStats.active}</p>
+              <p className="text-muted-foreground text-sm">Active Members</p>
+              <p className="text-3xl font-bold text-foreground">{membershipStats.active}</p>
             </div>
             <Crown className="h-8 w-8 text-green-500" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Cancelling Soon</p>
-              <p className="text-3xl font-bold text-white">{membershipStats.cancelling}</p>
+              <p className="text-muted-foreground text-sm">Cancelling Soon</p>
+              <p className="text-3xl font-bold text-foreground">{membershipStats.cancelling}</p>
             </div>
             <AlertTriangle className="h-8 w-8 text-orange-500" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Expired Members</p>
-              <p className="text-3xl font-bold text-white">{membershipStats.expired}</p>
+              <p className="text-muted-foreground text-sm">Expired Members</p>
+              <p className="text-3xl font-bold text-foreground">{membershipStats.expired}</p>
             </div>
             <Crown className="h-8 w-8 text-red-500" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Monthly Revenue</p>
-              <p className="text-3xl font-bold text-white">{formatPrice(activeRevenue)}</p>
+              <p className="text-muted-foreground text-sm">Monthly Revenue</p>
+              <p className="text-3xl font-bold text-foreground">{formatPrice(activeRevenue)}</p>
             </div>
             <DollarSign className="h-8 w-8 text-green-500" />
           </div>
@@ -216,10 +216,10 @@ export default function AdminMembershipsPage() {
 
       {/* All Memberships */}
       {allMemberships && allMemberships.length > 0 && (
-        <Card className="bg-gray-900/50 border-gray-700 mb-8">
+        <Card className="bg-card/50 border-border mb-8">
           <CardHeader>
-            <CardTitle className="text-white">All Memberships</CardTitle>
-            <CardDescription className="text-gray-400">
+            <CardTitle className="text-foreground">All Memberships</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Complete list of member subscriptions and their current status
             </CardDescription>
           </CardHeader>
@@ -227,14 +227,14 @@ export default function AdminMembershipsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-700">
-                    <th className="text-left py-3 px-4 text-gray-400">Member</th>
-                    <th className="text-left py-3 px-4 text-gray-400">Plan</th>
-                    <th className="text-left py-3 px-4 text-gray-400">Status</th>
-                    <th className="text-left py-3 px-4 text-gray-400">Start Date</th>
-                    <th className="text-left py-3 px-4 text-gray-400">End Date</th>
-                    <th className="text-left py-3 px-4 text-gray-400">Days Left</th>
-                    <th className="text-left py-3 px-4 text-gray-400">Actions</th>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-4 text-muted-foreground">Member</th>
+                    <th className="text-left py-3 px-4 text-muted-foreground">Plan</th>
+                    <th className="text-left py-3 px-4 text-muted-foreground">Status</th>
+                    <th className="text-left py-3 px-4 text-muted-foreground">Start Date</th>
+                    <th className="text-left py-3 px-4 text-muted-foreground">End Date</th>
+                    <th className="text-left py-3 px-4 text-muted-foreground">Days Left</th>
+                    <th className="text-left py-3 px-4 text-muted-foreground">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -243,11 +243,11 @@ export default function AdminMembershipsPage() {
                     const daysLeft = Math.ceil((membership.currentPeriodEnd - now) / (1000 * 60 * 60 * 24));
                     
                     return (
-                      <tr key={membership._id} className="border-b border-gray-800 hover:bg-gray-800/50">
+                      <tr key={membership._id} className="border-b border-border hover:bg-muted/50">
                         <td className="py-3 px-4">
                           <div>
-                            <p className="text-white font-medium">{membership.userName}</p>
-                            <p className="text-gray-400 text-xs">{membership.userEmail}</p>
+                            <p className="text-foreground font-medium">{membership.userName}</p>
+                            <p className="text-muted-foreground text-xs">{membership.userEmail}</p>
                           </div>
                         </td>
                         <td className="py-3 px-4">
@@ -262,17 +262,17 @@ export default function AdminMembershipsPage() {
                             {getStatusText(membership.status, membership.cancelAtPeriodEnd)}
                           </Badge>
                         </td>
-                        <td className="py-3 px-4 text-gray-300">
+                        <td className="py-3 px-4 text-foreground">
                           {formatDate(membership.currentPeriodStart)}
                         </td>
-                        <td className="py-3 px-4 text-gray-300">
+                        <td className="py-3 px-4 text-foreground">
                           {formatDate(membership.currentPeriodEnd)}
                         </td>
                         <td className="py-3 px-4">
                           <span className={`font-medium ${
-                            daysLeft < 0 ? 'text-red-400' : 
-                            daysLeft <= 7 ? 'text-yellow-400' : 
-                            'text-green-400'
+                            daysLeft < 0 ? 'text-red-500' : 
+                            daysLeft <= 7 ? 'text-yellow-500' : 
+                            'text-green-500'
                           }`}>
                             {daysLeft < 0 ? 'Expired' : `${daysLeft} days`}
                           </span>
@@ -294,7 +294,7 @@ export default function AdminMembershipsPage() {
                             </Badge>
                           )}
                           {membership.status !== 'active' && (
-                            <span className="text-gray-500 text-xs">-</span>
+                            <span className="text-muted-foreground text-xs">-</span>
                           )}
                         </td>
                       </tr>
@@ -308,10 +308,10 @@ export default function AdminMembershipsPage() {
       )}
 
       {/* Membership Plans */}
-      <Card className="bg-gray-900/50 border-gray-700 mb-8">
+      <Card className="bg-card/50 border-border mb-8">
         <CardHeader>
-          <CardTitle className="text-white">Membership Plans</CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardTitle className="text-foreground">Membership Plans</CardTitle>
+          <CardDescription className="text-muted-foreground">
             Manage available membership plans and pricing
           </CardDescription>
         </CardHeader>
@@ -319,34 +319,34 @@ export default function AdminMembershipsPage() {
           {membershipPlans && membershipPlans.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {membershipPlans.map((plan) => (
-                <Card key={plan._id} className="bg-black/50 border-gray-600">
+                <Card key={plan._id} className="bg-card border-border">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-white text-lg">{plan.name}</CardTitle>
+                      <CardTitle className="text-foreground text-lg">{plan.name}</CardTitle>
                       <Badge 
                         className={
                           plan.isActive 
-                            ? "bg-green-900/50 text-green-400" 
-                            : "bg-red-900/50 text-red-400"
+                            ? "bg-green-500/20 text-green-500 border-green-500/30" 
+                            : "bg-red-500/20 text-red-500 border-red-500/30"
                         }
                       >
                         {plan.isActive ? "Active" : "Inactive"}
                       </Badge>
                     </div>
-                    <CardDescription className="text-gray-400 text-sm">
+                    <CardDescription className="text-muted-foreground text-sm">
                       {plan.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="space-y-3">
                       <div className="text-center">
-                        <p className="text-2xl font-bold text-white">{formatPrice(plan.price)}</p>
-                        <p className="text-gray-400 text-sm">per month</p>
+                        <p className="text-2xl font-bold text-foreground">{formatPrice(plan.price)}</p>
+                        <p className="text-muted-foreground text-sm">per month</p>
                       </div>
                       
                       <div className="space-y-2">
-                        <p className="text-sm font-semibold text-white">Features:</p>
-                        <ul className="text-xs text-gray-400 space-y-1">
+                        <p className="text-sm font-semibold text-foreground">Features:</p>
+                        <ul className="text-xs text-muted-foreground space-y-1">
                           {plan.features.slice(0, 3).map((feature, index) => (
                             <li key={index} className="flex items-start gap-1">
                               <span className="text-green-500">•</span>
@@ -354,16 +354,16 @@ export default function AdminMembershipsPage() {
                             </li>
                           ))}
                           {plan.features.length > 3 && (
-                            <li className="text-gray-500">+{plan.features.length - 3} more</li>
+                            <li className="text-muted-foreground/60">+{plan.features.length - 3} more</li>
                           )}
                         </ul>
                       </div>
 
-                      <div className="pt-2 border-t border-gray-700">
-                        <p className="text-xs text-gray-500">
+                      <div className="pt-2 border-t border-border">
+                        <p className="text-xs text-muted-foreground">
                           Stripe Price ID: {plan.stripePriceId}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           Created: {formatDate(plan.createdAt)}
                         </p>
                       </div>
@@ -374,9 +374,9 @@ export default function AdminMembershipsPage() {
             </div>
           ) : (
             <div className="text-center py-8">
-              <Crown className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-              <p className="text-gray-400 mb-4">No membership plans found</p>
-              <p className="text-gray-500 text-sm">Membership plans will appear here once created</p>
+              <Crown className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground mb-4">No membership plans found</p>
+              <p className="text-muted-foreground/60 text-sm">Membership plans will appear here once created</p>
             </div>
           )}
         </CardContent>
