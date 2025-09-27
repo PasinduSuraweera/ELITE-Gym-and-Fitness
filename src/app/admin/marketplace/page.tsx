@@ -180,7 +180,7 @@ export default function MarketplaceAdminPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-card border border-border rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Products</p>
@@ -190,7 +190,7 @@ export default function MarketplaceAdminPage() {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Active Items</p>
@@ -200,7 +200,7 @@ export default function MarketplaceAdminPage() {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Featured Items</p>
@@ -210,7 +210,7 @@ export default function MarketplaceAdminPage() {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Value</p>
@@ -233,7 +233,7 @@ export default function MarketplaceAdminPage() {
       </div>
 
       {/* Products Table */}
-      <div className="bg-card border border-border rounded-lg overflow-hidden">
+      <div className="bg-card/50 border border-border rounded-lg overflow-hidden">
         <div className="p-6 border-b border-border">
           <h2 className="text-xl font-bold text-foreground">Products</h2>
         </div>
