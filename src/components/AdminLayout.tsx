@@ -55,7 +55,7 @@ export function AdminLayout({
       {/* Full Screen Admin Layout - Override main layout */}
       <div className="fixed inset-0 bg-background text-foreground z-50 flex flex-col">
         {/* Admin Header */}
-        <header className="h-18 bg-card/95 border-b-2 border-border shadow-lg flex items-center justify-between px-6 flex-shrink-0 backdrop-blur-sm">
+        <header className="h-16 bg-card/95 border-b-2 border-border shadow-lg flex items-center justify-between px-6 flex-shrink-0 backdrop-blur-sm">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-lg">

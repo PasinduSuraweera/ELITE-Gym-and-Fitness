@@ -21,6 +21,7 @@ import {
   Mail,
   Phone
 } from "lucide-react";
+import { AdminLayout } from "@/components/AdminLayout";
 import { useAuth } from "@clerk/nextjs";
 
 export default function AdminTrainerManagementPage() {
@@ -108,30 +109,27 @@ export default function AdminTrainerManagementPage() {
     return [...Array(5)].map((_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-gray-400'}`}
+        className={`h-4 w-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'}`}
       />
     ));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900 p-4">
-      <div className="max-w-7xl mx-auto pt-20">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Trainer Management</h1>
-          <p className="text-white/80">Manage trainer applications and profiles</p>
-        </div>
+    <AdminLayout 
+      title="Trainer Management" 
+      subtitle="Manage trainer applications and profiles"
+    >
 
         {/* Tabs */}
         <Tabs defaultValue="pending" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white/10 backdrop-blur-md border-white/20 mb-8">
-            <TabsTrigger value="pending" className="data-[state=active]:bg-blue-500/20">
+          <TabsList className="grid w-full grid-cols-3 bg-card/50 border border-border mb-8">
+            <TabsTrigger value="pending" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
               Pending Applications ({pendingApplications.length})
             </TabsTrigger>
-            <TabsTrigger value="active" className="data-[state=active]:bg-blue-500/20">
+            <TabsTrigger value="active" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
               Active Trainers ({allTrainers?.filter(t => t.isActive).length || 0})
             </TabsTrigger>
-            <TabsTrigger value="inactive" className="data-[state=active]:bg-blue-500/20">
+            <TabsTrigger value="inactive" className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
               Inactive Trainers ({allTrainers?.filter(t => !t.isActive).length || 0})
             </TabsTrigger>
           </TabsList>
@@ -140,30 +138,30 @@ export default function AdminTrainerManagementPage() {
           <TabsContent value="pending">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {pendingApplications.map((application) => (
-                <Card key={application._id} className="bg-white/10 backdrop-blur-md border-white/20 p-6">
+                <Card key={application._id} className="bg-card/50 border border-border p-6 hover:border-primary/30 transition-all duration-300">
                   <div className="text-center mb-4">
                     <img
                       src={application.profileImage || "/logo.png"}
                       alt={application.name}
                       className="w-16 h-16 rounded-full mx-auto mb-3 object-cover"
                     />
-                    <h3 className="text-lg font-semibold text-white">{application.name}</h3>
-                    <p className="text-white/70 text-sm">{application.email}</p>
+                    <h3 className="text-lg font-semibold text-foreground">{application.name}</h3>
+                    <p className="text-muted-foreground text-sm">{application.email}</p>
                   </div>
 
                   <div className="space-y-3 mb-4">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/70">Experience:</span>
-                      <span className="text-white">{application.experience}</span>
+                      <span className="text-muted-foreground">Experience:</span>
+                      <span className="text-foreground">{application.experience}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/70">Rate:</span>
-                      <span className="text-white">LKR {application.hourlyRate.toLocaleString()}/hr</span>
+                      <span className="text-muted-foreground">Rate:</span>
+                      <span className="text-foreground">LKR {application.hourlyRate.toLocaleString()}/hr</span>
                     </div>
                   </div>
 
                   <div className="mb-4">
-                    <p className="text-white/60 text-xs mb-2">Specializations:</p>
+                    <p className="text-muted-foreground text-xs mb-2">Specializations:</p>
                     <div className="flex flex-wrap gap-1">
                       {application.specializations.map((spec: string, index: number) => (
                         <Badge key={index} variant="secondary" className="text-xs">
@@ -175,8 +173,8 @@ export default function AdminTrainerManagementPage() {
 
                   {application.bio && (
                     <div className="mb-4">
-                      <p className="text-white/60 text-xs mb-1">Bio:</p>
-                      <p className="text-white/80 text-xs">{application.bio.slice(0, 100)}...</p>
+                      <p className="text-muted-foreground text-xs mb-1">Bio:</p>
+                      <p className="text-foreground text-xs">{application.bio.slice(0, 100)}...</p>
                     </div>
                   )}
 
@@ -206,28 +204,28 @@ export default function AdminTrainerManagementPage() {
           <TabsContent value="active">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {allTrainers?.filter(trainer => trainer.isActive).map((trainer) => (
-                <Card key={trainer._id} className="bg-white/10 backdrop-blur-md border-white/20 p-6">
+                <Card key={trainer._id} className="bg-card/50 border border-border p-6 hover:border-primary/30 transition-all duration-300">
                   <div className="text-center mb-4">
                     <img
                       src={trainer.profileImage || "/logo.png"}
                       alt={trainer.name}
                       className="w-16 h-16 rounded-full mx-auto mb-3 object-cover"
                     />
-                    <h3 className="text-lg font-semibold text-white">{trainer.name}</h3>
+                    <h3 className="text-lg font-semibold text-foreground">{trainer.name}</h3>
                     <div className="flex items-center justify-center gap-1 text-yellow-400 mt-1">
                       {renderStars(Math.floor(trainer.rating || 0))}
-                      <span className="text-white/60 text-sm">({trainer.totalReviews})</span>
+                      <span className="text-muted-foreground text-sm">({trainer.totalReviews})</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 mb-4 text-center">
                     <div>
-                      <div className="text-lg font-bold text-white">{trainer.totalSessions}</div>
-                      <div className="text-xs text-white/60">Sessions</div>
+                      <div className="text-lg font-bold text-foreground">{trainer.totalSessions}</div>
+                      <div className="text-xs text-muted-foreground">Sessions</div>
                     </div>
                     <div>
-                      <div className="text-lg font-bold text-white">LKR {trainer.hourlyRate.toLocaleString()}</div>
-                      <div className="text-xs text-white/60">Per Hour</div>
+                      <div className="text-lg font-bold text-foreground">LKR {trainer.hourlyRate.toLocaleString()}</div>
+                      <div className="text-xs text-muted-foreground">Per Hour</div>
                     </div>
                   </div>
 
@@ -245,7 +243,7 @@ export default function AdminTrainerManagementPage() {
                     <Button
                       onClick={() => setSelectedTrainer(trainer)}
                       variant="outline"
-                      className="flex-1 border-white/20 text-white hover:bg-white/10"
+                      className="flex-1 border-border text-foreground hover:bg-accent"
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View
@@ -267,27 +265,27 @@ export default function AdminTrainerManagementPage() {
           <TabsContent value="inactive">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {allTrainers?.filter(trainer => !trainer.isActive).map((trainer) => (
-                <Card key={trainer._id} className="bg-white/10 backdrop-blur-md border-white/20 p-6 opacity-75">
+                <Card key={trainer._id} className="bg-card/30 border border-border p-6 opacity-75">
                   <div className="text-center mb-4">
                     <img
                       src={trainer.profileImage || "/logo.png"}
                       alt={trainer.name}
                       className="w-16 h-16 rounded-full mx-auto mb-3 object-cover grayscale"
                     />
-                    <h3 className="text-lg font-semibold text-white">{trainer.name}</h3>
-                    <Badge variant="secondary" className="mt-2 bg-gray-600 text-gray-200">
+                    <h3 className="text-lg font-semibold text-foreground">{trainer.name}</h3>
+                    <Badge variant="secondary" className="mt-2 bg-muted text-muted-foreground">
                       Inactive
                     </Badge>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 mb-4 text-center">
                     <div>
-                      <div className="text-lg font-bold text-white/70">{trainer.totalSessions}</div>
-                      <div className="text-xs text-white/50">Sessions</div>
+                      <div className="text-lg font-bold text-muted-foreground">{trainer.totalSessions}</div>
+                      <div className="text-xs text-muted-foreground/70">Sessions</div>
                     </div>
                     <div>
-                      <div className="text-lg font-bold text-white/70">LKR {trainer.hourlyRate.toLocaleString()}</div>
-                      <div className="text-xs text-white/50">Per Hour</div>
+                      <div className="text-lg font-bold text-muted-foreground">LKR {trainer.hourlyRate.toLocaleString()}</div>
+                      <div className="text-xs text-muted-foreground/70">Per Hour</div>
                     </div>
                   </div>
 
@@ -295,7 +293,7 @@ export default function AdminTrainerManagementPage() {
                     <Button
                       onClick={() => setSelectedTrainer(trainer)}
                       variant="outline"
-                      className="flex-1 border-white/20 text-white hover:bg-white/10"
+                      className="flex-1 border-border text-foreground hover:bg-accent"
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View
@@ -315,14 +313,14 @@ export default function AdminTrainerManagementPage() {
 
         {/* Trainer Details Modal */}
         {selectedTrainer && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <Card className="bg-white/10 backdrop-blur-md border-white/20 p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <Card className="bg-card border border-border p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
               <div className="flex justify-between items-start mb-6">
-                <h2 className="text-2xl font-bold text-white">{selectedTrainer.name}</h2>
+                <h2 className="text-2xl font-bold text-foreground">{selectedTrainer.name}</h2>
                 <Button
                   onClick={() => setSelectedTrainer(null)}
                   variant="outline"
-                  className="border-white/20 text-white hover:bg-white/10"
+                  className="border-border text-foreground hover:bg-accent"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -338,11 +336,11 @@ export default function AdminTrainerManagementPage() {
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-1 text-yellow-400 mb-2">
                       {renderStars(Math.floor(selectedTrainer.rating || 0))}
-                      <span className="text-white">({selectedTrainer.totalReviews})</span>
+                      <span className="text-foreground">({selectedTrainer.totalReviews})</span>
                     </div>
                     <Badge 
                       variant={selectedTrainer.isActive ? "default" : "secondary"}
-                      className={selectedTrainer.isActive ? "bg-green-600" : "bg-gray-600"}
+                      className={selectedTrainer.isActive ? "bg-green-600" : "bg-muted"}
                     >
                       {selectedTrainer.isActive ? "Active" : "Inactive"}
                     </Badge>
@@ -351,9 +349,9 @@ export default function AdminTrainerManagementPage() {
 
                 <div className="space-y-4">
                   <div>
-                    <h4 className="text-white font-medium mb-2">Contact Information</h4>
+                    <h4 className="text-foreground font-medium mb-2">Contact Information</h4>
                     <div className="space-y-1 text-sm">
-                      <div className="flex items-center gap-2 text-white/80">
+                      <div className="flex items-center gap-2 text-foreground">
                         <Mail className="h-4 w-4" />
                         <span>{selectedTrainer.email}</span>
                       </div>
@@ -361,25 +359,25 @@ export default function AdminTrainerManagementPage() {
                   </div>
 
                   <div>
-                    <h4 className="text-white font-medium mb-2">Professional Details</h4>
+                    <h4 className="text-foreground font-medium mb-2">Professional Details</h4>
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-white/70">Experience:</span>
-                        <span className="text-white">{selectedTrainer.experience}</span>
+                        <span className="text-muted-foreground">Experience:</span>
+                        <span className="text-foreground">{selectedTrainer.experience}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Hourly Rate:</span>
-                        <span className="text-white">LKR {selectedTrainer.hourlyRate.toLocaleString()}</span>
+                        <span className="text-muted-foreground">Hourly Rate:</span>
+                        <span className="text-foreground">LKR {selectedTrainer.hourlyRate.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-white/70">Total Sessions:</span>
-                        <span className="text-white">{selectedTrainer.totalSessions}</span>
+                        <span className="text-muted-foreground">Total Sessions:</span>
+                        <span className="text-foreground">{selectedTrainer.totalSessions}</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <h4 className="text-white font-medium mb-2">Specializations</h4>
+                    <h4 className="text-foreground font-medium mb-2">Specializations</h4>
                     <div className="flex flex-wrap gap-1">
                       {selectedTrainer.specializations.map((spec: string, index: number) => (
                         <Badge key={index} variant="secondary">
@@ -391,10 +389,10 @@ export default function AdminTrainerManagementPage() {
 
                   {selectedTrainer.certifications && (
                     <div>
-                      <h4 className="text-white font-medium mb-2">Certifications</h4>
+                      <h4 className="text-foreground font-medium mb-2">Certifications</h4>
                       <div className="space-y-1">
                         {selectedTrainer.certifications.map((cert: string, index: number) => (
-                          <div key={index} className="flex items-center gap-2 text-white/80 text-sm">
+                          <div key={index} className="flex items-center gap-2 text-foreground text-sm">
                             <Award className="h-3 w-3 text-yellow-400" />
                             <span>{cert}</span>
                           </div>
@@ -407,14 +405,13 @@ export default function AdminTrainerManagementPage() {
 
               {selectedTrainer.bio && (
                 <div className="mt-6">
-                  <h4 className="text-white font-medium mb-2">Bio</h4>
-                  <p className="text-white/80 text-sm leading-relaxed">{selectedTrainer.bio}</p>
+                  <h4 className="text-foreground font-medium mb-2">Bio</h4>
+                  <p className="text-foreground text-sm leading-relaxed">{selectedTrainer.bio}</p>
                 </div>
               )}
             </Card>
           </div>
         )}
-      </div>
-    </div>
+    </AdminLayout>
   );
 }

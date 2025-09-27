@@ -122,7 +122,7 @@ export default function TrainerApplicationsPage() {
       case "rejected":
         return "bg-red-500/20 text-red-400 border-red-500/30";
       default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "bg-muted/20 text-muted-foreground border-border";
     }
   };
 
@@ -146,40 +146,40 @@ export default function TrainerApplicationsPage() {
     >
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Total Applications</p>
-              <p className="text-3xl font-bold text-white">{stats.total}</p>
+              <p className="text-muted-foreground text-sm">Total Applications</p>
+              <p className="text-3xl font-bold text-foreground">{stats.total}</p>
             </div>
             <FileText className="h-8 w-8 text-blue-500" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Pending Review</p>
+              <p className="text-muted-foreground text-sm">Pending Review</p>
               <p className="text-3xl font-bold text-yellow-400">{stats.pending}</p>
             </div>
             <Clock className="h-8 w-8 text-yellow-400" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Approved</p>
+              <p className="text-muted-foreground text-sm">Approved</p>
               <p className="text-3xl font-bold text-green-400">{stats.approved}</p>
             </div>
             <CheckCircle className="h-8 w-8 text-green-400" />
           </div>
         </div>
 
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Rejected</p>
+              <p className="text-muted-foreground text-sm">Rejected</p>
               <p className="text-3xl font-bold text-red-400">{stats.rejected}</p>
             </div>
             <XCircle className="h-8 w-8 text-red-400" />
@@ -188,28 +188,28 @@ export default function TrainerApplicationsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 mb-8">
+      <div className="bg-card/50 border border-border rounded-lg p-6 mb-8">
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
           <div className="flex flex-col sm:flex-row gap-4 flex-1">
             {/* Search */}
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <input
                 type="text"
                 placeholder="Search by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full pl-10 pr-4 py-2 bg-accent border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
 
             {/* Status Filter */}
             <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="appearance-none pl-10 pr-8 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="appearance-none pl-10 pr-8 py-2 bg-accent border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="all">All Status</option>
                 <option value="pending">Pending</option>
@@ -220,11 +220,11 @@ export default function TrainerApplicationsPage() {
 
             {/* Sort */}
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none pl-10 pr-8 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="appearance-none pl-10 pr-8 py-2 bg-accent border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -233,7 +233,7 @@ export default function TrainerApplicationsPage() {
             </div>
           </div>
 
-          <div className="text-gray-400 text-sm">
+          <div className="text-muted-foreground text-sm">
             Showing {filteredApplications?.length || 0} of {stats.total} applications
           </div>
         </div>
@@ -244,16 +244,16 @@ export default function TrainerApplicationsPage() {
       {/* Applications Grid */}
       <div className="grid gap-6">
         {filteredApplications?.map((app) => (
-          <div key={app._id} className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 hover:border-gray-700 transition-all duration-200">
+          <div key={app._id} className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-200">
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-center">
                 <div className="h-16 w-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl mr-4 shadow-lg">
                   {app.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-1">{app.name}</h3>
-                  <p className="text-gray-400 mb-2">{app.email}</p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <h3 className="text-xl font-semibold text-foreground mb-1">{app.name}</h3>
+                  <p className="text-muted-foreground mb-2">{app.email}</p>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       {formatDate(app.submittedAt)}
@@ -272,7 +272,7 @@ export default function TrainerApplicationsPage() {
                 </span>
                 <button
                   onClick={() => setSelectedApp(app)}
-                  className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all duration-200"
+                  className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-all duration-200"
                   title="View Details"
                 >
                   <Eye className="h-5 w-5" />
@@ -281,31 +281,31 @@ export default function TrainerApplicationsPage() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mb-6">
-              <div className="bg-gray-800/50 rounded-lg p-4">
+              <div className="bg-accent/50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <User className="h-4 w-4 text-blue-400" />
-                  <p className="text-gray-400 text-sm font-medium">Experience</p>
+                  <p className="text-muted-foreground text-sm font-medium">Experience</p>
                 </div>
-                <p className="text-white text-sm line-clamp-3 leading-relaxed">{app.experience}</p>
+                <p className="text-foreground text-sm line-clamp-3 leading-relaxed">{app.experience}</p>
               </div>
-              <div className="bg-gray-800/50 rounded-lg p-4">
+              <div className="bg-accent/50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Award className="h-4 w-4 text-yellow-400" />
-                  <p className="text-gray-400 text-sm font-medium">Certifications</p>
+                  <p className="text-muted-foreground text-sm font-medium">Certifications</p>
                 </div>
-                <p className="text-white text-sm line-clamp-3 leading-relaxed">{app.certifications}</p>
+                <p className="text-foreground text-sm line-clamp-3 leading-relaxed">{app.certifications}</p>
               </div>
-              <div className="bg-gray-800/50 rounded-lg p-4">
+              <div className="bg-accent/50 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="h-4 w-4 text-green-400" />
-                  <p className="text-gray-400 text-sm font-medium">Motivation</p>
+                  <p className="text-muted-foreground text-sm font-medium">Motivation</p>
                 </div>
-                <p className="text-white text-sm line-clamp-3 leading-relaxed">{app.motivation}</p>
+                <p className="text-foreground text-sm line-clamp-3 leading-relaxed">{app.motivation}</p>
               </div>
             </div>
 
             {app.status === "pending" && (
-              <div className="flex gap-3 pt-4 border-t border-gray-800">
+              <div className="flex gap-3 pt-4 border-t border-border">
                 <button
                   onClick={() => handleReview(app._id, "approved")}
                   disabled={reviewingApp === app._id}
@@ -324,7 +324,7 @@ export default function TrainerApplicationsPage() {
                 </button>
                 <button
                   onClick={() => setSelectedApp(app)}
-                  className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2"
+                  className="px-6 py-3 bg-accent hover:bg-accent/80 text-foreground rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2"
                 >
                   <Eye className="h-4 w-4" />
                   Review
@@ -333,17 +333,17 @@ export default function TrainerApplicationsPage() {
             )}
 
             {app.status !== "pending" && app.reviewedAt && (
-              <div className="pt-4 border-t border-gray-800">
-                <div className="bg-gray-800/30 rounded-lg p-4">
+              <div className="pt-4 border-t border-border">
+                <div className="bg-accent/30 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <CheckSquare className="h-4 w-4 text-gray-400" />
-                    <p className="text-gray-400 text-sm font-medium">
+                    <CheckSquare className="h-4 w-4 text-muted-foreground" />
+                    <p className="text-muted-foreground text-sm font-medium">
                       Reviewed on {formatDate(app.reviewedAt)}
                     </p>
                   </div>
                   {app.notes && (
-                    <p className="text-white text-sm bg-gray-800 p-3 rounded-md">
-                      <span className="text-gray-400">Review Notes:</span> {app.notes}
+                    <p className="text-foreground text-sm bg-accent p-3 rounded-md">
+                      <span className="text-muted-foreground">Review Notes:</span> {app.notes}
                     </p>
                   )}
                 </div>
@@ -353,28 +353,28 @@ export default function TrainerApplicationsPage() {
         ))}
 
         {(!filteredApplications || filteredApplications.length === 0) && (
-          <div className="text-center py-16 bg-gray-900/50 border border-gray-800 rounded-lg">
+          <div className="text-center py-16 bg-card/50 border border-border rounded-lg">
             <div className="max-w-md mx-auto">
               {searchTerm || filterStatus !== "all" ? (
                 <>
-                  <Search className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-400 mb-2">No applications found</h3>
-                  <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                  <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-muted-foreground mb-2">No applications found</h3>
+                  <p className="text-muted-foreground/70">Try adjusting your search or filter criteria</p>
                   <button
                     onClick={() => {
                       setSearchTerm("");
                       setFilterStatus("all");
                     }}
-                    className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                    className="mt-4 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-sm font-medium transition-colors"
                   >
                     Clear Filters
                   </button>
                 </>
               ) : (
                 <>
-                  <Clock className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-400 mb-2">No trainer applications</h3>
-                  <p className="text-gray-500">New applications will appear here when submitted</p>
+                  <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-muted-foreground mb-2">No trainer applications</h3>
+                  <p className="text-muted-foreground/70">New applications will appear here when submitted</p>
                 </>
               )}
             </div>
@@ -386,8 +386,8 @@ export default function TrainerApplicationsPage() {
 
       {/* Enhanced Application Detail Modal */}
       {selectedApp && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-900 border border-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-card border border-border rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
             <div className="p-8">
               {/* Modal Header */}
               <div className="flex items-start justify-between mb-8">
@@ -396,9 +396,9 @@ export default function TrainerApplicationsPage() {
                     {selectedApp.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold text-white mb-1">{selectedApp.name}</h2>
-                    <p className="text-gray-400 text-lg">{selectedApp.email}</p>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+                    <h2 className="text-3xl font-bold text-foreground mb-1">{selectedApp.name}</h2>
+                    <p className="text-muted-foreground text-lg">{selectedApp.email}</p>
+                    <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
                         Applied {formatDate(selectedApp.submittedAt)}
@@ -417,7 +417,7 @@ export default function TrainerApplicationsPage() {
                   </span>
                   <button
                     onClick={() => setSelectedApp(null)}
-                    className="text-gray-400 hover:text-white hover:bg-gray-800 p-2 rounded-lg transition-all duration-200"
+                    className="text-muted-foreground hover:text-foreground hover:bg-accent p-2 rounded-lg transition-all duration-200"
                   >
                     <XCircle className="h-6 w-6" />
                   </button>
@@ -427,46 +427,46 @@ export default function TrainerApplicationsPage() {
               {/* Application Content */}
               <div className="grid lg:grid-cols-2 gap-8 mb-8">
                 <div className="space-y-6">
-                  <div className="bg-gray-800/50 rounded-lg p-6">
+                  <div className="bg-accent/50 rounded-lg p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <User className="h-5 w-5 text-blue-400" />
-                      <h3 className="text-xl font-semibold text-white">Professional Experience</h3>
+                      <h3 className="text-xl font-semibold text-foreground">Professional Experience</h3>
                     </div>
-                    <p className="text-gray-300 leading-relaxed">{selectedApp.experience}</p>
+                    <p className="text-foreground leading-relaxed">{selectedApp.experience}</p>
                   </div>
 
-                  <div className="bg-gray-800/50 rounded-lg p-6">
+                  <div className="bg-accent/50 rounded-lg p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <Award className="h-5 w-5 text-yellow-400" />
-                      <h3 className="text-xl font-semibold text-white">Certifications</h3>
+                      <h3 className="text-xl font-semibold text-foreground">Certifications</h3>
                     </div>
-                    <p className="text-gray-300 leading-relaxed">{selectedApp.certifications}</p>
+                    <p className="text-foreground leading-relaxed">{selectedApp.certifications}</p>
                   </div>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="bg-gray-800/50 rounded-lg p-6">
+                  <div className="bg-accent/50 rounded-lg p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <TrendingUp className="h-5 w-5 text-green-400" />
-                      <h3 className="text-xl font-semibold text-white">Motivation</h3>
+                      <h3 className="text-xl font-semibold text-foreground">Motivation</h3>
                     </div>
-                    <p className="text-gray-300 leading-relaxed">{selectedApp.motivation}</p>
+                    <p className="text-foreground leading-relaxed">{selectedApp.motivation}</p>
                   </div>
 
                   {selectedApp.status !== "pending" && selectedApp.reviewedAt && (
-                    <div className="bg-gray-800/50 rounded-lg p-6">
+                    <div className="bg-accent/50 rounded-lg p-6">
                       <div className="flex items-center gap-2 mb-4">
-                        <CheckSquare className="h-5 w-5 text-gray-400" />
-                        <h3 className="text-xl font-semibold text-white">Review Information</h3>
+                        <CheckSquare className="h-5 w-5 text-muted-foreground" />
+                        <h3 className="text-xl font-semibold text-foreground">Review Information</h3>
                       </div>
                       <div className="space-y-3">
-                        <p className="text-gray-300">
-                          <span className="text-gray-400">Reviewed on:</span> {formatDate(selectedApp.reviewedAt)}
+                        <p className="text-foreground">
+                          <span className="text-muted-foreground">Reviewed on:</span> {formatDate(selectedApp.reviewedAt)}
                         </p>
                         {selectedApp.notes && (
                           <div>
-                            <p className="text-gray-400 text-sm mb-2">Review Notes:</p>
-                            <p className="text-gray-300 bg-gray-700 p-3 rounded-md">{selectedApp.notes}</p>
+                            <p className="text-muted-foreground text-sm mb-2">Review Notes:</p>
+                            <p className="text-foreground bg-accent p-3 rounded-md">{selectedApp.notes}</p>
                           </div>
                         )}
                       </div>
@@ -477,18 +477,18 @@ export default function TrainerApplicationsPage() {
 
               {/* Review Section for Pending Applications */}
               {selectedApp.status === "pending" && (
-                <div className="bg-gray-800/30 rounded-lg p-6 mb-8">
-                  <h3 className="text-xl font-semibold text-white mb-4">Application Review</h3>
+                <div className="bg-accent/30 rounded-lg p-6 mb-8">
+                  <h3 className="text-xl font-semibold text-foreground mb-4">Application Review</h3>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-gray-400 text-sm font-medium mb-2">
+                      <label className="block text-muted-foreground text-sm font-medium mb-2">
                         Review Notes (Optional)
                       </label>
                       <textarea
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="Add any notes about this application decision..."
-                        className="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+                        className="w-full p-4 bg-accent border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                         rows={4}
                       />
                     </div>
@@ -498,7 +498,7 @@ export default function TrainerApplicationsPage() {
 
               {/* Action Buttons */}
               {selectedApp.status === "pending" && (
-                <div className="flex gap-4 pt-6 border-t border-gray-800">
+                <div className="flex gap-4 pt-6 border-t border-border">
                   <button
                     onClick={() => handleReview(selectedApp._id, "approved")}
                     disabled={reviewingApp === selectedApp._id}
