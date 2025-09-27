@@ -42,7 +42,7 @@ const Badge = ({
     "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors";
   const variantClasses =
     variant === "outline"
-      ? "border-gray-600 text-gray-400 bg-transparent"
+      ? "border-border text-muted-foreground bg-transparent"
       : "border-transparent bg-primary/20 text-primary";
 
   return (
@@ -142,36 +142,36 @@ const RecipesPage = () => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-green-900/50 text-green-400 border-green-500/30";
+        return "bg-green-100 text-green-800 border-green-300 dark:bg-green-900/50 dark:text-green-400 dark:border-green-500/30";
       case "medium":
-        return "bg-yellow-900/50 text-yellow-400 border-yellow-500/30";
+        return "bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/50 dark:text-yellow-400 dark:border-yellow-500/30";
       case "hard":
-        return "bg-destructive/50 text-destructive border-destructive/30";
+        return "bg-red-100 text-red-800 border-red-300 dark:bg-red-900/50 dark:text-red-400 dark:border-red-500/30";
       default:
-        return "bg-gray-900/50 text-gray-400 border-gray-500/30";
+        return "bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-900/50 dark:text-gray-400 dark:border-gray-500/30";
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "breakfast":
-        return "bg-orange-900/50 text-orange-400 border-orange-500/30";
+        return "bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/50 dark:text-orange-400 dark:border-orange-500/30";
       case "lunch":
-        return "bg-blue-900/50 text-blue-400 border-blue-500/30";
+        return "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/50 dark:text-blue-400 dark:border-blue-500/30";
       case "dinner":
-        return "bg-purple-900/50 text-purple-400 border-purple-500/30";
+        return "bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/50 dark:text-purple-400 dark:border-purple-500/30";
       case "snack":
-        return "bg-pink-900/50 text-pink-400 border-pink-500/30";
+        return "bg-pink-100 text-pink-800 border-pink-300 dark:bg-pink-900/50 dark:text-pink-400 dark:border-pink-500/30";
       case "pre-workout":
-        return "bg-green-900/50 text-green-400 border-green-500/30";
+        return "bg-green-100 text-green-800 border-green-300 dark:bg-green-900/50 dark:text-green-400 dark:border-green-500/30";
       case "post-workout":
-        return "bg-cyan-900/50 text-cyan-400 border-cyan-500/30";
+        return "bg-cyan-100 text-cyan-800 border-cyan-300 dark:bg-cyan-900/50 dark:text-cyan-400 dark:border-cyan-500/30";
       case "protein":
-        return "bg-orange-900/50 text-orange-400 border-orange-500/30";
+        return "bg-red-100 text-red-800 border-red-300 dark:bg-red-900/50 dark:text-red-400 dark:border-red-500/30";
       case "healthy":
-        return "bg-emerald-900/50 text-emerald-400 border-emerald-500/30";
+        return "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/50 dark:text-emerald-400 dark:border-emerald-500/30";
       default:
-        return "bg-gray-900/50 text-gray-400 border-gray-500/30";
+        return "bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-900/50 dark:text-gray-400 dark:border-gray-500/30";
     }
   };
 
@@ -353,7 +353,7 @@ const RecipesPage = () => {
                                 {recipe.weeklyPortions} portions
                               </div>
                               <div className="absolute top-2 left-2">
-                                <Badge className="bg-secondary/80 text-secondary-foreground border-secondary/30">
+                                <Badge className="bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/50 dark:text-orange-400 dark:border-orange-500/30">
                                   meal-prep
                                 </Badge>
                               </div>
@@ -389,7 +389,7 @@ const RecipesPage = () => {
                                 {recipe.category}
                               </Badge>
                               {!recipe.imageUrl && (
-                                <Badge className="bg-orange-900/50 text-orange-400 border-orange-500/30">
+                                <Badge className="bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/50 dark:text-orange-400 dark:border-orange-500/30">
                                   meal-prep
                                 </Badge>
                               )}
@@ -736,7 +736,7 @@ const RecipesPage = () => {
                         </span>
                       </div>
                       <div className="absolute top-2 left-2">
-                        <Badge className="bg-secondary/80 text-secondary-foreground border-secondary/30">
+                        <Badge className="bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/50 dark:text-yellow-400 dark:border-yellow-500/30">
                           popular
                         </Badge>
                       </div>
@@ -771,7 +771,7 @@ const RecipesPage = () => {
                         {recipe.difficulty}
                       </Badge>
                       {!recipe.imageUrl && (
-                        <Badge className="bg-secondary/50 text-secondary-foreground border-secondary/30">
+                        <Badge className="bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/50 dark:text-yellow-400 dark:border-yellow-500/30">
                           popular
                         </Badge>
                       )}
