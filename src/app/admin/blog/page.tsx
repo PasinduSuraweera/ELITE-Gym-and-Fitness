@@ -130,7 +130,7 @@ const AdminBlogPage = () => {
         {/* Statistics */}
         {blogStats && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-card border-border">
+            <Card className="bg-card/50 border-border">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Total Posts</CardTitle>
                 <FileText className="h-4 w-4 text-muted-foreground" />
@@ -143,7 +143,7 @@ const AdminBlogPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-card border-border">
+            <Card className="bg-card/50 border-border">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Total Views</CardTitle>
                 <Eye className="h-4 w-4 text-muted-foreground" />
@@ -154,7 +154,7 @@ const AdminBlogPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-card border-border">
+            <Card className="bg-card/50 border-border">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Total Likes</CardTitle>
                 <Heart className="h-4 w-4 text-muted-foreground" />
@@ -165,7 +165,7 @@ const AdminBlogPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-card border-border">
+            <Card className="bg-card/50 border-border">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">Categories</CardTitle>
                 <BarChart3 className="h-4 w-4 text-muted-foreground" />
@@ -181,7 +181,7 @@ const AdminBlogPage = () => {
         )}
 
         {/* Filters and Search */}
-        <Card className="bg-card border-border">
+        <Card className="bg-card/50 border-border">
           <CardHeader>
             <CardTitle className="text-foreground">Filter Posts</CardTitle>
           </CardHeader>
@@ -238,7 +238,7 @@ const AdminBlogPage = () => {
         </Card>
 
         {/* Posts Table */}
-        <Card className="bg-card border-border">
+        <Card className="bg-card/50 border-border">
           <CardHeader>
             <CardTitle className="text-foreground">Blog Posts</CardTitle>
             <CardDescription className="text-muted-foreground">
