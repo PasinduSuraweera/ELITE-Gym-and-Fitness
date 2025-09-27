@@ -184,47 +184,47 @@ export default function SalaryReportsPage() {
     >
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border border-blue-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-primary/10 to-primary/20 border border-primary/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Monthly Payroll</p>
-              <p className="text-2xl font-bold text-blue-400">{formatCurrency(salaryStats?.totalMonthlyPayroll)}</p>
+              <p className="text-2xl font-bold text-primary">{formatCurrency(salaryStats?.totalMonthlyPayroll)}</p>
             </div>
-            <DollarSign className="h-8 w-8 text-blue-400" />
+            <DollarSign className="h-8 w-8 text-primary" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 border border-green-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-green-500/10 to-green-500/20 border border-green-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Active Employees</p>
-              <p className="text-2xl font-bold text-green-400">{salaryStats?.totalEmployeesOnPayroll || 0}</p>
+              <p className="text-2xl font-bold text-green-500">{salaryStats?.totalEmployeesOnPayroll || 0}</p>
             </div>
-            <Users className="h-8 w-8 text-green-400" />
+            <Users className="h-8 w-8 text-green-500" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-purple-900/20 to-purple-800/20 border border-purple-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-purple-500/10 to-purple-500/20 border border-purple-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Average Salary</p>
-              <p className="text-2xl font-bold text-purple-400">
+              <p className="text-2xl font-bold text-purple-500">
                 {formatCurrency(salaryStats?.totalEmployeesOnPayroll && salaryStats.totalEmployeesOnPayroll > 0 
                   ? salaryStats.totalMonthlyPayroll / salaryStats.totalEmployeesOnPayroll 
                   : 0)}
               </p>
             </div>
-            <Calculator className="h-8 w-8 text-purple-400" />
+            <Calculator className="h-8 w-8 text-purple-500" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-orange-900/20 to-orange-800/20 border border-orange-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-orange-500/10 to-orange-500/20 border border-orange-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Processed Records</p>
-              <p className="text-2xl font-bold text-orange-400">{payrollRecords?.length || 0}</p>
+              <p className="text-2xl font-bold text-orange-500">{payrollRecords?.length || 0}</p>
             </div>
-            <CreditCard className="h-8 w-8 text-orange-400" />
+            <CreditCard className="h-8 w-8 text-orange-500" />
           </div>
         </div>
       </div>
@@ -236,23 +236,23 @@ export default function SalaryReportsPage() {
           
           {/* Debug Info */}
           {mounted && (
-            <div className="mb-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
-              <p className="text-sm text-blue-400">
+            <div className="mb-4 p-3 bg-primary/10 rounded-lg border border-primary/30">
+              <p className="text-sm text-primary">
                 Data Status: {payrollRecords ? `${payrollRecords.length} payroll records found` : 'Loading...'}
               </p>
-              <p className="text-xs text-blue-300">
+              <p className="text-xs text-muted-foreground">
                 Current Date: {new Date().toLocaleDateString()} | 
                 Month: {new Date().toLocaleString("default", { month: "short" })} | 
                 Year: {new Date().getFullYear()}
               </p>
               {payrollRecords && payrollRecords.length === 0 && (
-                <p className="text-sm text-yellow-400 mt-1">
+                <p className="text-sm text-yellow-500 mt-1">
                   ⚠️ No payroll records found. Please process payroll first from the Payroll page.
                 </p>
               )}
               {payrollRecords && payrollRecords.length > 0 && (
                 <div className="mt-2">
-                  <p className="text-xs text-green-400">
+                  <p className="text-xs text-green-500">
                     Found records for: {[...new Set(payrollRecords.map(r => `${r.payrollPeriod.month} ${r.payrollPeriod.year}`))].join(', ')}
                   </p>
                 </div>
@@ -288,20 +288,20 @@ export default function SalaryReportsPage() {
           <h3 className="text-lg font-semibold text-foreground mb-4">Available Reports</h3>
           
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+            <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg border border-primary/30">
               <div>
-                <p className="text-blue-400 font-medium">Payroll Report</p>
+                <p className="text-primary font-medium">Payroll Report</p>
                 <p className="text-muted-foreground text-xs">Complete salary breakdown with deductions</p>
               </div>
-              <FileText className="h-5 w-5 text-blue-400" />
+              <FileText className="h-5 w-5 text-primary" />
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+            <div className="flex items-center justify-between p-3 bg-green-500/10 rounded-lg border border-green-500/30">
               <div>
-                <p className="text-green-400 font-medium">Tax Summary</p>
+                <p className="text-green-500 font-medium">Tax Summary</p>
                 <p className="text-muted-foreground text-xs">PAYE, EPF, ETF compliance report</p>
               </div>
-              <FileText className="h-5 w-5 text-green-400" />
+              <FileText className="h-5 w-5 text-green-500" />
             </div>
           </div>
         </div>

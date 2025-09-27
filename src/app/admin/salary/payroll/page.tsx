@@ -392,7 +392,7 @@ export default function PayrollProcessingPage() {
       subtitle="Generate and process monthly payroll for all employees"
     >
       {/* Period Selection */}
-      <div className="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-800/50 rounded-lg p-6 mb-8">
+      <div className="bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/30 rounded-lg p-6 mb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-xl font-semibold text-foreground mb-2">Payroll Period Selection</h2>
@@ -420,13 +420,13 @@ export default function PayrollProcessingPage() {
                 disabled={isPayrollDisabled}
                 className={`px-6 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
                   isPayrollDisabled && hasExistingPayroll
-                    ? "bg-gray-500/50 text-gray-400 cursor-not-allowed" 
+                    ? "bg-muted text-muted-foreground cursor-not-allowed" 
                     : processingStatus === "processing" 
-                    ? "bg-gray-500/50 text-gray-400 cursor-not-allowed" 
+                    ? "bg-muted text-muted-foreground cursor-not-allowed" 
                     : processingStatus === "completed"
                     ? "bg-green-500 text-white"
                     : processingStatus === "error"
-                    ? "bg-red-500 text-white"
+                    ? "bg-destructive text-destructive-foreground"
                     : "bg-primary hover:bg-primary/90 text-primary-foreground"
                 }`}
                 title={hasExistingPayroll ? "Payroll already processed for this period" : ""}
@@ -465,12 +465,12 @@ export default function PayrollProcessingPage() {
 
       {/* Info Message for Already Processed Payroll */}
       {hasExistingPayroll && processingStatus !== "error" && (
-        <div className="bg-blue-500/20 border border-blue-500/50 rounded-lg p-4 mb-8">
+        <div className="bg-primary/20 border border-primary/50 rounded-lg p-4 mb-8">
           <div className="flex items-center gap-3">
-            <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0" />
+            <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
             <div>
-              <p className="text-blue-400 font-medium">Payroll Already Processed</p>
-              <p className="text-blue-300 text-sm mt-1">
+              <p className="text-primary font-medium">Payroll Already Processed</p>
+              <p className="text-primary/80 text-sm mt-1">
                 Payroll has already been processed for {getMonthName(parseInt(selectedMonth.split('-')[1]))} {selectedYear}. 
                 You can view, approve, or manage existing records below.
               </p>
@@ -481,14 +481,14 @@ export default function PayrollProcessingPage() {
 
       {/* Error Message */}
       {processingStatus === "error" && errorMessage && (
-        <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-8">
+        <div className="bg-destructive/20 border border-destructive/50 rounded-lg p-4 mb-8">
           <div className="flex items-center gap-3">
-            <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0" />
+            <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0" />
             <div>
-              <p className="text-red-400 font-medium">Payroll Processing Error</p>
-              <p className="text-red-300 text-sm mt-1">{errorMessage}</p>
+              <p className="text-destructive font-medium">Payroll Processing Error</p>
+              <p className="text-destructive/80 text-sm mt-1">{errorMessage}</p>
               {errorMessage.includes("already processed") && (
-                <p className="text-red-300 text-xs mt-2">
+                <p className="text-destructive/80 text-xs mt-2">
                   Tip: Check existing payroll records below or select a different period.
                 </p>
               )}
@@ -499,49 +499,49 @@ export default function PayrollProcessingPage() {
 
       {/* Payroll Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 border border-green-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-green-500/10 to-green-500/20 border border-green-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Employees</p>
-              <p className="text-2xl font-bold text-green-400">{payrollStatsCalculated.totalEmployees}</p>
-              <p className="text-green-300 text-xs mt-1">Active payroll</p>
+              <p className="text-2xl font-bold text-green-500">{payrollStatsCalculated.totalEmployees}</p>
+              <p className="text-green-500/70 text-xs mt-1">Active payroll</p>
             </div>
-            <Users className="h-6 w-6 text-green-400" />
+            <Users className="h-6 w-6 text-green-500" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border border-blue-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-primary/10 to-primary/20 border border-primary/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Gross Payroll</p>
-              <p className="text-2xl font-bold text-blue-400">{formatCurrency(payrollStatsCalculated.totalGrossPay)}</p>
-              <p className="text-blue-300 text-xs mt-1">Before deductions</p>
+              <p className="text-2xl font-bold text-primary">{formatCurrency(payrollStatsCalculated.totalGrossPay)}</p>
+              <p className="text-primary/70 text-xs mt-1">Before deductions</p>
             </div>
-            <Calculator className="h-6 w-6 text-blue-400" />
+            <Calculator className="h-6 w-6 text-primary" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-purple-900/20 to-purple-800/20 border border-purple-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-purple-500/10 to-purple-500/20 border border-purple-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Net Payroll</p>
-              <p className="text-2xl font-bold text-purple-400">{formatCurrency(payrollStatsCalculated.totalNetPay)}</p>
-              <p className="text-purple-300 text-xs mt-1">After deductions</p>
+              <p className="text-2xl font-bold text-purple-500">{formatCurrency(payrollStatsCalculated.totalNetPay)}</p>
+              <p className="text-purple-500/70 text-xs mt-1">After deductions</p>
             </div>
-            <Wallet className="h-6 w-6 text-purple-400" />
+            <Wallet className="h-6 w-6 text-purple-500" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-orange-900/20 to-orange-800/20 border border-orange-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-orange-500/10 to-orange-500/20 border border-orange-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Deductions</p>
-              <p className="text-2xl font-bold text-orange-400">
+              <p className="text-2xl font-bold text-orange-500">
                 {formatCurrency(payrollStatsCalculated.totalTaxDeductions + payrollStatsCalculated.totalEPF + payrollStatsCalculated.totalETF)}
               </p>
-              <p className="text-orange-300 text-xs mt-1">Tax + EPF + ETF</p>
+              <p className="text-orange-500/70 text-xs mt-1">Tax + EPF + ETF</p>
             </div>
-            <CreditCard className="h-6 w-6 text-orange-400" />
+            <CreditCard className="h-6 w-6 text-orange-500" />
           </div>
         </div>
       </div>
@@ -618,15 +618,15 @@ export default function PayrollProcessingPage() {
 
         <div className="bg-card/50 border border-border rounded-lg p-6">
           <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
-          <div className="mb-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
-            <p className="text-sm text-blue-400 mb-1">💡 Individual Approval Available</p>
-            <p className="text-xs text-blue-300">Click the check icon next to any pending record to approve individually, or use "Approve All" below.</p>
+          <div className="mb-4 p-3 bg-primary/10 rounded-lg border border-primary/30">
+            <p className="text-sm text-primary mb-1">💡 Individual Approval Available</p>
+            <p className="text-xs text-primary/80">Click the check icon next to any pending record to approve individually, or use "Approve All" below.</p>
           </div>
           <div className="space-y-3">
             <button
               onClick={handleApproveAll}
               disabled={payrollStatsCalculated.pending === 0}
-              className="w-full bg-green-500/20 hover:bg-green-500/30 text-green-400 border border-green-500/30 px-4 py-2 rounded-lg transition-colors text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-green-500/20 hover:bg-green-500/30 text-green-500 border border-green-500/30 px-4 py-2 rounded-lg transition-colors text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <CheckCircle className="h-4 w-4" />
               Approve All Processed ({payrollStatsCalculated.pending})
@@ -634,7 +634,7 @@ export default function PayrollProcessingPage() {
             <button 
               onClick={handleExportPayrollReport}
               disabled={!filteredPayrollData?.length}
-              className="w-full bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border border-blue-500/30 px-4 py-2 rounded-lg transition-colors text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary/20 hover:bg-primary/30 text-primary border border-primary/30 px-4 py-2 rounded-lg transition-colors text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="h-4 w-4" />
               Export Payroll Report

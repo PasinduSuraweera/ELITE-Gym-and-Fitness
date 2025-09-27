@@ -172,47 +172,47 @@ export default function SalaryAdvancesPage() {
     >
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border border-blue-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-primary/10 to-primary/20 border border-primary/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Requests</p>
-              <p className="text-2xl font-bold text-blue-400">{advanceStatsCalculated.totalRequests}</p>
-              <p className="text-blue-300 text-xs mt-1">All time</p>
+              <p className="text-2xl font-bold text-primary">{advanceStatsCalculated.totalRequests}</p>
+              <p className="text-primary/70 text-xs mt-1">All time</p>
             </div>
-            <FileText className="h-6 w-6 text-blue-400" />
+            <FileText className="h-6 w-6 text-primary" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-orange-900/20 to-orange-800/20 border border-orange-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-orange-500/10 to-orange-500/20 border border-orange-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Pending Approval</p>
-              <p className="text-2xl font-bold text-orange-400">{advanceStatsCalculated.pendingRequests}</p>
-              <p className="text-orange-300 text-xs mt-1">Awaiting review</p>
+              <p className="text-2xl font-bold text-orange-500">{advanceStatsCalculated.pendingRequests}</p>
+              <p className="text-orange-500/70 text-xs mt-1">Awaiting review</p>
             </div>
-            <Clock className="h-6 w-6 text-orange-400" />
+            <Clock className="h-6 w-6 text-orange-500" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 border border-green-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-green-500/10 to-green-500/20 border border-green-500/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Total Approved</p>
-              <p className="text-2xl font-bold text-green-400">{formatCurrency(advanceStatsCalculated.totalApprovedAmount)}</p>
-              <p className="text-green-300 text-xs mt-1">Lifetime disbursed</p>
+              <p className="text-2xl font-bold text-green-500">{formatCurrency(advanceStatsCalculated.totalApprovedAmount)}</p>
+              <p className="text-green-500/70 text-xs mt-1">Lifetime disbursed</p>
             </div>
-            <CheckCircle className="h-6 w-6 text-green-400" />
+            <CheckCircle className="h-6 w-6 text-green-500" />
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-purple-900/20 to-purple-800/20 border border-purple-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-accent/10 to-accent/20 border border-accent/30 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">Average Request</p>
-              <p className="text-2xl font-bold text-purple-400">{formatCurrency(advanceStatsCalculated.averageRequestAmount)}</p>
-              <p className="text-purple-300 text-xs mt-1">Per request</p>
+              <p className="text-2xl font-bold text-accent-foreground">{formatCurrency(advanceStatsCalculated.averageRequestAmount)}</p>
+              <p className="text-accent-foreground/70 text-xs mt-1">Per request</p>
             </div>
-            <TrendingUp className="h-6 w-6 text-purple-400" />
+            <TrendingUp className="h-6 w-6 text-accent-foreground" />
           </div>
         </div>
       </div>
@@ -224,28 +224,28 @@ export default function SalaryAdvancesPage() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                <div className="w-3 h-3 rounded-full bg-orange-500"></div>
                 <span className="text-muted-foreground">Pending</span>
               </div>
               <span className="text-foreground font-medium">{advanceStatsCalculated.pendingRequests}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
                 <span className="text-muted-foreground">Approved</span>
               </div>
               <span className="text-foreground font-medium">{advanceStatsCalculated.approvedRequests}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-400"></div>
+                <div className="w-3 h-3 rounded-full bg-primary"></div>
                 <span className="text-muted-foreground">Disbursed</span>
               </div>
               <span className="text-foreground font-medium">{advanceStatsCalculated.disbursedRequests}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                <div className="w-3 h-3 rounded-full bg-red-500"></div>
                 <span className="text-muted-foreground">Rejected</span>
               </div>
               <span className="text-foreground font-medium">{advanceStatsCalculated.rejectedRequests}</span>

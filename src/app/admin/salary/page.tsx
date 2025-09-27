@@ -176,9 +176,9 @@ export default function SalaryManagementDashboard() {
       {/* Quick Insights Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Salary Breakdown by Role */}
-        <div className="bg-gradient-to-r from-blue-900/20 to-blue-800/20 border border-blue-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-primary/10 to-primary/20 border border-primary/30 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Award className="h-6 w-6 text-blue-400" />
+            <Award className="h-6 w-6 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Salary by Role</h3>
           </div>
           <div className="space-y-3">
@@ -202,15 +202,15 @@ export default function SalaryManagementDashboard() {
 
 
         {/* Payroll Processing Status */}
-        <div className="bg-gradient-to-r from-green-900/20 to-green-800/20 border border-green-800/50 rounded-lg p-6">
+        <div className="bg-gradient-to-r from-green-500/10 to-green-500/20 border border-green-500/30 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-4">
-            <Activity className="h-6 w-6 text-green-400" />
+            <Activity className="h-6 w-6 text-green-500" />
             <h3 className="text-lg font-semibold text-foreground">Processing Status</h3>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground text-sm">Completion Rate</span>
-              <span className="text-green-400 font-medium">
+              <span className="text-green-500 font-medium">
                 {salaryStats?.totalEmployeesOnPayroll ? 
                   Math.round(((salaryStats.totalEmployeesOnPayroll - (salaryStats.totalPendingApprovals || 0)) / salaryStats.totalEmployeesOnPayroll) * 100) 
                   : 0}%
@@ -218,7 +218,7 @@ export default function SalaryManagementDashboard() {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted-foreground text-sm">Auto Processing</span>
-              <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs font-medium">
+              <span className="bg-green-500/20 text-green-500 px-2 py-1 rounded-full text-xs font-medium">
                 Enabled
               </span>
             </div>
@@ -230,14 +230,14 @@ export default function SalaryManagementDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Link 
           href="/admin/salary/structures"
-          className="group bg-card/50 border border-border rounded-lg p-6 hover:border-blue-500/50 transition-all duration-300"
+          className="group bg-card/50 border border-border rounded-lg p-6 hover:border-primary/50 transition-all duration-300"
         >
           <div className="flex items-center mb-4">
-            <Calculator className="h-6 w-6 text-blue-500 mr-3" />
-            <h3 className="text-xl font-semibold text-foreground group-hover:text-blue-500">Salary Structures</h3>
+            <Calculator className="h-6 w-6 text-primary mr-3" />
+            <h3 className="text-xl font-semibold text-foreground group-hover:text-primary">Salary Structures</h3>
           </div>
           <p className="text-muted-foreground mb-4">Create and manage employee salary structures and compensation plans</p>
-          <div className="text-blue-500 text-sm font-medium">
+          <div className="text-primary text-sm font-medium">
             {salaryStats?.totalEmployeesOnPayroll || 0} active structures →
           </div>
         </Link>
