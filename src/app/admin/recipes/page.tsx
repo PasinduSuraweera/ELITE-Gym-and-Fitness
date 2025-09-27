@@ -121,11 +121,11 @@ const AdminRecipesPage = () => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-green-900/50 text-green-400 border-green-500/30";
+        return "bg-green-100 text-green-800 border-green-300 dark:bg-green-900/50 dark:text-green-400 dark:border-green-500/30";
       case "medium":
-        return "bg-yellow-900/50 text-yellow-400 border-yellow-500/30";
+        return "bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/50 dark:text-yellow-400 dark:border-yellow-500/30";
       case "hard":
-        return "bg-red-900/50 text-red-400 border-red-500/30";
+        return "bg-red-100 text-red-800 border-red-300 dark:bg-red-900/50 dark:text-red-400 dark:border-red-500/30";
       default:
         return "bg-accent/50 text-muted-foreground border-border";
     }
@@ -134,21 +134,21 @@ const AdminRecipesPage = () => {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "breakfast":
-        return "bg-orange-900/50 text-orange-400 border-orange-500/30";
+        return "bg-orange-100 text-orange-800 border-orange-300 dark:bg-orange-900/50 dark:text-orange-400 dark:border-orange-500/30";
       case "lunch":
-        return "bg-blue-900/50 text-blue-400 border-blue-500/30";
+        return "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/50 dark:text-blue-400 dark:border-blue-500/30";
       case "dinner":
-        return "bg-purple-900/50 text-purple-400 border-purple-500/30";
+        return "bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/50 dark:text-purple-400 dark:border-purple-500/30";
       case "snack":
-        return "bg-pink-900/50 text-pink-400 border-pink-500/30";
+        return "bg-pink-100 text-pink-800 border-pink-300 dark:bg-pink-900/50 dark:text-pink-400 dark:border-pink-500/30";
       case "pre-workout":
-        return "bg-green-900/50 text-green-400 border-green-500/30";
+        return "bg-green-100 text-green-800 border-green-300 dark:bg-green-900/50 dark:text-green-400 dark:border-green-500/30";
       case "post-workout":
-        return "bg-cyan-900/50 text-cyan-400 border-cyan-500/30";
+        return "bg-cyan-100 text-cyan-800 border-cyan-300 dark:bg-cyan-900/50 dark:text-cyan-400 dark:border-cyan-500/30";
       case "protein":
-        return "bg-red-900/50 text-red-400 border-red-500/30";
+        return "bg-red-100 text-red-800 border-red-300 dark:bg-red-900/50 dark:text-red-400 dark:border-red-500/30";
       case "healthy":
-        return "bg-emerald-900/50 text-emerald-400 border-emerald-500/30";
+        return "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/50 dark:text-emerald-400 dark:border-emerald-500/30";
       default:
         return "bg-accent/50 text-muted-foreground border-border";
     }
