@@ -8,7 +8,6 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useState, useEffect } from "react";
 import { ShoppingCart } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
 import { ThemeAwareLogo } from "./ThemeAwareLogo";
 
 const Navbar = () => {
@@ -210,9 +209,6 @@ const Navbar = () => {
 
         {/* AUTH BUTTONS */}
         <div className="flex items-center gap-4" suppressHydrationWarning>
-          {/* Theme Toggle */}
-          <ThemeToggle />
-
           {/* Shopping Cart Icon */}
           {isSignedIn && (
             <Link href="/marketplace/cart" className="relative">

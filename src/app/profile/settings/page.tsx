@@ -1,16 +1,192 @@
 "use client";
 
 import { UserLayout } from "@/components/UserLayout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Palette, User, Bell, Shield, Sun, Moon, Monitor } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 
 export default function SettingsPage() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleThemeChange = (value: string) => {
+    setTheme(value);
+  };
+
   return (
     <UserLayout 
       title="Settings" 
-      subtitle="Manage your account settings"
+      subtitle="Manage your account preferences and settings"
     >
-      <div className="text-center py-16">
-        <h2 className="text-2xl font-bold text-foreground mb-4">Settings Page</h2>
-        <p className="text-muted-foreground">Coming Soon...</p>
+      <div className="max-w-6xl mx-auto">
+        <Tabs defaultValue="appearance" className="space-y-8">
+          {/* Tab Navigation */}
+          <TabsList className="grid w-full grid-cols-4 bg-card/50 border border-border p-1 h-12 rounded-lg">
+            <TabsTrigger
+              value="appearance"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
+            >
+              <Palette className="h-4 w-4 mr-2" />
+              Appearance
+            </TabsTrigger>
+            <TabsTrigger
+              value="account"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
+            >
+              <User className="h-4 w-4 mr-2" />
+              Account
+            </TabsTrigger>
+            <TabsTrigger
+              value="notifications"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
+            >
+              <Bell className="h-4 w-4 mr-2" />
+              Notifications
+            </TabsTrigger>
+            <TabsTrigger
+              value="privacy"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
+            >
+              <Shield className="h-4 w-4 mr-2" />
+              Privacy
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Appearance Tab */}
+          <TabsContent value="appearance" className="space-y-6">
+            <div className="grid gap-6">
+              {/* Theme Settings */}
+              <Card className="bg-card/50 border-border">
+                <CardHeader>
+                  <CardTitle className="text-foreground flex items-center gap-2">
+                    <Palette className="h-5 w-5 text-primary" />
+                    Theme Preference
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Choose how ELITE GYM appears to you. Your preference will be saved automatically.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-medium text-foreground">Theme Mode</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Select your preferred interface theme
+                      </p>
+                    </div>
+                    <div className="min-w-[140px]">
+                      {mounted && (
+                        <select
+                          value={theme}
+                          onChange={(e) => handleThemeChange(e.target.value)}
+                          className="w-full px-3 py-2 bg-card border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        >
+                          <option value="light">Light Theme</option>
+                          <option value="dark">Dark Theme</option>
+                          <option value="system">System Default</option>
+                        </select>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Theme Preview */}
+                  <div className="border border-border rounded-lg p-4 bg-accent/50">
+                    <h4 className="text-sm font-medium text-foreground mb-3">Preview</h4>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className="w-12 h-8 bg-white border border-gray-300 rounded flex items-center justify-center">
+                          <Sun className="h-4 w-4 text-yellow-500" />
+                        </div>
+                        <span className="text-xs text-muted-foreground">Light</span>
+                      </div>
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className="w-12 h-8 bg-gray-900 border border-gray-600 rounded flex items-center justify-center">
+                          <Moon className="h-4 w-4 text-blue-400" />
+                        </div>
+                        <span className="text-xs text-muted-foreground">Dark</span>
+                      </div>
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className="w-12 h-8 bg-gradient-to-r from-white to-gray-900 border border-gray-400 rounded flex items-center justify-center">
+                          <Monitor className="h-4 w-4 text-gray-600" />
+                        </div>
+                        <span className="text-xs text-muted-foreground">System</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Account Tab */}
+          <TabsContent value="account" className="space-y-6">
+            <Card className="bg-card/50 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <User className="h-5 w-5 text-primary" />
+                  Account Settings
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Manage your account information and preferences
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <User className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">Account settings coming soon...</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Notifications Tab */}
+          <TabsContent value="notifications" className="space-y-6">
+            <Card className="bg-card/50 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <Bell className="h-5 w-5 text-primary" />
+                  Notification Settings
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Control how and when you receive notifications
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">Notification settings coming soon...</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Privacy Tab */}
+          <TabsContent value="privacy" className="space-y-6">
+            <Card className="bg-card/50 border-border">
+              <CardHeader>
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                  Privacy & Security
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Manage your privacy settings and account security
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12">
+                  <Shield className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">Privacy settings coming soon...</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </UserLayout>
   );
