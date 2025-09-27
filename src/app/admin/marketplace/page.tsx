@@ -17,8 +17,10 @@ import {
   X,
   Plus
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function MarketplaceAdminPage() {
+  const { isSignedIn } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [formData, setFormData] = useState({
@@ -45,8 +47,8 @@ export default function MarketplaceAdminPage() {
     }
   };
 
-  const items = useQuery(api.marketplace.getAllMarketplaceItems);
-  const stats = useQuery(api.marketplace.getMarketplaceStats);
+  const items = useQuery(api.marketplace.getAllMarketplaceItems, isSignedIn ? undefined : "skip");
+  const stats = useQuery(api.marketplace.getMarketplaceStats, isSignedIn ? undefined : "skip");
   const createItem = useMutation(api.marketplace.createMarketplaceItem);
   const updateItem = useMutation(api.marketplace.updateMarketplaceItem);
   const deleteItem = useMutation(api.marketplace.deleteMarketplaceItem);

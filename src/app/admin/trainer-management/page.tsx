@@ -21,13 +21,15 @@ import {
   Mail,
   Phone
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function AdminTrainerManagementPage() {
+  const { isSignedIn } = useAuth();
   const [selectedTrainer, setSelectedTrainer] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("pending");
 
   // Get all trainer profiles
-  const allTrainers = useQuery(api.trainerProfiles.getActiveTrainers, {});
+  const allTrainers = useQuery(api.trainerProfiles.getActiveTrainers, isSignedIn ? {} : "skip");
 
   // Get trainer applications (mock data - you'd need to create this query)
   const pendingApplications = [

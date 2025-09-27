@@ -12,15 +12,17 @@ import {
   Calculator,
   CreditCard
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function SalaryReportsPage() {
+  const { isSignedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [quickReportType, setQuickReportType] = useState("payroll");
 
   // Convex queries
-  const salaryStats = useQuery(api.salary.getSalaryStats);
+  const salaryStats = useQuery(api.salary.getSalaryStats, isSignedIn ? undefined : "skip");
   // Get all payroll records for reports
-  const payrollRecords = useQuery(api.salary.getPayrollRecords, { allRecords: true });
+  const payrollRecords = useQuery(api.salary.getPayrollRecords, isSignedIn ? { allRecords: true } : "skip");
 
   // Mutations
   const createGeneratedReport = useMutation(api.salary.createGeneratedReport);

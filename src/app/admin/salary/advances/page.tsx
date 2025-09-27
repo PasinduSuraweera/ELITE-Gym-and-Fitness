@@ -26,6 +26,7 @@ import {
   Send,
   X
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 interface NewAdvanceForm {
   employeeName: string;
@@ -46,6 +47,7 @@ const initialFormState: NewAdvanceForm = {
 };
 
 export default function SalaryAdvancesPage() {
+  const { isSignedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
@@ -61,10 +63,10 @@ export default function SalaryAdvancesPage() {
   const [filterUrgency, setFilterUrgency] = useState("all");
 
   // Convex queries and mutations
-  const allUsers = useQuery(api.users.getAllUsers);
-  const salaryStructures = useQuery(api.salary.getAllSalaryStructures);
-  const advanceRequests = useQuery(api.salary.getAllAdvanceRequests);
-  const advanceStats = useQuery(api.salary.getAdvanceStats);
+  const allUsers = useQuery(api.users.getAllUsers, isSignedIn ? undefined : "skip");
+  const salaryStructures = useQuery(api.salary.getAllSalaryStructures, isSignedIn ? undefined : "skip");
+  const advanceRequests = useQuery(api.salary.getAllAdvanceRequests, isSignedIn ? undefined : "skip");
+  const advanceStats = useQuery(api.salary.getAdvanceStats, isSignedIn ? undefined : "skip");
   
   // Mutations
   const createAdvanceRequest = useMutation(api.salary.createAdvanceRequest);

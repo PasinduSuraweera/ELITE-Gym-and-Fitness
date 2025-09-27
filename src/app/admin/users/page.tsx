@@ -7,10 +7,12 @@ import { useState, useEffect } from "react";
 import { Crown, Shield, User, Search, Filter, Eye, Calendar, Activity, Users, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@clerk/nextjs";
 
 export default function AdminUsersPage() {
-  const users = useQuery(api.users.getAllUsers);
-  const allMemberships = useQuery(api.memberships.getAllMemberships);
+  const { isSignedIn } = useAuth();
+  const users = useQuery(api.users.getAllUsers, isSignedIn ? undefined : "skip");
+  const allMemberships = useQuery(api.memberships.getAllMemberships, isSignedIn ? undefined : "skip");
   const updateRole = useMutation(api.users.updateUserRole);
   const [updatingUser, setUpdatingUser] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);

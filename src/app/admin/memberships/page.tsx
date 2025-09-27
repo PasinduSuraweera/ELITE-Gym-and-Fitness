@@ -8,16 +8,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Users, Crown, DollarSign, AlertTriangle } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function AdminMembershipsPage() {
+  const { isSignedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   const checkExpiredMemberships = useMutation(api.memberships.checkExpiredMemberships);
   const fixAllMembershipPeriods = useMutation(api.memberships.fixAllMembershipPeriods);
   const cancelMembership = useMutation(api.memberships.cancelMembership);
   const fixAllDuplicateMemberships = useMutation(api.memberships.fixAllDuplicateMemberships);
   
-  const membershipPlans = useQuery(api.memberships.getMembershipPlans);
-  const allMemberships = useQuery(api.memberships.getAllMemberships);
+  const membershipPlans = useQuery(api.memberships.getMembershipPlans, isSignedIn ? undefined : "skip");
+  const allMemberships = useQuery(api.memberships.getAllMemberships, isSignedIn ? undefined : "skip");
 
   useEffect(() => {
     setMounted(true);

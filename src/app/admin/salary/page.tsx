@@ -25,24 +25,26 @@ import {
   Activity
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function SalaryManagementDashboard() {
+  const { isSignedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   
   // Get salary statistics
-  const salaryStats = useQuery(api.salary.getSalaryStats);
-  const allSalaryStructures = useQuery(api.salary.getAllSalaryStructures);
+  const salaryStats = useQuery(api.salary.getSalaryStats, isSignedIn ? undefined : "skip");
+  const allSalaryStructures = useQuery(api.salary.getAllSalaryStructures, isSignedIn ? undefined : "skip");
   
   // Get recent payroll data for current month
   const currentMonth = new Date().toLocaleString("default", { month: "short" });
   const currentYear = new Date().getFullYear();
-  const recentPayroll = useQuery(api.salary.getPayrollRecords, {
+  const recentPayroll = useQuery(api.salary.getPayrollRecords, isSignedIn ? {
     year: currentYear,
     month: currentMonth
-  });
+  } : "skip");
   
   // Get user data for recent activity
-  const allUsers = useQuery(api.users.getAllUsers);
+  const allUsers = useQuery(api.users.getAllUsers, isSignedIn ? undefined : "skip");
 
   useEffect(() => {
     setMounted(true);
@@ -89,10 +91,10 @@ export default function SalaryManagementDashboard() {
   const previousMonth = getPreviousMonthData();
   
   // Get previous month payroll for comparison
-  const previousMonthPayroll = useQuery(api.salary.getPayrollRecords, {
+  const previousMonthPayroll = useQuery(api.salary.getPayrollRecords, isSignedIn ? {
     year: previousMonth.year,
     month: previousMonth.month
-  });
+  } : "skip");
 
   // Calculate actual growth based on real data
   const currentMonthTotal = recentPayroll?.reduce((sum, record) => sum + record.netSalary, 0) || 0;

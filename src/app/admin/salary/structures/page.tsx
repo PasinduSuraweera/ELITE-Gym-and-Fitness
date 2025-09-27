@@ -21,6 +21,7 @@ import {
   Download,
   Eye
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 interface SalaryStructureForm {
   employeeName: string;
@@ -70,9 +71,10 @@ export default function SalaryStructuresPage() {
   const [filterStatus, setFilterStatus] = useState("all");
 
   // Convex queries and mutations
-  const salaryStructures = useQuery(api.salary.getAllSalaryStructures);
-  const salaryStats = useQuery(api.salary.getSalaryStats);
-  const allUsers = useQuery(api.users.getAllUsers);
+  const { isSignedIn } = useAuth();
+  const salaryStructures = useQuery(api.salary.getAllSalaryStructures, isSignedIn ? undefined : "skip");
+  const salaryStats = useQuery(api.salary.getSalaryStats, isSignedIn ? undefined : "skip");
+  const allUsers = useQuery(api.users.getAllUsers, isSignedIn ? undefined : "skip");
   
   const createSalaryStructure = useMutation(api.salary.createSalaryStructure);
   const updateSalaryStructure = useMutation(api.salary.updateSalaryStructure);

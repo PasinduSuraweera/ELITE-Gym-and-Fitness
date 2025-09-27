@@ -19,9 +19,11 @@ import {
   Users,
   CheckSquare
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function TrainerApplicationsPage() {
-  const applications = useQuery(api.trainers.getTrainerApplications);
+  const { isSignedIn } = useAuth();
+  const applications = useQuery(api.trainers.getTrainerApplications, isSignedIn ? undefined : "skip");
   const reviewApplication = useMutation(api.trainers.reviewTrainerApplication);
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [selectedApp, setSelectedApp] = useState<any>(null);

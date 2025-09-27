@@ -26,6 +26,7 @@ import Link from "next/link";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
+import { useAuth } from "@clerk/nextjs";
 
 // Simple Badge component (same as in main recipes page)
 const Badge = ({
@@ -52,8 +53,9 @@ const Badge = ({
 };
 
 const AdminRecipesPage = () => {
+  const { isSignedIn } = useAuth();
   // Get recipes from Convex
-  const recipes = useQuery(api.recipes.getRecipes, {});
+  const recipes = useQuery(api.recipes.getRecipes, isSignedIn ? {} : "skip");
   const deleteRecipeMutation = useMutation(api.recipes.deleteRecipe);
   const updateRecipeMutation = useMutation(api.recipes.updateRecipe);
   const createRecipeMutation = useMutation(api.recipes.createRecipe);

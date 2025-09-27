@@ -240,6 +240,7 @@ const Navbar = () => {
                 Profile
               </Link>
               <UserButton
+                afterSignOutUrl="/"
                 appearance={{
                   elements: {
                     avatarBox: "h-10 w-10",

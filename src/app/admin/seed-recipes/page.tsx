@@ -20,8 +20,10 @@ import {
   RefreshCw
 } from "lucide-react";
 import { AdminLayout } from "@/components/AdminLayout";
+import { useAuth } from "@clerk/nextjs";
 
 const SeedRecipesPage = () => {
+  const { isSignedIn } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
   const [results, setResults] = useState<any>(null);
 
@@ -30,7 +32,7 @@ const SeedRecipesPage = () => {
   const seedComprehensiveRecipes = useMutation(api.recipes.seedComprehensiveRecipes);
 
   // Query existing recipes
-  const existingRecipes = useQuery(api.recipes.getAllRecipes);
+  const existingRecipes = useQuery(api.recipes.getAllRecipes, isSignedIn ? undefined : "skip");
 
   const handleSeedSample = async () => {
     setLoading("sample");

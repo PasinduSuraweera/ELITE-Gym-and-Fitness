@@ -19,14 +19,18 @@ import {
   Star
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function AdminDashboard() {
-  const users = useQuery(api.users.getAllUsers);
-  const applications = useQuery(api.trainers.getTrainerApplications);
-  const marketplaceStats = useQuery(api.marketplace.getMarketplaceStats);
-  const allMemberships = useQuery(api.memberships.getAllMemberships);
-  const membershipPlans = useQuery(api.memberships.getMembershipPlans);
-  const activeTrainers = useQuery(api.trainerProfiles.getActiveTrainers, {});
+  const { isSignedIn } = useAuth();
+  
+  // Only run queries if user is authenticated to prevent "Not authenticated" errors during logout
+  const users = useQuery(api.users.getAllUsers, isSignedIn ? undefined : "skip");
+  const applications = useQuery(api.trainers.getTrainerApplications, isSignedIn ? undefined : "skip");
+  const marketplaceStats = useQuery(api.marketplace.getMarketplaceStats, isSignedIn ? undefined : "skip");
+  const allMemberships = useQuery(api.memberships.getAllMemberships, isSignedIn ? undefined : "skip");
+  const membershipPlans = useQuery(api.memberships.getMembershipPlans, isSignedIn ? undefined : "skip");
+  const activeTrainers = useQuery(api.trainerProfiles.getActiveTrainers, isSignedIn ? {} : "skip");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -55,8 +59,8 @@ export default function AdminDashboard() {
   };
 
   // Get recipe data from Convex
-  const allRecipes = useQuery(api.recipes.getRecipes, {});
-  const recommendedRecipesList = useQuery(api.recipes.getRecommendedRecipes, {});
+  const allRecipes = useQuery(api.recipes.getRecipes, isSignedIn ? {} : "skip");
+  const recommendedRecipesList = useQuery(api.recipes.getRecommendedRecipes, isSignedIn ? {} : "skip");
 
   // Calculate comprehensive statistics
   const totalUsers = users?.length || 0;

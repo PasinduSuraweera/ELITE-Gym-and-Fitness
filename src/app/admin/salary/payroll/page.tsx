@@ -26,8 +26,10 @@ import {
   ArrowRight,
   X
 } from "lucide-react";
+import { useAuth } from "@clerk/nextjs";
 
 export default function PayrollProcessingPage() {
+  const { isSignedIn } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(() => {
     const now = new Date();
@@ -60,16 +62,16 @@ export default function PayrollProcessingPage() {
   };
 
   // Convex queries and mutations
-  const salaryStructures = useQuery(api.salary.getAllSalaryStructures);
-  const salaryStats = useQuery(api.salary.getSalaryStats);
-  const payrollRecords = useQuery(api.salary.getPayrollRecords, {
+  const salaryStructures = useQuery(api.salary.getAllSalaryStructures, isSignedIn ? undefined : "skip");
+  const salaryStats = useQuery(api.salary.getSalaryStats, isSignedIn ? undefined : "skip");
+  const payrollRecords = useQuery(api.salary.getPayrollRecords, isSignedIn ? {
     year: selectedYear,
     month: getMonthName(parseInt(selectedMonth.split('-')[1]))
-  });
-  const payrollStats = useQuery(api.salary.getPayrollStats, {
+  } : "skip");
+  const payrollStats = useQuery(api.salary.getPayrollStats, isSignedIn ? {
     year: selectedYear,
     month: getMonthName(parseInt(selectedMonth.split('-')[1]))
-  });
+  } : "skip");
   
   // Create mutations
   const processPayroll = useMutation(api.salary.processPayroll);

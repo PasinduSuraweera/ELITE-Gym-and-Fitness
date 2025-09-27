@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import { api } from "../../../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,15 +44,16 @@ const Badge = ({ children, className = "", variant = "default" }: {
 };
 
 const AdminBlogPage = () => {
+  const { isSignedIn } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
   // Get blog posts
-  const allPosts = useQuery(api.blog.getBlogPosts, {});
+  const allPosts = useQuery(api.blog.getBlogPosts, isSignedIn ? {} : "skip");
   
   // Get blog statistics
-  const blogStats = useQuery(api.blog.getBlogStats, {});
+  const blogStats = useQuery(api.blog.getBlogStats, isSignedIn ? {} : "skip");
 
   // Delete post mutation
   const deletePost = useMutation(api.blog.deleteBlogPost);
