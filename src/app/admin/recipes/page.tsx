@@ -21,6 +21,7 @@ import {
   Trash2,
   ChefHat,
   X,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { useQuery, useMutation } from "convex/react";
@@ -59,6 +60,12 @@ const AdminRecipesPage = () => {
   const deleteRecipeMutation = useMutation(api.recipes.deleteRecipe);
   const updateRecipeMutation = useMutation(api.recipes.updateRecipe);
   const createRecipeMutation = useMutation(api.recipes.createRecipe);
+
+  // Search and filter state
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
+  const [recommendedFilter, setRecommendedFilter] = useState<string>("all");
 
   // Modal state for adding new recipe
   const [showAddModal, setShowAddModal] = useState(false);
@@ -101,20 +108,44 @@ const AdminRecipesPage = () => {
     isRecommended: false,
   });
 
-  // Calculate statistics from recipes data
-  const totalRecipes = recipes?.length || 0;
+  // Filter recipes based on search and filters
+  const filteredRecipes = recipes?.filter((recipe) => {
+    const matchesSearch = 
+      recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      recipe.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      recipe.ingredients.some(ing => 
+        ing.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+    const matchesCategory = 
+      categoryFilter === "all" || recipe.category === categoryFilter;
+    
+    const matchesDifficulty = 
+      difficultyFilter === "all" || recipe.difficulty === difficultyFilter;
+    
+    const matchesRecommended = 
+      recommendedFilter === "all" || 
+      (recommendedFilter === "recommended" && recipe.isRecommended) ||
+      (recommendedFilter === "not-recommended" && !recipe.isRecommended);
+
+    return matchesSearch && matchesCategory && matchesDifficulty && matchesRecommended;
+  });
+
+  // Calculate statistics from filtered recipes data
+  const totalRecipes = filteredRecipes?.length || 0;
+  const allRecipes = recipes?.length || 0;
   const recommendedRecipes =
-    recipes?.filter((recipe) => recipe.isRecommended).length || 0;
-  const avgCookingTime = recipes?.length
+    filteredRecipes?.filter((recipe) => recipe.isRecommended).length || 0;
+  const avgCookingTime = filteredRecipes?.length
     ? Math.round(
-        recipes.reduce((sum, recipe) => sum + recipe.cookingTime, 0) /
-          recipes.length
+        filteredRecipes.reduce((sum, recipe) => sum + recipe.cookingTime, 0) /
+          filteredRecipes.length
       )
     : 0;
-  const avgProtein = recipes?.length
+  const avgProtein = filteredRecipes?.length
     ? Math.round(
-        recipes.reduce((sum, recipe) => sum + recipe.protein, 0) /
-          recipes.length
+        filteredRecipes.reduce((sum, recipe) => sum + recipe.protein, 0) /
+          filteredRecipes.length
       )
     : 0;
 
@@ -461,11 +492,135 @@ const AdminRecipesPage = () => {
           </Card>
         </div>
 
+        {/* Search and Filters */}
+        <Card className="bg-card/50 border border-border">
+          <CardHeader>
+            <CardTitle className="text-foreground">Search & Filter Recipes</CardTitle>
+            <CardDescription className="text-muted-foreground">
+              Find recipes by name, ingredients, category, or difficulty
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="lg:col-span-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Search
+                </label>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-3 py-2 bg-card border border-border rounded-md text-foreground placeholder-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  placeholder="Search by title, description, or ingredients..."
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Category
+                </label>
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="w-full px-3 py-2 bg-card border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                  <option value="snack">Snack</option>
+                  <option value="pre-workout">Pre-workout</option>
+                  <option value="post-workout">Post-workout</option>
+                  <option value="protein">Protein</option>
+                  <option value="healthy">Healthy</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Difficulty
+                </label>
+                <select
+                  value={difficultyFilter}
+                  onChange={(e) => setDifficultyFilter(e.target.value)}
+                  className="w-full px-3 py-2 bg-card border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="all">All Levels</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Recommended
+                </label>
+                <select
+                  value={recommendedFilter}
+                  onChange={(e) => setRecommendedFilter(e.target.value)}
+                  className="w-full px-3 py-2 bg-card border border-border rounded-md text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="all">All Recipes</option>
+                  <option value="recommended">Recommended</option>
+                  <option value="not-recommended">Not Recommended</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Filter Summary */}
+            {(searchTerm || categoryFilter !== "all" || difficultyFilter !== "all" || recommendedFilter !== "all") && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {searchTerm && (
+                  <Badge className="bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/50 dark:text-blue-400 dark:border-blue-500/30">
+                    Search: "{searchTerm}"
+                  </Badge>
+                )}
+                {categoryFilter !== "all" && (
+                  <Badge className={getCategoryColor(categoryFilter)}>
+                    Category: {categoryFilter}
+                  </Badge>
+                )}
+                {difficultyFilter !== "all" && (
+                  <Badge className={getDifficultyColor(difficultyFilter)}>
+                    Difficulty: {difficultyFilter}
+                  </Badge>
+                )}
+                {recommendedFilter !== "all" && (
+                  <Badge className="bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900/50 dark:text-yellow-400 dark:border-yellow-500/30">
+                    {recommendedFilter === "recommended" ? "Recommended Only" : "Not Recommended"}
+                  </Badge>
+                )}
+                <Button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setCategoryFilter("all");
+                    setDifficultyFilter("all");
+                    setRecommendedFilter("all");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="h-6 px-2 text-xs border-red-500/50 text-red-400 hover:bg-red-500/10"
+                >
+                  Clear All
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Action Buttons */}
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-semibold text-foreground">
-            All Recipes ({totalRecipes})
-          </h2>
+          <div>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Recipes ({totalRecipes} of {allRecipes})
+            </h2>
+            {totalRecipes !== allRecipes && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Showing {totalRecipes} filtered results from {allRecipes} total recipes
+              </p>
+            )}
+          </div>
           <Button
             onClick={() => setShowAddModal(true)}
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -476,147 +631,182 @@ const AdminRecipesPage = () => {
         </div>
 
         {/* Recipes Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recipes.map((recipe: any) => (
-            <div
-              key={recipe._id}
-              className="bg-card/50 border border-border hover:border-primary/50 transition-colors rounded-lg overflow-hidden flex flex-col h-full"
-            >
-              {/* Recipe Image */}
-              {recipe.imageUrl && (
-                <div className="relative h-32 overflow-hidden flex-shrink-0">
-                  <img
-                    src={recipe.imageUrl}
-                    alt={recipe.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                  {recipe.isRecommended && (
-                    <div className="absolute top-2 right-2">
-                      <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div className="p-4 pb-3 flex-1 flex flex-col">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="text-foreground text-lg mb-2 flex items-center gap-2">
-                      {recipe.title}
-                      {!recipe.imageUrl && recipe.isRecommended && (
-                        <Star className="h-4 w-4 text-yellow-400" />
-                      )}
-                    </h3>
-                    <p className="text-muted-foreground text-sm line-clamp-2">
-                      {recipe.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 mt-3">
-                  <Badge className={getCategoryColor(recipe.category)}>
-                    {recipe.category}
-                  </Badge>
-                  <Badge className={getDifficultyColor(recipe.difficulty)}>
-                    {recipe.difficulty}
-                  </Badge>
-                </div>
-
-                {/* Recipe Stats */}
-                <div className="grid grid-cols-3 gap-4 mb-4 text-center mt-4">
-                  <div>
-                    <Clock className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
-                    <div className="text-sm font-semibold text-foreground">
-                      {recipe.cookingTime}m
-                    </div>
-                  </div>
-                  <div>
-                    <Users className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
-                    <div className="text-sm font-semibold text-foreground">
-                      {recipe.servings}
-                    </div>
-                  </div>
-                  <div>
-                    <Flame className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
-                    <div className="text-sm font-semibold text-foreground">
-                      {recipe.calories}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Nutrition Info */}
-                <div className="bg-accent/50 rounded-lg p-3 mb-4">
-                  <div className="grid grid-cols-3 gap-2 text-xs text-center">
-                    <div>
-                      <div className="text-red-400 font-semibold">
-                        {recipe.protein}g
+        {filteredRecipes && filteredRecipes.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredRecipes.map((recipe: any) => (
+              <div
+                key={recipe._id}
+                className="bg-card/50 border border-border hover:border-primary/50 transition-colors rounded-lg overflow-hidden flex flex-col h-full"
+              >
+                {/* Recipe Image */}
+                {recipe.imageUrl && (
+                  <div className="relative h-32 overflow-hidden flex-shrink-0">
+                    <img
+                      src={recipe.imageUrl}
+                      alt={recipe.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    {recipe.isRecommended && (
+                      <div className="absolute top-2 right-2">
+                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
                       </div>
-                      <div className="text-muted-foreground">Protein</div>
+                    )}
+                  </div>
+                )}
+
+                <div className="p-4 pb-3 flex-1 flex flex-col">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-foreground text-lg mb-2 flex items-center gap-2">
+                        {recipe.title}
+                        {!recipe.imageUrl && recipe.isRecommended && (
+                          <Star className="h-4 w-4 text-yellow-400" />
+                        )}
+                      </h3>
+                      <p className="text-muted-foreground text-sm line-clamp-2">
+                        {recipe.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 mt-3">
+                    <Badge className={getCategoryColor(recipe.category)}>
+                      {recipe.category}
+                    </Badge>
+                    <Badge className={getDifficultyColor(recipe.difficulty)}>
+                      {recipe.difficulty}
+                    </Badge>
+                  </div>
+
+                  {/* Recipe Stats */}
+                  <div className="grid grid-cols-3 gap-4 mb-4 text-center mt-4">
+                    <div>
+                      <Clock className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
+                      <div className="text-sm font-semibold text-foreground">
+                        {recipe.cookingTime}m
+                      </div>
                     </div>
                     <div>
-                      <div className="text-blue-400 font-semibold">
-                        {recipe.carbs}g
+                      <Users className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
+                      <div className="text-sm font-semibold text-foreground">
+                        {recipe.servings}
                       </div>
-                      <div className="text-muted-foreground">Carbs</div>
                     </div>
                     <div>
-                      <div className="text-yellow-400 font-semibold">
-                        {recipe.fats}g
+                      <Flame className="h-4 w-4 text-muted-foreground mx-auto mb-1" />
+                      <div className="text-sm font-semibold text-foreground">
+                        {recipe.calories}
                       </div>
-                      <div className="text-muted-foreground">Fats</div>
                     </div>
                   </div>
-                </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-2 mt-auto">
-                  <Link href={`/recipes/${recipe._id}`} className="flex-1">
+                  {/* Nutrition Info */}
+                  <div className="bg-accent/50 rounded-lg p-3 mb-4">
+                    <div className="grid grid-cols-3 gap-2 text-xs text-center">
+                      <div>
+                        <div className="text-red-400 font-semibold">
+                          {recipe.protein}g
+                        </div>
+                        <div className="text-muted-foreground">Protein</div>
+                      </div>
+                      <div>
+                        <div className="text-blue-400 font-semibold">
+                          {recipe.carbs}g
+                        </div>
+                        <div className="text-muted-foreground">Carbs</div>
+                      </div>
+                      <div>
+                        <div className="text-yellow-400 font-semibold">
+                          {recipe.fats}g
+                        </div>
+                        <div className="text-muted-foreground">Fats</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 mt-auto">
+                    <Link href={`/recipes/${recipe._id}`} className="flex-1">
+                      <Button
+                        variant="outline"
+                        className="w-full border-border text-muted-foreground hover:bg-accent"
+                      >
+                        View
+                      </Button>
+                    </Link>
                     <Button
                       variant="outline"
-                      className="w-full border-border text-muted-foreground hover:bg-accent"
+                      size="sm"
+                      className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
+                      onClick={() =>
+                        handleToggleRecommended(recipe._id, recipe.isRecommended)
+                      }
+                      title={
+                        recipe.isRecommended
+                          ? "Remove from recommended"
+                          : "Mark as recommended"
+                      }
                     >
-                      View
+                      <Star
+                        className={`h-4 w-4 ${recipe.isRecommended ? "fill-current" : ""}`}
+                      />
                     </Button>
-                  </Link>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
-                    onClick={() =>
-                      handleToggleRecommended(recipe._id, recipe.isRecommended)
-                    }
-                    title={
-                      recipe.isRecommended
-                        ? "Remove from recommended"
-                        : "Mark as recommended"
-                    }
-                  >
-                    <Star
-                      className={`h-4 w-4 ${recipe.isRecommended ? "fill-current" : ""}`}
-                    />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
-                    onClick={() => handleEditRecipe(recipe._id)}
-                  >
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-red-500/50 text-red-400 hover:bg-red-500/10"
-                    onClick={() => handleDeleteRecipe(recipe._id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
+                      onClick={() => handleEditRecipe(recipe._id)}
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+                      onClick={() => handleDeleteRecipe(recipe._id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <Card className="bg-card border border-border">
+            <CardContent className="p-12 text-center">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center">
+                  <FileText className="w-10 h-10 text-muted-foreground" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {searchTerm || categoryFilter !== "all" || difficultyFilter !== "all" || recommendedFilter !== "all" 
+                      ? "No recipes found" 
+                      : "No recipes yet"
+                    }
+                  </h3>
+                  <p className="text-muted-foreground max-w-md">
+                    {searchTerm || categoryFilter !== "all" || difficultyFilter !== "all" || recommendedFilter !== "all"
+                      ? "Try adjusting your search criteria or filters to find more recipes."
+                      : "Get started by creating your first recipe to help members with their fitness journey."
+                    }
+                  </p>
+                </div>
+                {!(searchTerm || categoryFilter !== "all" || difficultyFilter !== "all" || recommendedFilter !== "all") && (
+                  <Button
+                    onClick={() => setShowAddModal(true)}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Your First Recipe
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         
         {/* Add Recipe Modal */}
