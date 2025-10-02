@@ -81,10 +81,10 @@ const ProductDetailPage = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading product details...</p>
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading product details...</p>
         </div>
       </div>
     );
@@ -97,22 +97,22 @@ const ProductDetailPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
 
       <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6">
-          <div className="flex items-center space-x-2 text-sm text-gray-400">
-            <Link href="/" className="hover:text-white transition-colors">
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">
               Home
             </Link>
             <span>/</span>
             <Link
               href="/marketplace"
-              className="hover:text-white transition-colors"
+              className="hover:text-foreground transition-colors"
             >
               Marketplace
             </Link>
@@ -121,14 +121,14 @@ const ProductDetailPage = () => {
                 <span>/</span>
                 <Link
                   href={`/marketplace?category=${product.category}`}
-                  className="hover:text-white transition-colors capitalize"
+                  className="hover:text-foreground transition-colors capitalize"
                 >
                   {product.category}
                 </Link>
               </>
             )}
             <span>/</span>
-            <span className="text-white font-medium truncate max-w-xs">
+            <span className="text-foreground font-medium truncate max-w-xs">
               {product?.name}
             </span>
           </div>
@@ -139,7 +139,7 @@ const ProductDetailPage = () => {
           <Button
             onClick={() => router.back()}
             variant="outline"
-            className="border-gray-600 text-white hover:bg-gray-800 hover:border-red-500 transition-all duration-200"
+            className="border-border text-foreground hover:bg-accent hover:border-primary transition-all duration-200"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Back to Marketplace
@@ -150,7 +150,7 @@ const ProductDetailPage = () => {
           {/* Product Images */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="aspect-square bg-gray-900 rounded-lg overflow-hidden">
+            <div className="aspect-square bg-card rounded-lg overflow-hidden">
               {product.imageUrl ? (
                 <Image
                   src={productImages[selectedImageIndex]}
@@ -162,7 +162,7 @@ const ProductDetailPage = () => {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <ShoppingCart className="h-20 w-20 text-gray-600" />
+                  <ShoppingCart className="h-20 w-20 text-muted-foreground" />
                 </div>
               )}
             </div>
@@ -176,8 +176,8 @@ const ProductDetailPage = () => {
                     onClick={() => setSelectedImageIndex(index)}
                     className={`w-18 h-18 rounded-lg overflow-hidden border-2 ${
                       index === selectedImageIndex
-                        ? "border-red-500"
-                        : "border-gray-700"
+                        ? "border-primary"
+                        : "border-border"
                     }`}
                   >
                     <Image
@@ -197,7 +197,7 @@ const ProductDetailPage = () => {
           <div className="space-y-6">
             {/* Category and Featured Badge */}
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full capitalize">
+              <span className="px-3 py-1 bg-accent text-foreground text-sm rounded-full capitalize">
                 {product.category}
               </span>
               {product.featured && (
@@ -209,16 +209,16 @@ const ProductDetailPage = () => {
             </div>
 
             {/* Product Name */}
-            <h1 className="text-3xl md:text-4xl font-bold text-white">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
               {product.name}
             </h1>
 
             {/* Price */}
             <div className="space-y-2">
-              <div className="text-4xl font-bold text-red-400">
+              <div className="text-4xl font-bold text-primary">
                 {formatPrice(product.price)}
               </div>
-              <div className="text-gray-400">
+              <div className="text-muted-foreground">
                 {product.stock > 0 ? (
                   <span className="text-green-400">
                     ✓ {product.stock} in stock
@@ -231,8 +231,8 @@ const ProductDetailPage = () => {
 
             {/* Description */}
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-white">Description</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <h3 className="text-lg font-semibold text-foreground">Description</h3>
+              <p className="text-muted-foreground leading-relaxed">
                 {product.description}
               </p>
             </div>
@@ -240,18 +240,18 @@ const ProductDetailPage = () => {
             {/* Quantity Selector */}
             {product.stock > 0 && (
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-white">Quantity</h3>
+                <h3 className="text-lg font-semibold text-foreground">Quantity</h3>
                 <div className="flex items-center gap-3">
                   <Button
                     onClick={() => handleQuantityChange(-1)}
                     disabled={quantity <= 1}
                     variant="outline"
                     size="sm"
-                    className="border-gray-600 text-white hover:bg-gray-800"
+                    className="border-border text-foreground hover:bg-accent"
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
-                  <span className="text-xl font-medium text-white px-4">
+                  <span className="text-xl font-medium text-foreground px-4">
                     {quantity}
                   </span>
                   <Button
@@ -259,7 +259,7 @@ const ProductDetailPage = () => {
                     disabled={quantity >= product.stock}
                     variant="outline"
                     size="sm"
-                    className="border-gray-600 text-white hover:bg-gray-800"
+                    className="border-border text-foreground hover:bg-accent"
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -274,7 +274,7 @@ const ProductDetailPage = () => {
                   <Button
                     onClick={handleAddToCart}
                     disabled={product.stock === 0 || addingToCart}
-                    className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 text-lg"
+                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-lg"
                   >
                     {addingToCart ? (
                       <>Adding to Cart...</>
@@ -287,13 +287,13 @@ const ProductDetailPage = () => {
                   </Button>
                   <Button
                     variant="outline"
-                    className="border-gray-600 text-white hover:bg-gray-800"
+                    className="border-border text-foreground hover:bg-accent"
                   >
                     <Heart className="h-5 w-5" />
                   </Button>
                   <Button
                     variant="outline"
-                    className="border-gray-600 text-white hover:bg-gray-800"
+                    className="border-border text-foreground hover:bg-accent"
                   >
                     <Share2 className="h-5 w-5" />
                   </Button>
@@ -301,7 +301,7 @@ const ProductDetailPage = () => {
               ) : (
                 <Button
                   asChild
-                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 text-lg"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 text-lg"
                 >
                   <Link href="/sign-in">
                     <ShoppingCart className="h-5 w-5 mr-2" />
@@ -315,7 +315,7 @@ const ProductDetailPage = () => {
                 <Button
                   asChild
                   variant="outline"
-                  className="w-full border-gray-600 text-white hover:bg-gray-800"
+                  className="w-full border-border text-foreground hover:bg-accent"
                 >
                   <Link href="/marketplace/cart">
                     View Cart ({cartSummary.totalItems} items)
@@ -325,18 +325,18 @@ const ProductDetailPage = () => {
             </div>
 
             {/* Product Features */}
-            <div className="space-y-4 pt-6 border-t border-gray-800">
+            <div className="space-y-4 pt-6 border-t border-border">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <Truck className="h-5 w-5 text-red-400" />
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Truck className="h-5 w-5 text-primary" />
                   <span>Free shipping on orders over Rs. 5,000</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <Shield className="h-5 w-5 text-red-400" />
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <Shield className="h-5 w-5 text-primary" />
                   <span>Secure payment</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <RotateCcw className="h-5 w-5 text-red-400" />
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <RotateCcw className="h-5 w-5 text-primary" />
                   <span>30-day returns</span>
                 </div>
               </div>
@@ -348,11 +348,11 @@ const ProductDetailPage = () => {
         {relatedProducts && relatedProducts.length > 1 && (
           <div className="mt-16">
             <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-foreground">
                 Related Products
               </h2>
-              <div className="flex-1 h-px bg-gradient-to-r from-red-500/50 to-transparent"></div>
-              <span className="text-gray-400 text-sm capitalize">
+              <div className="flex-1 h-px bg-gradient-to-r from-primary/50 to-transparent"></div>
+              <span className="text-muted-foreground text-sm capitalize">
                 {product?.category} Collection
               </span>
             </div>
@@ -367,9 +367,9 @@ const ProductDetailPage = () => {
                     href={`/marketplace/product/${item._id}`}
                     className="group"
                   >
-                    <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden hover:border-red-500/50 transition-all duration-300 h-full flex flex-col">
+                    <div className="bg-card/50 border border-border rounded-lg overflow-hidden hover:border-primary/50 transition-all duration-300 h-full flex flex-col">
                       {/* Product Image - Fixed Height */}
-                      <div className="h-48 bg-gray-800 relative overflow-hidden flex-shrink-0">
+                      <div className="h-48 bg-accent relative overflow-hidden flex-shrink-0">
                         {item.imageUrl ? (
                           <Image
                             src={item.imageUrl}
@@ -380,7 +380,7 @@ const ProductDetailPage = () => {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <ShoppingCart className="h-8 w-8 text-gray-600" />
+                            <ShoppingCart className="h-8 w-8 text-muted-foreground" />
                           </div>
                         )}
 
@@ -402,25 +402,25 @@ const ProductDetailPage = () => {
 
                       {/* Product Info - Flexible Height */}
                       <div className="p-4 flex-1 flex flex-col">
-                        <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-red-400 transition-colors min-h-[3.5rem]">
+                        <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors min-h-[3.5rem]">
                           {item.name}
                         </h3>
 
-                        <p className="text-gray-400 text-sm mb-4 line-clamp-2 flex-1 min-h-[2.5rem]">
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2 flex-1 min-h-[2.5rem]">
                           {item.description}
                         </p>
 
                         <div className="flex items-center justify-between mt-auto">
                           <div className="flex-1">
-                            <div className="text-xl font-bold text-white mb-1">
+                            <div className="text-xl font-bold text-foreground mb-1">
                               {formatPrice(item.price)}
                             </div>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                               {item.stock} in stock
                             </p>
                           </div>
 
-                          <div className="text-red-400 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                          <div className="text-primary opacity-0 group-hover:opacity-100 transition-opacity ml-2">
                             <ArrowLeft className="h-4 w-4 rotate-180" />
                           </div>
                         </div>
@@ -435,7 +435,7 @@ const ProductDetailPage = () => {
               <Button
                 asChild
                 variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-800 hover:border-red-500"
+                className="border-border text-foreground hover:bg-accent hover:border-primary"
               >
                 <Link href={`/marketplace?category=${product?.category}`}>
                   View All {product?.category?.charAt(0).toUpperCase()}
@@ -449,7 +449,7 @@ const ProductDetailPage = () => {
         {/* Floating Back Button for Mobile */}
         <Button
           onClick={() => router.back()}
-          className="fixed bottom-6 right-6 md:hidden bg-red-600 hover:bg-red-700 text-white rounded-full w-14 h-14 shadow-lg z-50"
+          className="fixed bottom-6 right-6 md:hidden bg-primary hover:bg-primary/90 text-primary-foreground rounded-full w-14 h-14 shadow-lg z-50"
         >
           <ArrowLeft className="h-6 w-6" />
         </Button>
