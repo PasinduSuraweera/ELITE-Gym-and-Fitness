@@ -89,7 +89,6 @@ export default function SettingsPage() {
                         >
                           <option value="light">Light Theme</option>
                           <option value="dark">Dark Theme</option>
-                          <option value="system">System Default</option>
                         </select>
                       )}
                     </div>

@@ -106,11 +106,11 @@ export default function BookSessionPage() {
 
   if (!trainerProfile) {
     return (
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
         <div className="flex items-center justify-center min-h-screen relative z-10">
-          <div className="text-white text-xl">Loading trainer information...</div>
+          <div className="text-foreground text-xl">Loading trainer information...</div>
         </div>
       </div>
     );
@@ -118,40 +118,40 @@ export default function BookSessionPage() {
 
   if (!userMembership || userMembership.status !== "active") {
     return (
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-black"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-background"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
         
         <div className="flex items-center justify-center min-h-screen relative z-10 p-4">
-          <Card className="bg-gray-900/50 backdrop-blur-md border border-gray-800 max-w-md">
+          <Card className="bg-card/50 backdrop-blur-md border border-border max-w-md">
             <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-6 bg-red-600/20 rounded-full flex items-center justify-center">
-                <User className="h-8 w-8 text-red-500" />
+              <div className="w-16 h-16 mx-auto mb-6 bg-primary/20 rounded-full flex items-center justify-center">
+                <User className="h-8 w-8 text-primary" />
               </div>
               
-              <h2 className="text-2xl font-bold text-white mb-3">Membership Required</h2>
-              <p className="text-gray-400 mb-6 leading-relaxed">
-                All trainer sessions are <span className="text-red-400 font-semibold">FREE</span> with an active membership.
+              <h2 className="text-2xl font-bold text-foreground mb-3">Membership Required</h2>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                All trainer sessions are <span className="text-primary font-semibold">FREE</span> with an active membership.
               </p>
               
               <div className="space-y-3 mb-6">
-                <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <CheckCircle className="h-4 w-4 text-green-500 dark:text-green-400 flex-shrink-0" />
                   <span>Unlimited personal training</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <CheckCircle className="h-4 w-4 text-green-500 dark:text-green-400 flex-shrink-0" />
                   <span>All group classes included</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-300">
-                  <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <CheckCircle className="h-4 w-4 text-green-500 dark:text-green-400 flex-shrink-0" />
                   <span>Full gym access</span>
                 </div>
               </div>
               
               <Button 
                 onClick={() => router.push("/membership")}
-                className="w-full bg-red-600 hover:bg-red-700 text-white mb-3"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground mb-3"
               >
                 Get Membership
               </Button>
@@ -159,7 +159,7 @@ export default function BookSessionPage() {
               <Button 
                 onClick={() => router.back()}
                 variant="outline"
-                className="w-full border-gray-600 text-gray-300 hover:bg-gray-800"
+                className="w-full border-border text-muted-foreground hover:bg-accent"
               >
                 Go Back
               </Button>
@@ -171,41 +171,41 @@ export default function BookSessionPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background" suppressHydrationWarning>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20" suppressHydrationWarning></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5" suppressHydrationWarning></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
       
       <div className="container mx-auto px-4 py-32 relative z-10" suppressHydrationWarning>
         {/* Header */}
         <div className="text-center mb-16" suppressHydrationWarning>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
             Book Your
-            <span className="text-red-500 block">Training Session</span>
+            <span className="text-primary block">Training Session</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Schedule your personalized training session with <span className="text-red-400 font-semibold">{trainerProfile.name}</span> 
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Schedule your personalized training session with <span className="text-primary font-semibold">{trainerProfile.name}</span> 
             and take your fitness journey to the next level
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Trainer Info */}
-          <Card className="bg-gradient-to-br from-gray-900/60 via-gray-900/40 to-gray-800/60 backdrop-blur-sm border border-red-500/20 hover:border-red-500/40 transition-colors">
+          <Card className="bg-card/50 backdrop-blur-sm border border-border hover:border-primary/40 transition-colors">
             <CardContent className="p-8">
               <div className="text-center mb-6">
                 <div className="relative inline-block">
                   <img
                     src={trainerProfile.profileImage || "/logo.png"}
                     alt={trainerProfile.name}
-                    className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-red-500/30"
+                    className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-primary/30"
                   />
                   <div className="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full flex items-center justify-center">
                     <CheckCircle className="h-4 w-4 text-white" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">{trainerProfile.name}</h3>
-                <div className="flex items-center justify-center gap-2 text-yellow-400 mb-4">
+                <h3 className="text-2xl font-bold text-foreground mb-2">{trainerProfile.name}</h3>
+                <div className="flex items-center justify-center gap-2 text-yellow-500 dark:text-yellow-400 mb-4">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -217,25 +217,25 @@ export default function BookSessionPage() {
                     ))}
                   </div>
                   <span className="font-semibold">{trainerProfile.rating?.toFixed(1) || "New"}</span>
-                  <span className="text-gray-400">({trainerProfile.totalReviews || 0} reviews)</span>
+                  <span className="text-muted-foreground">({trainerProfile.totalReviews || 0} reviews)</span>
                 </div>
               </div>
 
               <div className="space-y-4 mb-6">
-                <div className="flex items-center gap-3 p-3 bg-gray-800/30 rounded-lg">
-                  <Award className="h-5 w-5 text-red-400" />
+                <div className="flex items-center gap-3 p-3 bg-accent/30 rounded-lg">
+                  <Award className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="text-white font-medium">{trainerProfile.experience} experience</p>
-                    <p className="text-gray-400 text-sm">Professional Training</p>
+                    <p className="text-foreground font-medium">{trainerProfile.experience} experience</p>
+                    <p className="text-muted-foreground text-sm">Professional Training</p>
                   </div>
                 </div>
               </div>
 
               <div className="mb-6">
-                <p className="text-sm text-gray-400 mb-3 font-medium">Specializations:</p>
+                <p className="text-sm text-muted-foreground mb-3 font-medium">Specializations:</p>
                 <div className="flex flex-wrap gap-2">
                   {trainerProfile.specializations.map((spec: string, index: number) => (
-                    <Badge key={index} className="bg-red-600/20 text-red-300 border-red-500/30 hover:bg-red-600/30 transition-colors">
+                    <Badge key={index} className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30 transition-colors">
                       {spec.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </Badge>
                   ))}
@@ -243,9 +243,9 @@ export default function BookSessionPage() {
               </div>
 
               {trainerProfile.bio && (
-                <div className="border-t border-gray-700/50 pt-4">
-                  <p className="text-sm text-gray-400 mb-2 font-medium">About:</p>
-                  <p className="text-sm text-gray-300 leading-relaxed">{trainerProfile.bio}</p>
+                <div className="border-t border-border pt-4">
+                  <p className="text-sm text-muted-foreground mb-2 font-medium">About:</p>
+                  <p className="text-sm text-foreground leading-relaxed">{trainerProfile.bio}</p>
                 </div>
               )}
             </CardContent>
@@ -254,15 +254,15 @@ export default function BookSessionPage() {
           {/* Booking Form */}
           <div className="lg:col-span-2 space-y-6">
             {/* Session Type */}
-            <Card className="bg-gradient-to-br from-gray-900/60 via-gray-900/40 to-gray-800/60 backdrop-blur-sm border border-gray-700/50 hover:border-red-500/30 transition-colors">
+            <Card className="bg-card/50 backdrop-blur-sm border border-border hover:border-primary/30 transition-colors">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center">
-                    <User className="h-5 w-5 text-red-400" />
+                  <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                    <User className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white">Choose Session Type</h3>
-                    <p className="text-gray-400 text-sm">Select the training format that suits you best</p>
+                    <h3 className="text-xl font-semibold text-foreground">Choose Session Type</h3>
+                    <p className="text-muted-foreground text-sm">Select the training format that suits you best</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -270,36 +270,36 @@ export default function BookSessionPage() {
                     onClick={() => setSessionType("personal_training")}
                     className={`group p-6 rounded-xl border-2 transition-colors ${
                       sessionType === "personal_training"
-                        ? "border-red-500 bg-red-500/20"
-                        : "border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 hover:border-red-400/50"
+                        ? "border-primary bg-primary/20"
+                        : "border-border bg-card/50 hover:bg-accent/50 hover:border-primary/50"
                     }`}
                   >
                     <div className="text-center">
                       <div className={`w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                        sessionType === "personal_training" ? "bg-red-500/30" : "bg-gray-700/50"
+                        sessionType === "personal_training" ? "bg-primary/30" : "bg-accent/50"
                       }`}>
-                        <User className="h-6 w-6 text-white" />
+                        <User className="h-6 w-6 text-foreground" />
                       </div>
-                      <h4 className="font-semibold text-white mb-2">Personal Training</h4>
-                      <p className="text-sm text-gray-400">One-on-one focused session</p>
+                      <h4 className="font-semibold text-foreground mb-2">Personal Training</h4>
+                      <p className="text-sm text-muted-foreground">One-on-one focused session</p>
                     </div>
                   </button>
                   <button
                     onClick={() => setSessionType("group_class")}
                     className={`group p-6 rounded-xl border-2 transition-colors ${
                       sessionType === "group_class"
-                        ? "border-red-500 bg-red-500/20"
-                        : "border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 hover:border-red-400/50"
+                        ? "border-primary bg-primary/20"
+                        : "border-border bg-card/50 hover:bg-accent/50 hover:border-primary/50"
                     }`}
                   >
                     <div className="text-center">
                       <div className={`w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                        sessionType === "group_class" ? "bg-red-500/30" : "bg-gray-700/50"
+                        sessionType === "group_class" ? "bg-primary/30" : "bg-accent/50"
                       }`}>
-                        <Users className="h-6 w-6 text-white" />
+                        <Users className="h-6 w-6 text-foreground" />
                       </div>
-                      <h4 className="font-semibold text-white mb-2">Group Class</h4>
-                      <p className="text-sm text-gray-400">Train with others in a group</p>
+                      <h4 className="font-semibold text-foreground mb-2">Group Class</h4>
+                      <p className="text-sm text-muted-foreground">Train with others in a group</p>
                     </div>
                   </button>
                 </div>
@@ -307,15 +307,15 @@ export default function BookSessionPage() {
             </Card>
 
             {/* Date Selection */}
-            <Card className="bg-gradient-to-br from-gray-900/60 via-gray-900/40 to-gray-800/60 backdrop-blur-sm border border-gray-700/50 hover:border-red-500/30 transition-colors">
+            <Card className="bg-card/50 backdrop-blur-sm border border-border hover:border-primary/30 transition-colors">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center">
-                    <Calendar className="h-5 w-5 text-red-400" />
+                  <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                    <Calendar className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white">Select Date</h3>
-                    <p className="text-gray-400 text-sm">Choose your preferred session date</p>
+                    <h3 className="text-xl font-semibold text-foreground">Select Date</h3>
+                    <p className="text-muted-foreground text-sm">Choose your preferred session date</p>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-7 gap-3">
@@ -329,23 +329,23 @@ export default function BookSessionPage() {
                         onClick={() => setSelectedDate(date)}
                         className={`group p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 ${
                           isSelected
-                            ? "border-red-500 bg-red-500/20 shadow-lg shadow-red-500/25"
-                            : "border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 hover:border-red-400/50"
+                            ? "border-primary bg-primary/20 shadow-lg shadow-primary/25"
+                            : "border-border bg-card/50 hover:bg-accent/50 hover:border-primary/50"
                         }`}
                       >
                         <div className="text-center">
                           <p className={`text-xs font-medium mb-1 ${
-                            isSelected ? "text-red-300" : "text-gray-400 group-hover:text-gray-300"
+                            isSelected ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
                           }`}>
                             {dateObj.toLocaleDateString('en', { weekday: 'short' })}
                           </p>
                           <p className={`text-lg font-bold ${
-                            isSelected ? "text-white" : "text-gray-300 group-hover:text-white"
+                            isSelected ? "text-foreground" : "text-foreground group-hover:text-foreground"
                           }`}>
                             {dateObj.getDate()}
                           </p>
                           {isToday && (
-                            <div className="w-1 h-1 bg-green-400 rounded-full mx-auto mt-1"></div>
+                            <div className="w-1 h-1 bg-green-500 dark:bg-green-400 rounded-full mx-auto mt-1"></div>
                           )}
                         </div>
                       </button>
@@ -357,15 +357,15 @@ export default function BookSessionPage() {
 
             {/* Time Slots */}
             {selectedDate && (
-              <Card className="bg-gradient-to-br from-gray-900/60 via-gray-900/40 to-gray-800/60 backdrop-blur-sm border border-gray-700/50 hover:border-red-500/30 transition-all duration-300">
+              <Card className="bg-card/50 backdrop-blur-sm border border-border hover:border-primary/30 transition-all duration-300">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center">
-                      <Clock className="h-5 w-5 text-red-400" />
+                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                      <Clock className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-white">Available Times</h3>
-                      <p className="text-gray-400 text-sm">
+                      <h3 className="text-xl font-semibold text-foreground">Available Times</h3>
+                      <p className="text-muted-foreground text-sm">
                         {new Date(selectedDate).toLocaleDateString('en', { 
                           weekday: 'long', 
                           month: 'long', 
@@ -382,21 +382,21 @@ export default function BookSessionPage() {
                           onClick={() => setSelectedTimeSlot(slot)}
                           className={`group p-4 rounded-xl border-2 transition-colors ${
                             selectedTimeSlot === slot
-                              ? "border-red-500 bg-red-500/20"
-                              : "border-gray-600 bg-gray-800/50 hover:bg-gray-700/50 hover:border-red-400/50"
+                              ? "border-primary bg-primary/20"
+                              : "border-border bg-card/50 hover:bg-accent/50 hover:border-primary/50"
                           }`}
                         >
                           <div className="text-center">
                             <Clock className={`h-5 w-5 mx-auto mb-2 ${
-                              selectedTimeSlot === slot ? "text-red-400" : "text-gray-400 group-hover:text-red-400"
+                              selectedTimeSlot === slot ? "text-primary" : "text-muted-foreground group-hover:text-primary"
                             }`} />
                             <p className={`text-sm font-semibold ${
-                              selectedTimeSlot === slot ? "text-white" : "text-gray-300 group-hover:text-white"
+                              selectedTimeSlot === slot ? "text-foreground" : "text-foreground group-hover:text-foreground"
                             }`}>
                               {slot.startTime}
                             </p>
                             <p className={`text-xs ${
-                              selectedTimeSlot === slot ? "text-red-300" : "text-gray-500 group-hover:text-gray-400"
+                              selectedTimeSlot === slot ? "text-primary" : "text-muted-foreground group-hover:text-muted-foreground"
                             }`}>
                               {slot.endTime}
                             </p>
@@ -406,11 +406,11 @@ export default function BookSessionPage() {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <div className="w-16 h-16 bg-gray-800/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Clock className="h-8 w-8 text-gray-600" />
+                      <div className="w-16 h-16 bg-accent/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Clock className="h-8 w-8 text-muted-foreground" />
                       </div>
-                      <h4 className="text-lg font-medium text-gray-300 mb-2">No Available Slots</h4>
-                      <p className="text-gray-500">Try selecting a different date</p>
+                      <h4 className="text-lg font-medium text-foreground mb-2">No Available Slots</h4>
+                      <p className="text-muted-foreground">Try selecting a different date</p>
                     </div>
                   )}
                 </CardContent>
@@ -418,24 +418,24 @@ export default function BookSessionPage() {
             )}
 
             {/* Notes */}
-            <Card className="bg-gradient-to-br from-gray-900/60 via-gray-900/40 to-gray-800/60 backdrop-blur-sm border border-gray-700/50 hover:border-red-500/30 transition-colors">
+            <Card className="bg-card/50 backdrop-blur-sm border border-border hover:border-primary/30 transition-colors">
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center">
-                    <User className="h-5 w-5 text-red-400" />
+                  <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                    <User className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white">Session Notes</h3>
-                    <p className="text-gray-400 text-sm">Optional - Share your goals or requirements</p>
+                    <h3 className="text-xl font-semibold text-foreground">Session Notes</h3>
+                    <p className="text-muted-foreground text-sm">Optional - Share your goals or requirements</p>
                   </div>
                 </div>
                 <textarea
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Tell your trainer about your fitness goals, any injuries, or specific areas you'd like to focus on..."
-                  className="w-full p-4 bg-gray-800/30 border border-gray-600/50 rounded-xl text-white placeholder-gray-500 resize-none h-32 focus:outline-none focus:border-red-500/50 focus:ring-2 focus:ring-red-500/20 transition-all"
+                  className="w-full p-4 bg-card border border-border rounded-xl text-foreground placeholder-muted-foreground resize-none h-32 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 />
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   {notes.length}/500 characters
                 </p>
               </CardContent>
@@ -443,33 +443,33 @@ export default function BookSessionPage() {
 
             {/* Booking Summary & Button */}
             {selectedTimeSlot && (
-              <Card className="bg-gradient-to-br from-red-900/20 via-gray-900/60 to-gray-800/60 backdrop-blur-sm border border-red-500/30">
+              <Card className="bg-card/50 backdrop-blur-sm border border-primary/30">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-red-600/30 rounded-lg flex items-center justify-center">
-                      <CheckCircle className="h-5 w-5 text-red-400" />
+                    <div className="w-10 h-10 bg-primary/30 rounded-lg flex items-center justify-center">
+                      <CheckCircle className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-white">Booking Summary</h3>
-                      <p className="text-gray-400 text-sm">Review your session details</p>
+                      <h3 className="text-xl font-semibold text-foreground">Booking Summary</h3>
+                      <p className="text-muted-foreground text-sm">Review your session details</p>
                     </div>
                   </div>
                   
                   <div className="space-y-4 mb-8">
-                    <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-accent/30 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <User className="h-5 w-5 text-gray-400" />
-                        <span className="text-gray-300">Trainer</span>
+                        <User className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-foreground">Trainer</span>
                       </div>
-                      <span className="text-white font-medium">{trainerProfile.name}</span>
+                      <span className="text-foreground font-medium">{trainerProfile.name}</span>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-accent/30 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Calendar className="h-5 w-5 text-gray-400" />
-                        <span className="text-gray-300">Date</span>
+                        <Calendar className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-foreground">Date</span>
                       </div>
-                      <span className="text-white font-medium">
+                      <span className="text-foreground font-medium">
                         {new Date(selectedDate).toLocaleDateString('en', { 
                           weekday: 'short',
                           month: 'short', 
@@ -478,35 +478,35 @@ export default function BookSessionPage() {
                       </span>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-accent/30 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Clock className="h-5 w-5 text-gray-400" />
-                        <span className="text-gray-300">Time</span>
+                        <Clock className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-foreground">Time</span>
                       </div>
-                      <span className="text-white font-medium">{selectedTimeSlot.startTime} - {selectedTimeSlot.endTime}</span>
+                      <span className="text-foreground font-medium">{selectedTimeSlot.startTime} - {selectedTimeSlot.endTime}</span>
                     </div>
                     
-                    <div className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-accent/30 rounded-lg">
                       <div className="flex items-center gap-3">
                         {sessionType === "personal_training" ? (
-                          <User className="h-5 w-5 text-gray-400" />
+                          <User className="h-5 w-5 text-muted-foreground" />
                         ) : (
-                          <Users className="h-5 w-5 text-gray-400" />
+                          <Users className="h-5 w-5 text-muted-foreground" />
                         )}
-                        <span className="text-gray-300">Type</span>
+                        <span className="text-foreground">Type</span>
                       </div>
-                      <span className="text-white font-medium capitalize">{sessionType.replace('_', ' ')}</span>
+                      <span className="text-foreground font-medium capitalize">{sessionType.replace('_', ' ')}</span>
                     </div>
                   </div>
                   
                   <Button
                     onClick={handleBooking}
                     disabled={isBooking}
-                    className="w-full bg-red-600 hover:bg-red-700 text-white text-lg py-4 rounded-xl font-semibold disabled:opacity-50"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-4 rounded-xl font-semibold disabled:opacity-50"
                   >
                     {isBooking ? (
                       <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
                         Processing...
                       </div>
                     ) : (
