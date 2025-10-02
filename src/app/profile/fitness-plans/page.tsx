@@ -3,7 +3,8 @@
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { UserLayout } from "@/components/UserLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,8 +17,22 @@ import {
 } from "@/components/ui/accordion";
 
 const FitnessPlansPage = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
   const userId = user?.id as string;
+  const [mounted, setMounted] = useState(false);
+
+  // Redirect to home if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+  }, [isLoaded, user, router]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const allPlans = useQuery(api.plans.getUserPlans, { userId });
   const [selectedPlanId, setSelectedPlanId] = useState<null | string>(null);
@@ -27,6 +42,27 @@ const FitnessPlansPage = () => {
   const currentPlan = selectedPlanId
     ? allPlans?.find((plan) => plan._id === selectedPlanId)
     : activePlan;
+
+  // Show loading state during auth check or hydration
+  if (!mounted || !isLoaded) {
+    return (
+      <UserLayout 
+        title="Fitness Plans" 
+        subtitle="Manage your workout routines and training programs"
+      >
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-32 bg-card rounded-lg"></div>
+          </div>
+        </div>
+      </UserLayout>
+    );
+  }
+
+  // Don't render anything if user is not authenticated (will redirect)
+  if (!user) {
+    return null;
+  }
 
   return (
     <UserLayout 

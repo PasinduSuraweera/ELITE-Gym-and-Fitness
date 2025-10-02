@@ -4,6 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { UserLayout } from "@/components/UserLayout";
 import ProfileHeader from "@/components/ProfileHeader";
 import NoFitnessPlan from "@/components/NoFitnessPlan";
@@ -14,12 +15,21 @@ import { Calendar, Shield, Activity, Target, Clock } from "lucide-react";
 import { useMembershipExpiryCheck, getMembershipStatusInfo, formatMembershipDate } from "@/lib/membership-utils";
 
 const ProfilePage = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
   const userId = user?.id as string;
   const [mounted, setMounted] = useState(false);
   
   // Auto-check for expired memberships
   useMembershipExpiryCheck();
+
+  // Redirect to home if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+  }, [isLoaded, user, router]);
 
   const allPlans = useQuery(api.plans.getUserPlans, { userId });
   const userRole = useQuery(api.users.getCurrentUserRole);
@@ -46,6 +56,27 @@ const ProfilePage = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Show loading state during auth check or hydration
+  if (!mounted || !isLoaded) {
+    return (
+      <UserLayout 
+        title="Profile Overview" 
+        subtitle="Manage your account and view your fitness journey"
+      >
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-32 bg-card rounded-lg"></div>
+          </div>
+        </div>
+      </UserLayout>
+    );
+  }
+
+  // Don't render anything if user is not authenticated (will redirect)
+  if (!user) {
+    return null;
+  }
 
   const handleCancelMembership = async () => {
     if (!user?.id) return;
@@ -335,21 +366,7 @@ const ProfilePage = () => {
     </>
   );
 
-  // Show loading state during hydration
-  if (!mounted) {
-    return (
-      <UserLayout 
-        title="Profile Overview" 
-        subtitle="Manage your account and view your fitness journey"
-      >
-        <div className="space-y-6">
-          <div className="animate-pulse">
-            <div className="h-32 bg-card rounded-lg"></div>
-          </div>
-        </div>
-      </UserLayout>
-    );
-  }
+
 
   return (
     <UserLayout 

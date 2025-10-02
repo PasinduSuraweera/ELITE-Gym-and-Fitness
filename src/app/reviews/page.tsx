@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useQuery, useMutation } from "convex/react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
@@ -18,15 +18,29 @@ interface ReviewFormData {
 }
 
 export default function ReviewsPage() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const bookingIdParam = searchParams.get('booking');
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
   const [reviewForm, setReviewForm] = useState<ReviewFormData>({
     rating: 5,
     comment: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Redirect to home if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+  }, [isLoaded, user, router]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Get user's bookings (completed ones can be reviewed)
   const userBookings = useQuery(api.bookings.getUserBookings,
@@ -103,17 +117,25 @@ export default function ReviewsPage() {
     });
   };
 
-  if (!user) {
+  // Show loading state during auth check or hydration
+  if (!mounted || !isLoaded) {
     return (
       <UserLayout 
         title="Reviews & Feedback"
-        subtitle="Please sign in to view and write reviews"
+        subtitle="Share your experience and help others choose their trainer"
       >
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="text-foreground text-xl">Please sign in to view reviews.</div>
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-32 bg-card rounded-lg"></div>
+          </div>
         </div>
       </UserLayout>
     );
+  }
+
+  // Don't render anything if user is not authenticated (will redirect)
+  if (!user) {
+    return null;
   }
 
   return (

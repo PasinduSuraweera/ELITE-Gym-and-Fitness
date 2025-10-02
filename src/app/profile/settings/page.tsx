@@ -6,10 +6,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Palette, User, Bell, Shield, Sun, Moon, Monitor } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
+
+  // Redirect to home if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+  }, [isLoaded, user, router]);
 
   useEffect(() => {
     setMounted(true);
@@ -18,6 +30,27 @@ export default function SettingsPage() {
   const handleThemeChange = (value: string) => {
     setTheme(value);
   };
+
+  // Show loading state during auth check or hydration
+  if (!mounted || !isLoaded) {
+    return (
+      <UserLayout 
+        title="Settings" 
+        subtitle="Manage your account preferences and settings"
+      >
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-32 bg-card rounded-lg"></div>
+          </div>
+        </div>
+      </UserLayout>
+    );
+  }
+
+  // Don't render anything if user is not authenticated (will redirect)
+  if (!user) {
+    return null;
+  }
 
   return (
     <UserLayout 

@@ -3,6 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import { useRouter } from "next/navigation";
 import { UserLayout } from "@/components/UserLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,8 +11,17 @@ import { Package, Truck, Calendar, CreditCard, MapPin, Phone, Mail } from "lucid
 import { useState, useEffect } from "react";
 
 const OrdersPage = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
+
+  // Redirect to home if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+  }, [isLoaded, user, router]);
 
   // Get user orders
   const userOrders = useQuery(
@@ -64,8 +74,8 @@ const OrdersPage = () => {
     }
   };
 
-  // Show loading state during hydration
-  if (!mounted) {
+  // Show loading state during hydration or auth check
+  if (!mounted || !isLoaded) {
     return (
       <UserLayout 
         title="Order History" 
@@ -73,11 +83,16 @@ const OrdersPage = () => {
       >
         <div className="space-y-6">
           <div className="animate-pulse">
-            <div className="h-32 bg-gray-800 rounded-lg"></div>
+            <div className="h-32 bg-card rounded-lg"></div>
           </div>
         </div>
       </UserLayout>
     );
+  }
+
+  // Don't render anything if user is not authenticated (will redirect)
+  if (!user) {
+    return null;
   }
 
   return (

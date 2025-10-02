@@ -4,14 +4,24 @@ import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { UserLayout } from "@/components/UserLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Receipt, Download } from "lucide-react";
 
 const PaymentSlipsPage = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
+
+  // Redirect to home if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+  }, [isLoaded, user, router]);
   
   // Get user's own payroll records
   const userPayrollRecords = useQuery(
@@ -25,6 +35,27 @@ const PaymentSlipsPage = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Show loading state during auth check or hydration
+  if (!mounted || !isLoaded) {
+    return (
+      <UserLayout 
+        title="Payment Slips" 
+        subtitle="Download your salary and payment records"
+      >
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-32 bg-card rounded-lg"></div>
+          </div>
+        </div>
+      </UserLayout>
+    );
+  }
+
+  // Don't render anything if user is not authenticated (will redirect)
+  if (!user) {
+    return null;
+  }
 
   // Format currency
   const formatCurrency = (amount: number) => {

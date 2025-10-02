@@ -7,14 +7,52 @@ import { Calendar, Clock, Star, User } from "lucide-react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function TrainingSessionsPage() {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  // Redirect to home if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !user) {
+      router.push("/");
+      return;
+    }
+  }, [isLoaded, user, router]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const userBookings = useQuery(
     api.bookings.getUserBookings, 
     user?.id ? { userClerkId: user.id } : "skip"
   );
   const cancelBooking = useMutation(api.bookings.cancelBooking);
+
+  // Show loading state during auth check or hydration
+  if (!mounted || !isLoaded) {
+    return (
+      <UserLayout 
+        title="Training Sessions" 
+        subtitle="Manage your training sessions and bookings"
+      >
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-32 bg-card rounded-lg"></div>
+          </div>
+        </div>
+      </UserLayout>
+    );
+  }
+
+  // Don't render anything if user is not authenticated (will redirect)
+  if (!user) {
+    return null;
+  }
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
