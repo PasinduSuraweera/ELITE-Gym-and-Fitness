@@ -11,12 +11,12 @@ import {
   ShoppingBag, 
   TrendingUp, 
   ChefHat,
-  Calendar,
   DollarSign,
   Award,
   Activity,
   Clock,
-  Star
+  Star,
+  Package
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
@@ -31,6 +31,8 @@ export default function AdminDashboard() {
   const allMemberships = useQuery(api.memberships.getAllMemberships, isSignedIn ? undefined : "skip");
   const membershipPlans = useQuery(api.memberships.getMembershipPlans, isSignedIn ? undefined : "skip");
   const activeTrainers = useQuery(api.trainerProfiles.getActiveTrainers, isSignedIn ? {} : "skip");
+  const inventoryStats = useQuery(api.inventory.getInventoryStats, isSignedIn ? undefined : "skip");
+  const maintenanceAlerts = useQuery(api.inventory.getMaintenanceAlerts, isSignedIn ? undefined : "skip");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -196,73 +198,116 @@ export default function AdminDashboard() {
       subtitle="Here's what's happening at Elite Gym today"
     >
       {/* Enhanced Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
-        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-muted-foreground text-sm">Total Users</p>
-              <p className="text-3xl font-bold text-foreground">{totalUsers}</p>
-              <p className="text-muted-foreground text-xs mt-1">{userCount} members, {trainerCount} trainers</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-muted-foreground text-sm font-medium">Total Users</p>
+              <p className="text-3xl font-bold text-foreground mt-2">{totalUsers}</p>
+              <p className="text-muted-foreground text-xs mt-2 leading-relaxed">
+                {userCount} members, {trainerCount} trainers
+              </p>
             </div>
-            <Users className="h-8 w-8 text-primary" />
+            <div className="ml-4 flex-shrink-0">
+              <Users className="h-10 w-10 text-primary" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-muted-foreground text-sm">Active Trainers</p>
-              <p className="text-3xl font-bold text-foreground">{activeTrainerCount}</p>
-              <div className="flex items-center gap-1 mt-1">
+            <div className="flex-1 min-w-0">
+              <p className="text-muted-foreground text-sm font-medium">Active Trainers</p>
+              <p className="text-3xl font-bold text-foreground mt-2">{activeTrainerCount}</p>
+              <div className="flex items-center gap-1 mt-2">
                 <Star className="h-3 w-3 text-yellow-500 fill-current" />
-                <p className="text-yellow-400 text-xs">{averageTrainerRating.toFixed(1)} avg rating</p>
+                <p className="text-yellow-400 text-xs font-medium">{averageTrainerRating.toFixed(1)} avg rating</p>
               </div>
             </div>
-            <UserCheck className="h-8 w-8 text-blue-400" />
+            <div className="ml-4 flex-shrink-0">
+              <UserCheck className="h-10 w-10 text-blue-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-muted-foreground text-sm">Active Memberships</p>
-              <p className="text-3xl font-bold text-foreground">{activeMemberships}</p>
-              <p className="text-green-400 text-xs mt-1">{((activeMemberships/totalMemberships)*100 || 0).toFixed(1)}% active rate</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-muted-foreground text-sm font-medium">Active Memberships</p>
+              <p className="text-3xl font-bold text-foreground mt-2">{activeMemberships}</p>
+              <p className="text-green-400 text-xs mt-2 font-medium">
+                {((activeMemberships/totalMemberships)*100 || 0).toFixed(1)}% active rate
+              </p>
             </div>
-            <Activity className="h-8 w-8 text-green-400" />
+            <div className="ml-4 flex-shrink-0">
+              <Activity className="h-10 w-10 text-green-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-muted-foreground text-sm">Healthy Recipes</p>
-              <p className="text-3xl font-bold text-foreground">{totalRecipes}</p>
-              <p className="text-orange-400 text-xs mt-1">{recommendedRecipesCount} featured</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-muted-foreground text-sm font-medium">Equipment</p>
+              <p className="text-3xl font-bold text-foreground mt-2">{inventoryStats?.totalItems || 0}</p>
+              <p className="text-cyan-400 text-xs mt-2 leading-relaxed">
+                {inventoryStats?.availableQuantity || 0} available
+                {(inventoryStats?.lowStockItems || 0) > 0 && (
+                  <span className="text-red-400 block mt-1">• {inventoryStats?.lowStockItems} low stock</span>
+                )}
+              </p>
             </div>
-            <ChefHat className="h-8 w-8 text-orange-400" />
+            <div className="ml-4 flex-shrink-0">
+              <Package className="h-10 w-10 text-cyan-400" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Second Row of Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 min-w-0">
+              <p className="text-muted-foreground text-sm font-medium">Healthy Recipes</p>
+              <p className="text-3xl font-bold text-foreground mt-2">{totalRecipes}</p>
+              <p className="text-orange-400 text-xs mt-2 font-medium">
+                {recommendedRecipesCount} featured
+              </p>
+            </div>
+            <div className="ml-4 flex-shrink-0">
+              <ChefHat className="h-10 w-10 text-orange-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-muted-foreground text-sm">Marketplace</p>
-              <p className="text-3xl font-bold text-foreground">{marketplaceStats?.activeItems || 0}</p>
-              <p className="text-purple-400 text-xs mt-1">{formatCurrency(marketplaceStats?.totalValue || 0)} value</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-muted-foreground text-sm font-medium">Marketplace</p>
+              <p className="text-3xl font-bold text-foreground mt-2">{marketplaceStats?.activeItems || 0}</p>
+              <p className="text-purple-400 text-xs mt-2 font-medium">
+                {formatCurrency(marketplaceStats?.totalValue || 0)} value
+              </p>
             </div>
-            <ShoppingBag className="h-8 w-8 text-purple-400" />
+            <div className="ml-4 flex-shrink-0">
+              <ShoppingBag className="h-10 w-10 text-purple-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-card/50 border border-border rounded-lg p-6 hover:border-primary/30 transition-all duration-300">
+        <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-muted-foreground text-sm">Monthly Revenue</p>
-              <p className="text-3xl font-bold text-foreground">{formatCurrency(monthlyRevenue)}</p>
-              <p className="text-yellow-400 text-xs mt-1">+{revenueGrowth}% this month</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-muted-foreground text-sm font-medium">Monthly Revenue</p>
+              <p className="text-3xl font-bold text-foreground mt-2">{formatCurrency(monthlyRevenue)}</p>
+              <p className="text-yellow-400 text-xs mt-2 font-medium">
+                +{revenueGrowth}% this month
+              </p>
             </div>
-            <DollarSign className="h-8 w-8 text-yellow-400" />
+            <div className="ml-4 flex-shrink-0">
+              <DollarSign className="h-10 w-10 text-yellow-400" />
+            </div>
           </div>
         </div>
       </div>
@@ -289,6 +334,26 @@ export default function AdminDashboard() {
                   {expiredMemberships}
                 </span>
               </div>
+              {maintenanceAlerts && (maintenanceAlerts.overdue.length > 0 || maintenanceAlerts.lowStock.length > 0) && (
+                <>
+                  {maintenanceAlerts.overdue.length > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground text-sm">Overdue Maintenance</span>
+                      <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs font-medium">
+                        {maintenanceAlerts.overdue.length}
+                      </span>
+                    </div>
+                  )}
+                  {maintenanceAlerts.lowStock.length > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground text-sm">Low Stock Items</span>
+                      <span className="bg-orange-500/20 text-orange-400 px-2 py-1 rounded-full text-xs font-medium">
+                        {maintenanceAlerts.lowStock.length}
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -19,6 +19,7 @@ import type * as blogComments from "../blogComments.js";
 import type * as bookings from "../bookings.js";
 import type * as cart from "../cart.js";
 import type * as http from "../http.js";
+import type * as inventory from "../inventory.js";
 import type * as marketplace from "../marketplace.js";
 import type * as memberships from "../memberships.js";
 import type * as migrations from "../migrations.js";
@@ -49,6 +50,7 @@ declare const fullApi: ApiFromModules<{
   bookings: typeof bookings;
   cart: typeof cart;
   http: typeof http;
+  inventory: typeof inventory;
   marketplace: typeof marketplace;
   memberships: typeof memberships;
   migrations: typeof migrations;

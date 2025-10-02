@@ -751,4 +751,93 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_generated_by", ["generatedBy"])
     .index("by_generated_date", ["generatedAt"]),
+
+  // Inventory Management for Gym Equipment
+  inventory: defineTable({
+    name: v.string(),
+    description: v.optional(v.string()),
+    category: v.union(
+      v.literal("cardio"),
+      v.literal("strength"),
+      v.literal("free_weights"),
+      v.literal("functional"),
+      v.literal("accessories"),
+      v.literal("safety"),
+      v.literal("cleaning"),
+      v.literal("maintenance")
+    ),
+    manufacturer: v.optional(v.string()),
+    model: v.optional(v.string()),
+    serialNumber: v.optional(v.string()),
+    
+    // Quantity and Availability
+    totalQuantity: v.number(),
+    availableQuantity: v.number(),
+    inUseQuantity: v.number(),
+    maintenanceQuantity: v.number(),
+    
+    // Condition and Status
+    condition: v.union(
+      v.literal("excellent"),
+      v.literal("good"),
+      v.literal("fair"),
+      v.literal("poor"),
+      v.literal("out_of_order")
+    ),
+    status: v.union(
+      v.literal("active"),
+      v.literal("inactive"),
+      v.literal("maintenance"),
+      v.literal("retired")
+    ),
+    
+    // Purchase Information
+    purchaseDate: v.optional(v.number()),
+    purchasePrice: v.optional(v.number()),
+    vendor: v.optional(v.string()),
+    warrantyExpiry: v.optional(v.number()),
+    
+    // Location and Assignment
+    location: v.optional(v.string()),
+    zone: v.optional(v.string()),
+    assignedTo: v.optional(v.id("users")),
+    
+    // Maintenance
+    lastMaintenanceDate: v.optional(v.number()),
+    nextMaintenanceDate: v.optional(v.number()),
+    maintenanceNotes: v.optional(v.string()),
+    
+    // Alerts and Thresholds
+    minQuantityAlert: v.optional(v.number()),
+    maxCapacity: v.optional(v.number()),
+    
+    // Usage Tracking
+    usageCount: v.optional(v.number()),
+    lastUsedDate: v.optional(v.number()),
+    
+    // Images and Documentation
+    imageUrl: v.optional(v.string()),
+    manualUrl: v.optional(v.string()),
+    
+    // Tags for flexible categorization
+    tags: v.optional(v.array(v.string())),
+    
+    // Notes and Additional Info
+    notes: v.optional(v.string()),
+    
+    // Metadata
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    createdBy: v.id("users"),
+    updatedBy: v.id("users"),
+  })
+    .index("by_category", ["category"])
+    .index("by_status", ["status"])
+    .index("by_condition", ["condition"])
+    .index("by_location", ["location"])
+    .index("by_zone", ["zone"])
+    .index("by_assigned_to", ["assignedTo"])
+    .index("by_created_date", ["createdAt"])
+    .index("by_maintenance_date", ["nextMaintenanceDate"])
+    .index("by_purchase_date", ["purchaseDate"]),
 });
