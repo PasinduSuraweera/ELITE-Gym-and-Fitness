@@ -56,10 +56,10 @@ export default function BecomeTrainerPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-black text-white pt-24 pb-16 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground pt-24 pb-16 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Please Sign In</h1>
-          <p className="text-gray-400">You need to be signed in to apply as a trainer</p>
+          <h1 className="text-3xl font-bold mb-4 text-foreground">Please Sign In</h1>
+          <p className="text-muted-foreground">You need to be signed in to apply as a trainer</p>
         </div>
       </div>
     );
@@ -115,25 +115,25 @@ export default function BecomeTrainerPage() {
     const statusInfo = getStatusMessage();
 
     return (
-      <div className="min-h-screen bg-black text-white pt-24 pb-16">
+      <div className="min-h-screen bg-background text-foreground pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className={`bg-gradient-to-br ${statusInfo.bgColor} border ${statusInfo.borderColor} rounded-lg p-8 text-center`}>
               <div className="mb-6">
                 {getStatusIcon()}
               </div>
-              <h1 className="text-3xl font-bold text-white mb-4">{statusInfo.title}</h1>
-              <p className="text-gray-300 mb-6 leading-relaxed">{statusInfo.description}</p>
+              <h1 className="text-3xl font-bold text-foreground mb-4">{statusInfo.title}</h1>
+              <p className="text-muted-foreground mb-6 leading-relaxed">{statusInfo.description}</p>
               
-              <div className="bg-black/30 rounded-lg p-4 mb-6">
-                <p className="text-sm text-gray-400 mb-2">Application submitted on:</p>
-                <p className="text-white font-medium">{formatDate(existingApplication.submittedAt)}</p>
+              <div className="bg-card/30 border border-border rounded-lg p-4 mb-6">
+                <p className="text-sm text-muted-foreground mb-2">Application submitted on:</p>
+                <p className="text-foreground font-medium">{formatDate(existingApplication.submittedAt)}</p>
               </div>
 
               {existingApplication.notes && (
-                <div className="bg-black/30 rounded-lg p-4 mb-6">
-                  <p className="text-sm text-gray-400 mb-2">Admin Notes:</p>
-                  <p className="text-white">{existingApplication.notes}</p>
+                <div className="bg-card/30 border border-border rounded-lg p-4 mb-6">
+                  <p className="text-sm text-muted-foreground mb-2">Admin Notes:</p>
+                  <p className="text-foreground">{existingApplication.notes}</p>
                 </div>
               )}
             </div>
@@ -144,63 +144,63 @@ export default function BecomeTrainerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-16">
+    <div className="min-h-screen bg-background text-foreground pt-24 pb-16">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full mb-6">
-              <Dumbbell className="h-8 w-8 text-white" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary to-primary/80 rounded-full mb-6">
+              <Dumbbell className="h-8 w-8 text-primary-foreground" />
             </div>
-            <h1 className="text-4xl font-bold text-white mb-4">Become a Trainer</h1>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <h1 className="text-4xl font-bold text-foreground mb-4">Become a Trainer</h1>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Join our elite team of fitness professionals and help members achieve their fitness goals. 
               Share your expertise and passion for fitness with our community.
             </p>
           </div>
 
           {/* Requirements */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 mb-8">
-            <h2 className="text-xl font-semibold text-white mb-4">Requirements</h2>
+          <div className="bg-card/50 border border-border rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold text-foreground mb-4">Requirements</h2>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-white font-medium">Certified Fitness Professional</p>
-                  <p className="text-gray-400 text-sm">Valid fitness certification required</p>
+                  <p className="text-foreground font-medium">Certified Fitness Professional</p>
+                  <p className="text-muted-foreground text-sm">Valid fitness certification required</p>
                 </div>
               </div>
               <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-white font-medium">Experience in Training</p>
-                  <p className="text-gray-400 text-sm">Minimum 1 year of training experience</p>
+                  <p className="text-foreground font-medium">Experience in Training</p>
+                  <p className="text-muted-foreground text-sm">Minimum 1 year of training experience</p>
                 </div>
               </div>
               <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-white font-medium">Passion for Fitness</p>
-                  <p className="text-gray-400 text-sm">Genuine desire to help others succeed</p>
+                  <p className="text-foreground font-medium">Passion for Fitness</p>
+                  <p className="text-muted-foreground text-sm">Genuine desire to help others succeed</p>
                 </div>
               </div>
               <div className="flex items-start">
-                <CheckCircle className="h-5 w-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-white font-medium">Professional Attitude</p>
-                  <p className="text-gray-400 text-sm">Excellent communication skills</p>
+                  <p className="text-foreground font-medium">Professional Attitude</p>
+                  <p className="text-muted-foreground text-sm">Excellent communication skills</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Application Form */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-white mb-6">Application Form</h2>
+          <div className="bg-card/50 border border-border rounded-lg p-8">
+            <h2 className="text-2xl font-semibold text-foreground mb-6">Application Form</h2>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="experience" className="block text-sm font-medium text-white mb-2">
+                <label htmlFor="experience" className="block text-sm font-medium text-foreground mb-2">
                   Training Experience *
                 </label>
                 <textarea
@@ -208,14 +208,14 @@ export default function BecomeTrainerPage() {
                   value={formData.experience}
                   onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                   placeholder="Describe your fitness and training experience. Include years of experience, types of training you specialize in, and any notable achievements..."
-                  className="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full p-4 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   rows={4}
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="certifications" className="block text-sm font-medium text-white mb-2">
+                <label htmlFor="certifications" className="block text-sm font-medium text-foreground mb-2">
                   Certifications & Qualifications *
                 </label>
                 <textarea
@@ -223,14 +223,14 @@ export default function BecomeTrainerPage() {
                   value={formData.certifications}
                   onChange={(e) => setFormData({ ...formData, certifications: e.target.value })}
                   placeholder="List your fitness certifications, education, and any relevant qualifications. Include certification body, date obtained, and current status..."
-                  className="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full p-4 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   rows={4}
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="motivation" className="block text-sm font-medium text-white mb-2">
+                <label htmlFor="motivation" className="block text-sm font-medium text-foreground mb-2">
                   Why do you want to be a trainer at Elite Gym? *
                 </label>
                 <textarea
@@ -238,7 +238,7 @@ export default function BecomeTrainerPage() {
                   value={formData.motivation}
                   onChange={(e) => setFormData({ ...formData, motivation: e.target.value })}
                   placeholder="Tell us about your passion for fitness, why you want to help others, and what you can bring to our team..."
-                  className="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full p-4 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   rows={4}
                   required
                 />
@@ -247,7 +247,7 @@ export default function BecomeTrainerPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full bg-red-600 hover:bg-red-700 text-white py-4 text-lg font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/25 disabled:opacity-50"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-4 text-lg font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-primary/25 disabled:opacity-50"
               >
                 {isSubmitting ? "Submitting Application..." : "Submit Application"}
               </Button>
@@ -255,20 +255,20 @@ export default function BecomeTrainerPage() {
           </div>
 
           {/* What Happens Next */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 mt-8">
-            <h2 className="text-xl font-semibold text-white mb-4">What Happens Next?</h2>
+          <div className="bg-card/50 border border-border rounded-lg p-6 mt-8">
+            <h2 className="text-xl font-semibold text-foreground mb-4">What Happens Next?</h2>
             <div className="space-y-3">
               <div className="flex items-start">
-                <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-0.5">1</div>
-                <p className="text-gray-300">We'll review your application within 2-3 business days</p>
+                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-bold mr-3 mt-0.5">1</div>
+                <p className="text-muted-foreground">We'll review your application within 2-3 business days</p>
               </div>
               <div className="flex items-start">
-                <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-0.5">2</div>
-                <p className="text-gray-300">If approved, you'll receive trainer access and onboarding materials</p>
+                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-bold mr-3 mt-0.5">2</div>
+                <p className="text-muted-foreground">If approved, you'll receive trainer access and onboarding materials</p>
               </div>
               <div className="flex items-start">
-                <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-0.5">3</div>
-                <p className="text-gray-300">You can start helping members and building your trainer profile</p>
+                <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-bold mr-3 mt-0.5">3</div>
+                <p className="text-muted-foreground">You can start helping members and building your trainer profile</p>
               </div>
             </div>
           </div>
