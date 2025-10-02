@@ -93,31 +93,6 @@ export default function SettingsPage() {
                       )}
                     </div>
                   </div>
-
-                  {/* Theme Preview */}
-                  <div className="border border-border rounded-lg p-4 bg-accent/50">
-                    <h4 className="text-sm font-medium text-foreground mb-3">Preview</h4>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="flex flex-col items-center space-y-2">
-                        <div className="w-12 h-8 bg-white border border-gray-300 rounded flex items-center justify-center">
-                          <Sun className="h-4 w-4 text-yellow-500" />
-                        </div>
-                        <span className="text-xs text-muted-foreground">Light</span>
-                      </div>
-                      <div className="flex flex-col items-center space-y-2">
-                        <div className="w-12 h-8 bg-gray-900 border border-gray-600 rounded flex items-center justify-center">
-                          <Moon className="h-4 w-4 text-blue-400" />
-                        </div>
-                        <span className="text-xs text-muted-foreground">Dark</span>
-                      </div>
-                      <div className="flex flex-col items-center space-y-2">
-                        <div className="w-12 h-8 bg-gradient-to-r from-white to-gray-900 border border-gray-400 rounded flex items-center justify-center">
-                          <Monitor className="h-4 w-4 text-gray-600" />
-                        </div>
-                        <span className="text-xs text-muted-foreground">System</span>
-                      </div>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
             </div>
