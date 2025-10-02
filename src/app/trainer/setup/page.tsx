@@ -128,12 +128,12 @@ export default function TrainerSetup() {
   if (!mounted) {
     return (
       <RoleGuard allowedRoles={["trainer", "admin"]}>
-        <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-blue-950/20 to-purple-950/20"></div>
+        <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
           <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
             <div className="animate-pulse space-y-6">
-              <div className="h-12 bg-gray-800 rounded-lg"></div>
-              <div className="h-64 bg-gray-800 rounded-lg"></div>
+              <div className="h-12 bg-accent rounded-lg"></div>
+              <div className="h-64 bg-accent rounded-lg"></div>
             </div>
           </div>
         </div>
@@ -143,18 +143,18 @@ export default function TrainerSetup() {
 
   return (
     <RoleGuard allowedRoles={["trainer", "admin"]}>
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background" suppressHydrationWarning>
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-blue-950/20 to-purple-950/20" suppressHydrationWarning></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5" suppressHydrationWarning></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
         
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1 max-w-4xl" suppressHydrationWarning>
           {/* Header */}
           <div className="text-center mb-8" suppressHydrationWarning>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Complete Your <span className="text-blue-500">Trainer Profile</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Complete Your <span className="text-primary">Trainer Profile</span>
             </h1>
-            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Set up your professional profile to start accepting bookings from gym members
             </p>
           </div>
@@ -166,35 +166,35 @@ export default function TrainerSetup() {
                 <div key={stepNum} className="flex items-center">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
                     step >= stepNum 
-                      ? "bg-blue-600 text-white" 
-                      : "bg-gray-700 text-gray-400"
+                      ? "bg-primary text-primary-foreground" 
+                      : "bg-muted text-muted-foreground"
                   }`}>
                     {step > stepNum ? <CheckCircle className="h-6 w-6" /> : stepNum}
                   </div>
                   {stepNum < 3 && (
                     <div className={`w-16 h-1 ${
-                      step > stepNum ? "bg-blue-600" : "bg-gray-700"
+                      step > stepNum ? "bg-primary" : "bg-muted"
                     }`} />
                   )}
                 </div>
               ))}
             </div>
             <div className="flex justify-center mt-2">
-              <span className="text-gray-400 text-sm">
+              <span className="text-muted-foreground text-sm">
                 Step {step} of 3
               </span>
             </div>
           </div>
 
           {/* Step Content */}
-          <Card className="bg-gray-900/50 border border-gray-800 mb-8">
+          <Card className="bg-card/50 border border-border mb-8">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 {step === 1 && <><User className="h-5 w-5" /> Personal Information</>}
                 {step === 2 && <><Star className="h-5 w-5" /> Specializations</>}
                 {step === 3 && <><Award className="h-5 w-5" /> Certifications & Pricing</>}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-muted-foreground">
                 {step === 1 && "Tell members about yourself and your experience"}
                 {step === 2 && "Select your areas of expertise and training specializations"}
                 {step === 3 && "Add your certifications and set your hourly rate"}
@@ -205,31 +205,31 @@ export default function TrainerSetup() {
               {step === 1 && (
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Professional Bio <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Professional Bio <span className="text-destructive">*</span>
                     </label>
                     <textarea
                       value={formData.bio}
                       onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
                       placeholder="Tell members about your background, training philosophy, and what makes you unique as a trainer..."
-                      className="w-full p-4 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[120px] resize-none"
+                      className="w-full p-4 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary min-h-[120px] resize-none"
                       rows={5}
                     />
-                    <div className="text-right text-xs text-gray-400 mt-1">
+                    <div className="text-right text-xs text-muted-foreground mt-1">
                       {formData.bio.length}/300 characters (minimum 50)
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Years of Experience <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Years of Experience <span className="text-destructive">*</span>
                     </label>
                     <Input
                       type="text"
                       value={formData.experience}
                       onChange={(e) => setFormData(prev => ({ ...prev, experience: e.target.value }))}
                       placeholder="e.g., 5+ years, 10 years, etc."
-                      className="bg-gray-800/50 border-gray-700 text-white focus:ring-blue-500"
+                      className="bg-card border-border text-foreground focus:ring-primary"
                     />
                   </div>
                 </div>
@@ -239,8 +239,8 @@ export default function TrainerSetup() {
               {step === 2 && (
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-4">
-                      Select Your Specializations <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-foreground mb-4">
+                      Select Your Specializations <span className="text-destructive">*</span>
                     </label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {specializationOptions.map((spec) => (
@@ -250,15 +250,15 @@ export default function TrainerSetup() {
                           onClick={() => handleSpecializationToggle(spec)}
                           className={`p-3 rounded-lg border text-sm font-medium transition-all ${
                             formData.specializations.includes(spec)
-                              ? "bg-blue-600 border-blue-500 text-white"
-                              : "bg-gray-800/50 border-gray-700 text-gray-300 hover:bg-gray-700/50"
+                              ? "bg-primary border-primary text-primary-foreground"
+                              : "bg-card border-border text-foreground hover:bg-accent"
                           }`}
                         >
                           {formatSpecialization(spec)}
                         </button>
                       ))}
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       Selected: {formData.specializations.length} specialization(s)
                     </p>
                   </div>
@@ -269,8 +269,8 @@ export default function TrainerSetup() {
               {step === 3 && (
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Certifications <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Certifications <span className="text-destructive">*</span>
                     </label>
                     <div className="flex gap-2 mb-3">
                       <Input
@@ -278,13 +278,13 @@ export default function TrainerSetup() {
                         value={tempCertification}
                         onChange={(e) => setTempCertification(e.target.value)}
                         placeholder="Enter certification name..."
-                        className="flex-1 bg-gray-800/50 border-gray-700 text-white focus:ring-blue-500"
+                        className="flex-1 bg-card border-border text-foreground focus:ring-primary"
                         onKeyPress={(e) => e.key === 'Enter' && addCertification()}
                       />
                       <Button
                         type="button"
                         onClick={addCertification}
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-primary hover:bg-primary/90"
                       >
                         Add
                       </Button>
@@ -295,13 +295,13 @@ export default function TrainerSetup() {
                         {formData.certifications.map((cert, index) => (
                           <div
                             key={index}
-                            className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg border border-gray-700"
+                            className="flex items-center justify-between p-3 bg-card rounded-lg border border-border"
                           >
-                            <span className="text-white">{cert}</span>
+                            <span className="text-foreground">{cert}</span>
                             <button
                               type="button"
                               onClick={() => removeCertification(cert)}
-                              className="text-red-400 hover:text-red-300 text-sm"
+                              className="text-destructive hover:text-destructive/80 text-sm"
                             >
                               Remove
                             </button>
@@ -312,21 +312,21 @@ export default function TrainerSetup() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Session Rate (LKR) <span className="text-red-500">*</span>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Session Rate (LKR) <span className="text-destructive">*</span>
                     </label>
                     <div className="relative">
-                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                       <Input
                         type="number"
                         value={formData.hourlyRate}
                         onChange={(e) => setFormData(prev => ({ ...prev, hourlyRate: Number(e.target.value) }))}
                         min="1000"
                         max="50000"
-                        className="pl-10 bg-gray-800/50 border-gray-700 text-white focus:ring-blue-500"
+                        className="pl-10 bg-card border-border text-foreground focus:ring-primary"
                       />
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Standard rate for reference (sessions are included with membership)
                     </p>
                   </div>
@@ -341,7 +341,7 @@ export default function TrainerSetup() {
               onClick={() => setStep(step - 1)}
               disabled={step === 1}
               variant="outline"
-              className="border-gray-700 text-gray-300 hover:bg-gray-800 disabled:opacity-50"
+              className="border-border text-foreground hover:bg-accent disabled:opacity-50"
             >
               Previous
             </Button>
@@ -351,7 +351,7 @@ export default function TrainerSetup() {
                 <Button
                   onClick={() => setStep(step + 1)}
                   disabled={!isStepValid(step)}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50"
+                  className="bg-primary hover:bg-primary/90 disabled:opacity-50"
                 >
                   Next Step
                 </Button>

@@ -426,12 +426,12 @@ export default function TrainerDashboard() {
   if (!mounted) {
     return (
       <RoleGuard allowedRoles={["trainer", "admin"]}>
-        <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-blue-950/20 to-purple-950/20"></div>
+        <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
           <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
             <div className="animate-pulse space-y-6">
-              <div className="h-12 bg-gray-800 rounded-lg"></div>
-              <div className="h-64 bg-gray-800 rounded-lg"></div>
+              <div className="h-12 bg-accent rounded-lg"></div>
+              <div className="h-64 bg-accent rounded-lg"></div>
             </div>
           </div>
         </div>
@@ -442,14 +442,14 @@ export default function TrainerDashboard() {
   if (!trainerProfile) {
     return (
       <RoleGuard allowedRoles={["trainer", "admin"]}>
-        <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-blue-950/20 to-purple-950/20"></div>
+        <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
           <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
             <div className="max-w-2xl mx-auto text-center">
-              <h1 className="text-4xl font-bold text-white mb-4">Setup Required</h1>
-              <p className="text-gray-300 mb-6">Your trainer profile needs to be set up first.</p>
+              <h1 className="text-4xl font-bold text-foreground mb-4">Setup Required</h1>
+              <p className="text-muted-foreground mb-6">Your trainer profile needs to be set up first.</p>
               <Link href="/trainer/setup">
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <Button className="bg-primary hover:bg-primary/90">
                   Complete Profile Setup
                 </Button>
               </Link>
@@ -462,71 +462,71 @@ export default function TrainerDashboard() {
 
   return (
     <RoleGuard allowedRoles={["trainer", "admin"]}>
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black" suppressHydrationWarning>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background" suppressHydrationWarning>
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-blue-950/20 to-purple-950/20" suppressHydrationWarning></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5" suppressHydrationWarning></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
         
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1" suppressHydrationWarning>
           {/* Header */}
           <div className="mb-8" suppressHydrationWarning>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-              Welcome back, <span className="text-blue-500">{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.fullName || trainerProfile.name}</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
+              Welcome back, <span className="text-primary">{user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : user?.fullName || trainerProfile.name}</span>
             </h1>
-            <p className="text-gray-300 text-lg">
+            <p className="text-muted-foreground text-lg">
               Manage your schedule, bookings, and track your performance
             </p>
           </div>
 
           {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-gray-900/50 border border-gray-800">
+            <Card className="bg-card/50 border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Total Sessions</p>
-                    <p className="text-3xl font-bold text-white">{trainerStats?.totalSessions || 0}</p>
+                    <p className="text-muted-foreground text-sm">Total Sessions</p>
+                    <p className="text-3xl font-bold text-foreground">{trainerStats?.totalSessions || 0}</p>
                   </div>
                   <CheckCircle className="h-8 w-8 text-green-500" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gray-900/50 border border-gray-800">
+            <Card className="bg-card/50 border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Upcoming Sessions</p>
-                    <p className="text-3xl font-bold text-white">{trainerStats?.upcomingSessions || 0}</p>
+                    <p className="text-muted-foreground text-sm">Upcoming Sessions</p>
+                    <p className="text-3xl font-bold text-foreground">{trainerStats?.upcomingSessions || 0}</p>
                   </div>
-                  <Calendar className="h-8 w-8 text-blue-500" />
+                  <Calendar className="h-8 w-8 text-primary" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gray-900/50 border border-gray-800">
+            <Card className="bg-card/50 border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Rating</p>
+                    <p className="text-muted-foreground text-sm">Rating</p>
                     <div className="flex items-center gap-2">
-                      <p className="text-3xl font-bold text-white">{trainerProfile.rating.toFixed(1)}</p>
+                      <p className="text-3xl font-bold text-foreground">{trainerProfile.rating.toFixed(1)}</p>
                       <Star className="h-5 w-5 text-yellow-400 fill-yellow-400" />
                     </div>
-                    <p className="text-xs text-gray-400">{trainerProfile.totalReviews} reviews</p>
+                    <p className="text-xs text-muted-foreground">{trainerProfile.totalReviews} reviews</p>
                   </div>
                   <Star className="h-8 w-8 text-yellow-500" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-gray-900/50 border border-gray-800">
+            <Card className="bg-card/50 border border-border">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-gray-400 text-sm">Session Status</p>
+                    <p className="text-muted-foreground text-sm">Session Status</p>
                     <p className="text-3xl font-bold text-green-400">Included</p>
-                    <p className="text-sm text-gray-500">For members</p>
+                    <p className="text-sm text-muted-foreground">For members</p>
                   </div>
                   <CheckCircle className="h-8 w-8 text-green-500" />
                 </div>
@@ -536,36 +536,36 @@ export default function TrainerDashboard() {
 
           {/* Main Content Tabs */}
           <Tabs defaultValue="bookings" className="w-full">
-            <TabsList className="grid w-full grid-cols-6 bg-gray-900/50 border border-gray-800">
-              <TabsTrigger value="bookings" className="data-[state=active]:bg-blue-600">
+            <TabsList className="grid w-full grid-cols-6 bg-card/50 border border-border">
+              <TabsTrigger value="bookings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 Today's Bookings
               </TabsTrigger>
-              <TabsTrigger value="schedule" className="data-[state=active]:bg-blue-600">
+              <TabsTrigger value="schedule" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 Manage Schedule
               </TabsTrigger>
-              <TabsTrigger value="upcoming" className="data-[state=active]:bg-blue-600">
+              <TabsTrigger value="upcoming" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 Upcoming Sessions
               </TabsTrigger>
-              <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-600">
+              <TabsTrigger value="reviews" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 Reviews
               </TabsTrigger>
-              <TabsTrigger value="payslips" className="data-[state=active]:bg-blue-600">
+              <TabsTrigger value="payslips" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 Payment Slips
               </TabsTrigger>
-              <TabsTrigger value="settings" className="data-[state=active]:bg-blue-600">
+              <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 Profile Settings
               </TabsTrigger>
             </TabsList>
 
             {/* Today's Bookings */}
             <TabsContent value="bookings" className="space-y-6">
-              <Card className="bg-gray-900/50 border border-gray-800">
+              <Card className="bg-card/50 border border-border">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <Calendar className="h-5 w-5" />
                     Today's Sessions ({formatDate(new Date().toISOString().split('T')[0])})
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-muted-foreground">
                     Manage your sessions for today
                   </CardDescription>
                 </CardHeader>
@@ -575,26 +575,26 @@ export default function TrainerDashboard() {
                       {todayBookings.map((booking) => (
                         <div
                           key={booking._id}
-                          className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+                          className="flex items-center justify-between p-4 bg-card rounded-lg border border-border"
                         >
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <h3 className="font-semibold text-white">{booking.userName}</h3>
+                              <h3 className="font-semibold text-foreground">{booking.userName}</h3>
                               <span className={`px-2 py-1 rounded-full text-xs ${
-                                booking.status === "confirmed" ? "bg-green-900/30 text-green-300" :
-                                booking.status === "pending" ? "bg-yellow-900/30 text-yellow-300" :
-                                booking.status === "cancelled" ? "bg-red-900/30 text-red-300" :
-                                "bg-gray-900/30 text-gray-300"
+                                booking.status === "confirmed" ? "bg-green-500/20 text-green-300" :
+                                booking.status === "pending" ? "bg-yellow-500/20 text-yellow-300" :
+                                booking.status === "cancelled" ? "bg-red-500/20 text-red-300" :
+                                "bg-accent text-muted-foreground"
                               }`}>
                                 {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
                               </span>
                             </div>
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-muted-foreground text-sm">
                               {formatTime(booking.startTime)} - {formatTime(booking.endTime)} • 
                               {booking.sessionType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                             </p>
                             {booking.notes && (
-                              <p className="text-gray-500 text-sm mt-1">Note: {booking.notes}</p>
+                              <p className="text-muted-foreground text-sm mt-1">Note: {booking.notes}</p>
                             )}
                           </div>
                           
@@ -624,7 +624,7 @@ export default function TrainerDashboard() {
                               <Button
                                 size="sm"
                                 onClick={() => handleBookingAction(booking._id, "complete")}
-                                className="bg-blue-600 hover:bg-blue-700"
+                                className="bg-primary hover:bg-primary/90"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
                                 Mark Complete
@@ -636,8 +636,8 @@ export default function TrainerDashboard() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Calendar className="h-12 w-12 text-gray-600 mx-auto mb-3" />
-                      <p className="text-gray-400">No sessions scheduled for today</p>
+                      <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                      <p className="text-muted-foreground">No sessions scheduled for today</p>
                     </div>
                   )}
                 </CardContent>
@@ -646,13 +646,13 @@ export default function TrainerDashboard() {
 
             {/* Schedule Management */}
             <TabsContent value="schedule" className="space-y-6">
-              <Card className="bg-gray-900/50 border border-gray-800">
+              <Card className="bg-card/50 border border-border">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <Clock className="h-5 w-5" />
                     Weekly Availability
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-muted-foreground">
                     Set your available hours for each day of the week
                   </CardDescription>
                 </CardHeader>
@@ -660,10 +660,10 @@ export default function TrainerDashboard() {
                   {weeklySchedule.map((day, index) => (
                     <div
                       key={day.dayOfWeek}
-                      className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+                      className="flex items-center gap-4 p-4 bg-card rounded-lg border border-border"
                     >
                       <div className="w-24">
-                        <label className="text-white font-medium capitalize">
+                        <label className="text-foreground font-medium capitalize">
                           {day.dayOfWeek}
                         </label>
                       </div>
@@ -677,15 +677,15 @@ export default function TrainerDashboard() {
                             newSchedule[index].isActive = e.target.checked;
                             setWeeklySchedule(newSchedule);
                           }}
-                          className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
+                          className="w-4 h-4 text-primary bg-background border-border rounded focus:ring-primary"
                         />
-                        <span className="text-gray-400 text-sm">Available</span>
+                        <span className="text-muted-foreground text-sm">Available</span>
                       </div>
 
                       {day.isActive && (
                         <>
                           <div className="flex items-center gap-2">
-                            <label className="text-gray-400 text-sm">From:</label>
+                            <label className="text-muted-foreground text-sm">From:</label>
                             <Input
                               type="time"
                               value={day.startTime}
@@ -694,12 +694,12 @@ export default function TrainerDashboard() {
                                 newSchedule[index].startTime = e.target.value;
                                 setWeeklySchedule(newSchedule);
                               }}
-                              className="w-32 bg-gray-700 border-gray-600 text-white"
+                              className="w-32 bg-background border-border text-foreground"
                             />
                           </div>
 
                           <div className="flex items-center gap-2">
-                            <label className="text-gray-400 text-sm">To:</label>
+                            <label className="text-muted-foreground text-sm">To:</label>
                             <Input
                               type="time"
                               value={day.endTime}
@@ -708,7 +708,7 @@ export default function TrainerDashboard() {
                                 newSchedule[index].endTime = e.target.value;
                                 setWeeklySchedule(newSchedule);
                               }}
-                              className="w-32 bg-gray-700 border-gray-600 text-white"
+                              className="w-32 bg-background border-border text-foreground"
                             />
                           </div>
                         </>
@@ -719,7 +719,7 @@ export default function TrainerDashboard() {
                   <div className="flex justify-end pt-4">
                     <Button
                       onClick={handleSaveSchedule}
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="bg-primary hover:bg-primary/90"
                     >
                       Save Schedule
                     </Button>
@@ -730,13 +730,13 @@ export default function TrainerDashboard() {
 
             {/* Upcoming Sessions */}
             <TabsContent value="upcoming" className="space-y-6">
-              <Card className="bg-gray-900/50 border border-gray-800">
+              <Card className="bg-card/50 border border-border">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <Users className="h-5 w-5" />
                     Upcoming Sessions
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-muted-foreground">
                     All your confirmed upcoming sessions
                   </CardDescription>
                 </CardHeader>
@@ -749,20 +749,20 @@ export default function TrainerDashboard() {
                         .map((booking) => (
                         <div
                           key={booking._id}
-                          className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+                          className="flex items-center justify-between p-4 bg-card rounded-lg border border-border"
                         >
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <h3 className="font-semibold text-white">{booking.userName}</h3>
-                              <span className="px-2 py-1 rounded-full text-xs bg-blue-900/30 text-blue-300">
+                              <h3 className="font-semibold text-foreground">{booking.userName}</h3>
+                              <span className="px-2 py-1 rounded-full text-xs bg-primary/20 text-primary">
                                 {booking.sessionType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                               </span>
                             </div>
-                            <p className="text-gray-400 text-sm">
+                            <p className="text-muted-foreground text-sm">
                               {formatDate(booking.sessionDate)} • 
                               {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
                             </p>
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-muted-foreground text-sm">
                               Contact: {booking.userEmail}
                             </p>
                           </div>
@@ -771,7 +771,7 @@ export default function TrainerDashboard() {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                              className="border-border text-foreground hover:bg-accent"
                             >
                               <Eye className="h-4 w-4 mr-1" />
                               View Details
@@ -782,8 +782,8 @@ export default function TrainerDashboard() {
                     </div>
                   ) : (
                     <div className="text-center py-8">
-                      <Users className="h-12 w-12 text-gray-600 mx-auto mb-3" />
-                      <p className="text-gray-400">No upcoming sessions</p>
+                      <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                      <p className="text-muted-foreground">No upcoming sessions</p>
                     </div>
                   )}
                 </CardContent>
@@ -792,13 +792,13 @@ export default function TrainerDashboard() {
 
             {/* Reviews Tab */}
             <TabsContent value="reviews" className="space-y-6">
-              <Card className="bg-gray-900/50 border border-gray-800">
+              <Card className="bg-card/50 border border-border">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <Star className="h-5 w-5" />
                     Customer Reviews
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-muted-foreground">
                     See what your clients are saying about your training sessions
                   </CardDescription>
                 </CardHeader>
@@ -806,21 +806,21 @@ export default function TrainerDashboard() {
                   {trainerReviews && trainerReviews.length > 0 ? (
                     <div className="space-y-4">
                       {/* Reviews Summary */}
-                      <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+                      <div className="bg-card rounded-lg p-4 border border-border">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div className="flex items-center gap-1">
                               <Star className="h-5 w-5 text-yellow-500 fill-current" />
-                              <span className="text-white text-lg font-semibold">
+                              <span className="text-foreground text-lg font-semibold">
                                 {trainerProfile?.rating}/5.0
                               </span>
                             </div>
-                            <span className="text-gray-400">
+                            <span className="text-muted-foreground">
                               ({trainerProfile?.totalReviews} reviews)
                             </span>
                           </div>
                           <div className="text-right">
-                            <p className="text-gray-400 text-sm">Overall Rating</p>
+                            <p className="text-muted-foreground text-sm">Overall Rating</p>
                             <div className="flex gap-1">
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <Star
@@ -828,7 +828,7 @@ export default function TrainerDashboard() {
                                   className={`h-4 w-4 ${
                                     star <= (trainerProfile?.rating || 0)
                                       ? "text-yellow-500 fill-current"
-                                      : "text-gray-600"
+                                      : "text-muted-foreground"
                                   }`}
                                 />
                               ))}
@@ -842,11 +842,11 @@ export default function TrainerDashboard() {
                         {trainerReviews.map((review) => (
                           <div
                             key={review._id}
-                            className="bg-gray-800/50 rounded-lg p-4 border border-gray-700"
+                            className="bg-card rounded-lg p-4 border border-border"
                           >
                             <div className="flex items-start justify-between mb-3">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                                <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
                                   {review.userImage ? (
                                     <img
                                       src={review.userImage}
@@ -854,13 +854,13 @@ export default function TrainerDashboard() {
                                       className="w-10 h-10 rounded-full object-cover"
                                     />
                                   ) : (
-                                    <span className="text-white font-medium">
+                                    <span className="text-foreground font-medium">
                                       {review.userName.charAt(0).toUpperCase()}
                                     </span>
                                   )}
                                 </div>
                                 <div>
-                                  <p className="text-white font-medium">{review.userName}</p>
+                                  <p className="text-foreground font-medium">{review.userName}</p>
                                   <div className="flex items-center gap-1">
                                     {[1, 2, 3, 4, 5].map((star) => (
                                       <Star
@@ -868,18 +868,18 @@ export default function TrainerDashboard() {
                                         className={`h-3 w-3 ${
                                           star <= review.rating
                                             ? "text-yellow-500 fill-current"
-                                            : "text-gray-600"
+                                            : "text-muted-foreground"
                                         }`}
                                       />
                                     ))}
-                                    <span className="text-gray-400 text-sm ml-1">
+                                    <span className="text-muted-foreground text-sm ml-1">
                                       {review.rating}/5
                                     </span>
                                   </div>
                                 </div>
                               </div>
                               <div className="text-right">
-                                <p className="text-gray-400 text-xs">
+                                <p className="text-muted-foreground text-xs">
                                   {new Date(review.createdAt).toLocaleDateString()}
                                 </p>
                               </div>
@@ -887,7 +887,7 @@ export default function TrainerDashboard() {
                             
                             {review.comment && (
                               <div className="mt-3">
-                                <p className="text-gray-300 text-sm leading-relaxed">
+                                <p className="text-foreground text-sm leading-relaxed">
                                   "{review.comment}"
                                 </p>
                               </div>
@@ -901,7 +901,7 @@ export default function TrainerDashboard() {
                         <div className="text-center">
                           <Button
                             variant="outline"
-                            className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                            className="border-border text-foreground hover:bg-accent"
                           >
                             Load More Reviews
                           </Button>
@@ -910,9 +910,9 @@ export default function TrainerDashboard() {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <Star className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                      <h3 className="text-gray-400 text-lg font-medium mb-2">No Reviews Yet</h3>
-                      <p className="text-gray-500 text-sm max-w-md mx-auto">
+                      <Star className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-foreground text-lg font-medium mb-2">No Reviews Yet</h3>
+                      <p className="text-muted-foreground text-sm max-w-md mx-auto">
                         You haven't received any reviews yet. Complete some training sessions 
                         and encourage your clients to leave feedback about their experience.
                       </p>
@@ -924,13 +924,13 @@ export default function TrainerDashboard() {
 
             {/* Payment Slips */}
             <TabsContent value="payslips" className="space-y-6">
-              <Card className="bg-gray-900/50 border border-gray-800">
+              <Card className="bg-card/50 border border-border">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <Receipt className="h-5 w-5" />
                     Payment Slips
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-muted-foreground">
                     Download your salary payment slips
                   </CardDescription>
                 </CardHeader>
@@ -940,18 +940,18 @@ export default function TrainerDashboard() {
                       {trainerPayrollRecords.map((record) => (
                         <div
                           key={record._id}
-                          className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg border border-gray-700"
+                          className="flex items-center justify-between p-4 bg-card rounded-lg border border-border"
                         >
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
-                              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                                <Receipt className="h-5 w-5 text-white" />
+                              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                <Receipt className="h-5 w-5 text-primary-foreground" />
                               </div>
                               <div>
-                                <h3 className="text-white font-medium">
+                                <h3 className="text-foreground font-medium">
                                   Salary for {record.payrollPeriod.periodLabel}
                                 </h3>
-                                <p className="text-gray-400 text-sm">
+                                <p className="text-muted-foreground text-sm">
                                   Status: 
                                   <span className={`ml-2 px-2 py-1 rounded text-xs ${
                                     record.status === 'approved' ? 'bg-green-500/20 text-green-400' :
@@ -965,26 +965,26 @@ export default function TrainerDashboard() {
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                               <div>
-                                <p className="text-gray-400">Gross Pay</p>
-                                <p className="text-white font-medium">
+                                <p className="text-muted-foreground">Gross Pay</p>
+                                <p className="text-foreground font-medium">
                                   {formatCurrency(record.earnings.totalEarnings)}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-gray-400">Deductions</p>
-                                <p className="text-white font-medium">
+                                <p className="text-muted-foreground">Deductions</p>
+                                <p className="text-foreground font-medium">
                                   {formatCurrency(record.deductions.totalDeductions)}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-gray-400">Net Salary</p>
+                                <p className="text-muted-foreground">Net Salary</p>
                                 <p className="text-green-400 font-bold">
                                   {formatCurrency(record.netSalary)}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-gray-400">Generated</p>
-                                <p className="text-white">
+                                <p className="text-muted-foreground">Generated</p>
+                                <p className="text-foreground">
                                   {new Date(record.createdAt).toLocaleDateString()}
                                 </p>
                               </div>
@@ -995,7 +995,7 @@ export default function TrainerDashboard() {
                             <Button
                               onClick={() => handleDownloadPaySlip(record)}
                               size="sm"
-                              className="bg-blue-600 hover:bg-blue-700 text-white"
+                              className="bg-primary hover:bg-primary/90 text-primary-foreground"
                             >
                               <Download className="h-4 w-4 mr-2" />
                               Download
@@ -1006,9 +1006,9 @@ export default function TrainerDashboard() {
                     </div>
                   ) : (
                     <div className="text-center py-12">
-                      <Receipt className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                      <h3 className="text-gray-400 text-lg font-medium mb-2">No Payment Slips</h3>
-                      <p className="text-gray-500 text-sm max-w-md mx-auto">
+                      <Receipt className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-foreground text-lg font-medium mb-2">No Payment Slips</h3>
+                      <p className="text-muted-foreground text-sm max-w-md mx-auto">
                         You don't have any payment slips yet. Payment slips will appear here 
                         after your salary is processed by the admin.
                       </p>
@@ -1020,13 +1020,13 @@ export default function TrainerDashboard() {
 
             {/* Profile Settings */}
             <TabsContent value="settings" className="space-y-6">
-              <Card className="bg-gray-900/50 border border-gray-800">
+              <Card className="bg-card/50 border border-border">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <Edit className="h-5 w-5" />
                     Profile Settings
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-muted-foreground">
                     Update your trainer profile information
                   </CardDescription>
                 </CardHeader>
@@ -1035,42 +1035,42 @@ export default function TrainerDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-2">
                           Profile Information
                         </label>
                         <div className="space-y-3">
-                          <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-                            <p className="text-gray-400 text-sm">Name</p>
-                            <p className="text-white">{trainerProfile?.name}</p>
+                          <div className="p-3 bg-card rounded-lg border border-border">
+                            <p className="text-muted-foreground text-sm">Name</p>
+                            <p className="text-foreground">{trainerProfile?.name}</p>
                           </div>
-                          <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-                            <p className="text-gray-400 text-sm">Email</p>
-                            <p className="text-white">{trainerProfile?.email}</p>
+                          <div className="p-3 bg-card rounded-lg border border-border">
+                            <p className="text-muted-foreground text-sm">Email</p>
+                            <p className="text-foreground">{trainerProfile?.email}</p>
                           </div>
-                          <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-                            <p className="text-gray-400 text-sm">Rating</p>
+                          <div className="p-3 bg-card rounded-lg border border-border">
+                            <p className="text-muted-foreground text-sm">Rating</p>
                             <div className="flex items-center gap-2">
                               <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                              <span className="text-white">{trainerProfile?.rating}/5.0</span>
-                              <span className="text-gray-400">({trainerProfile?.totalReviews} reviews)</span>
+                              <span className="text-foreground">{trainerProfile?.rating}/5.0</span>
+                              <span className="text-muted-foreground">({trainerProfile?.totalReviews} reviews)</span>
                             </div>
                           </div>
-                          <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-                            <p className="text-gray-400 text-sm">Specializations</p>
+                          <div className="p-3 bg-card rounded-lg border border-border">
+                            <p className="text-muted-foreground text-sm">Specializations</p>
                             <div className="flex flex-wrap gap-2 mt-1">
                               {trainerProfile?.specializations.map((spec, index) => (
                                 <span
                                   key={index}
-                                  className="px-2 py-1 bg-blue-900/30 text-blue-300 text-xs rounded-full"
+                                  className="px-2 py-1 bg-primary/20 text-primary text-xs rounded-full"
                                 >
                                   {spec.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                 </span>
                               ))}
                             </div>
                           </div>
-                          <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-                            <p className="text-gray-400 text-sm">Session Status</p>
-                            <p className="text-white">
+                          <div className="p-3 bg-card rounded-lg border border-border">
+                            <p className="text-muted-foreground text-sm">Session Status</p>
+                            <p className="text-foreground">
                               All sessions are included with member subscriptions
                             </p>
                           </div>
@@ -1079,13 +1079,13 @@ export default function TrainerDashboard() {
                     </div>
 
                     <div className="space-y-4">
-                      <div className="bg-gray-800 rounded-lg p-6">
+                      <div className="bg-card rounded-lg p-6 border border-border">
                         <div className="flex justify-between items-center mb-6">
-                          <h3 className="text-xl font-semibold text-white">Edit Profile Information</h3>
+                          <h3 className="text-xl font-semibold text-foreground">Edit Profile Information</h3>
                           {!isEditingProfile ? (
                             <button
                               onClick={handleEditProfile}
-                              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                              className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg transition-colors"
                             >
                               Edit Profile
                             </button>
@@ -1093,7 +1093,7 @@ export default function TrainerDashboard() {
                             <div className="space-x-2">
                               <button
                                 onClick={handleCancelEdit}
-                                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                                className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-lg transition-colors"
                               >
                                 Cancel
                               </button>
@@ -1111,7 +1111,7 @@ export default function TrainerDashboard() {
                         <div className="space-y-6">
                           {/* Bio Section */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                               Bio
                             </label>
                             {isEditingProfile ? (
@@ -1119,11 +1119,11 @@ export default function TrainerDashboard() {
                                 value={profileForm.bio}
                                 onChange={(e) => setProfileForm(prev => ({ ...prev, bio: e.target.value }))}
                                 rows={4}
-                                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
                                 placeholder="Tell us about yourself..."
                               />
                             ) : (
-                              <p className="text-gray-300 bg-gray-700 p-3 rounded-lg">
+                              <p className="text-foreground bg-muted p-3 rounded-lg">
                                 {trainerProfile?.bio || "No bio added yet"}
                               </p>
                             )}
@@ -1131,7 +1131,7 @@ export default function TrainerDashboard() {
 
                           {/* Experience Section */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                               Experience
                             </label>
                             {isEditingProfile ? (
@@ -1139,11 +1139,11 @@ export default function TrainerDashboard() {
                                 value={profileForm.experience}
                                 onChange={(e) => setProfileForm(prev => ({ ...prev, experience: e.target.value }))}
                                 rows={3}
-                                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
                                 placeholder="Describe your training experience..."
                               />
                             ) : (
-                              <p className="text-gray-300 bg-gray-700 p-3 rounded-lg">
+                              <p className="text-foreground bg-muted p-3 rounded-lg">
                                 {trainerProfile?.experience || "No experience added yet"}
                               </p>
                             )}
@@ -1151,7 +1151,7 @@ export default function TrainerDashboard() {
 
                           {/* Certifications Section */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                               Certifications
                             </label>
                             {isEditingProfile ? (
@@ -1162,12 +1162,12 @@ export default function TrainerDashboard() {
                                       type="text"
                                       value={cert}
                                       onChange={(e) => handleCertificationChange(index, e.target.value)}
-                                      className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                      className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
                                       placeholder="Enter certification..."
                                     />
                                     <button
                                       onClick={() => handleRemoveCertification(index)}
-                                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg transition-colors"
+                                      className="bg-destructive hover:bg-destructive/90 text-destructive-foreground px-3 py-2 rounded-lg transition-colors"
                                     >
                                       Remove
                                     </button>
@@ -1175,24 +1175,24 @@ export default function TrainerDashboard() {
                                 ))}
                                 <button
                                   onClick={handleAddCertification}
-                                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg transition-colors"
                                 >
                                   Add Certification
                                 </button>
                               </div>
                             ) : (
-                              <div className="bg-gray-700 p-3 rounded-lg">
+                              <div className="bg-muted p-3 rounded-lg">
                                 {trainerProfile?.certifications && trainerProfile.certifications.length > 0 ? (
-                                  <ul className="text-gray-300 space-y-1">
+                                  <ul className="text-foreground space-y-1">
                                     {trainerProfile.certifications.map((cert, index) => (
                                       <li key={index} className="flex items-center">
-                                        <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                                        <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
                                         {cert}
                                       </li>
                                     ))}
                                   </ul>
                                 ) : (
-                                  <p className="text-gray-400">No certifications added yet</p>
+                                  <p className="text-muted-foreground">No certifications added yet</p>
                                 )}
                               </div>
                             )}
@@ -1200,7 +1200,7 @@ export default function TrainerDashboard() {
 
                           {/* Specializations Section */}
                           <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-2">
                               Update Specializations
                             </label>
                             {isEditingProfile ? (
@@ -1214,30 +1214,30 @@ export default function TrainerDashboard() {
                                       type="checkbox"
                                       checked={profileForm.specializations.includes(spec)}
                                       onChange={() => handleSpecializationToggle(spec)}
-                                      className="text-red-500 focus:ring-red-500"
+                                      className="text-primary focus:ring-primary"
                                     />
-                                    <span className="text-gray-300 text-sm capitalize">
+                                    <span className="text-foreground text-sm capitalize">
                                       {spec.replace('_', ' ')}
                                     </span>
                                   </label>
                                 ))}
                               </div>
                             ) : (
-                              <div className="bg-gray-700 p-3 rounded-lg">
-                                <p className="text-gray-400 text-sm mb-2">Current specializations (click Edit Profile to modify):</p>
+                              <div className="bg-muted p-3 rounded-lg">
+                                <p className="text-muted-foreground text-sm mb-2">Current specializations (click Edit Profile to modify):</p>
                                 {trainerProfile?.specializations && trainerProfile.specializations.length > 0 ? (
                                   <div className="flex flex-wrap gap-2">
                                     {trainerProfile.specializations.map((spec, index) => (
                                       <span
                                         key={index}
-                                        className="bg-red-600 text-white px-3 py-1 rounded-full text-sm capitalize"
+                                        className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm capitalize"
                                       >
                                         {spec.replace('_', ' ')}
                                       </span>
                                     ))}
                                   </div>
                                 ) : (
-                                  <p className="text-gray-400">No specializations selected yet</p>
+                                  <p className="text-muted-foreground">No specializations selected yet</p>
                                 )}
                               </div>
                             )}
