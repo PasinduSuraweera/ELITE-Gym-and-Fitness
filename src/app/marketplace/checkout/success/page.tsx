@@ -33,12 +33,12 @@ const CheckoutSuccessPage = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
-            <p className="text-gray-400">Processing your order...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Processing your order...</p>
           </div>
         </div>
       </div>
@@ -46,10 +46,10 @@ const CheckoutSuccessPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
       
       <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
         <div className="max-w-2xl mx-auto">
@@ -58,30 +58,30 @@ const CheckoutSuccessPage = () => {
             <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-12 w-12 text-green-500" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               Order <span className="text-green-500">Confirmed!</span>
             </h1>
-            <p className="text-gray-400 text-lg">
+            <p className="text-muted-foreground text-lg">
               Thank you for your purchase. Your order has been successfully placed and will be processed shortly.
             </p>
           </div>
 
           {/* Order Confirmation Card */}
-          <Card className="bg-gray-900/50 border-gray-700 mb-8">
+          <Card className="bg-card/50 border-border mb-8">
             <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Package className="h-5 w-5 mr-2 text-red-500" />
+              <CardTitle className="text-foreground flex items-center">
+                <Package className="h-5 w-5 mr-2 text-primary" />
                 Order Information
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="text-gray-400 text-sm">Order ID</p>
-                  <p className="text-white font-mono">{sessionId?.slice(-8) || "PROCESSING"}</p>
+                  <p className="text-muted-foreground text-sm">Order ID</p>
+                  <p className="text-foreground font-mono">{sessionId?.slice(-8) || "PROCESSING"}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm">Payment Status</p>
+                  <p className="text-muted-foreground text-sm">Payment Status</p>
                   <div className="flex items-center">
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                     <p className="text-green-500 font-medium">Paid</p>
@@ -89,18 +89,18 @@ const CheckoutSuccessPage = () => {
                 </div>
               </div>
               
-              <div className="border-t border-gray-700 pt-4">
-                <p className="text-gray-400 text-sm mb-2">What happens next?</p>
+              <div className="border-t border-border pt-4">
+                <p className="text-muted-foreground text-sm mb-2">What happens next?</p>
                 <div className="space-y-2 text-sm">
-                  <div className="flex items-center text-gray-300">
+                  <div className="flex items-center text-foreground">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
                     Order confirmation email sent to {user?.emailAddresses?.[0]?.emailAddress}
                   </div>
-                  <div className="flex items-center text-gray-300">
+                  <div className="flex items-center text-foreground">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
                     Processing and preparation (1-2 business days)
                   </div>
-                  <div className="flex items-center text-gray-300">
+                  <div className="flex items-center text-foreground">
                     <div className="w-2 h-2 bg-orange-500 rounded-full mr-3"></div>
                     Shipping and delivery (3-7 business days)
                   </div>
@@ -110,11 +110,11 @@ const CheckoutSuccessPage = () => {
           </Card>
 
           {/* Delivery Information */}
-          <Card className="bg-gray-900/50 border-gray-700 mb-8">
+          <Card className="bg-card/50 border-border mb-8">
             <CardContent className="pt-6">
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
                 <h3 className="text-blue-400 font-medium mb-2">📦 Delivery Information</h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-foreground text-sm">
                   Your order will be delivered to the address you provided during checkout. 
                   You'll receive tracking information via email once your order ships.
                 </p>
@@ -124,21 +124,21 @@ const CheckoutSuccessPage = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild className="bg-red-600 hover:bg-red-700">
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link href="/profile">
                 <Package className="h-4 w-4 mr-2" />
                 View Order History
               </Link>
             </Button>
             
-            <Button variant="outline" asChild className="border-gray-600 text-white hover:bg-gray-700">
+            <Button variant="outline" asChild className="border-border text-foreground hover:bg-accent">
               <Link href="/marketplace">
                 Continue Shopping
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Link>
             </Button>
             
-            <Button variant="outline" asChild className="border-gray-600 text-white hover:bg-gray-700">
+            <Button variant="outline" asChild className="border-border text-foreground hover:bg-accent">
               <Link href="/">
                 <Home className="h-4 w-4 mr-2" />
                 Back to Home
@@ -147,11 +147,11 @@ const CheckoutSuccessPage = () => {
           </div>
 
           {/* Contact Support */}
-          <div className="text-center mt-8 pt-8 border-t border-gray-700">
-            <p className="text-gray-400 text-sm mb-2">
+          <div className="text-center mt-8 pt-8 border-t border-border">
+            <p className="text-muted-foreground text-sm mb-2">
               Need help with your order?
             </p>
-            <Button variant="link" asChild className="text-red-500 hover:text-red-400">
+            <Button variant="link" asChild className="text-primary hover:text-primary/80">
               <Link href="/contact">Contact Support</Link>
             </Button>
           </div>

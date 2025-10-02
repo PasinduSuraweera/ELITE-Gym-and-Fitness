@@ -114,14 +114,14 @@ const CheckoutPage = () => {
 
   if (!user) {
     return (
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
           <div className="text-center">
-            <CreditCard className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-white mb-2">Sign In Required</h1>
-            <p className="text-gray-400 mb-6">Please sign in to proceed with checkout</p>
-            <Button asChild className="bg-red-600 hover:bg-red-700">
+            <CreditCard className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">Sign In Required</h1>
+            <p className="text-muted-foreground mb-6">Please sign in to proceed with checkout</p>
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link href="/sign-in">Sign In</Link>
             </Button>
           </div>
@@ -132,14 +132,14 @@ const CheckoutPage = () => {
 
   if (!cartItems || cartItems.length === 0) {
     return (
-      <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
         <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
           <div className="text-center">
-            <Package className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-white mb-2">Your cart is empty</h1>
-            <p className="text-gray-400 mb-6">Add some items to your cart to proceed with checkout</p>
-            <Button asChild className="bg-red-600 hover:bg-red-700">
+            <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">Your cart is empty</h1>
+            <p className="text-muted-foreground mb-6">Add some items to your cart to proceed with checkout</p>
+            <Button asChild className="bg-primary hover:bg-primary/90">
               <Link href="/marketplace">Continue Shopping</Link>
             </Button>
           </div>
@@ -149,60 +149,60 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen text-white overflow-hidden relative bg-black">
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-red-950/20 to-orange-950/20"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(220,38,38,0.1)_0%,transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
       
       <div className="container mx-auto px-4 py-32 relative z-10 flex-1">
         {/* Header */}
         <div className="flex items-center mb-8">
-          <Button variant="outline" asChild className="mr-4 border-gray-700 text-white hover:bg-gray-800">
+          <Button variant="outline" asChild className="mr-4 border-border text-foreground hover:bg-accent">
             <Link href="/marketplace/cart">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Cart
             </Link>
           </Button>
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">
-              <span className="text-red-500">Secure</span> Checkout
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+              <span className="text-primary">Secure</span> Checkout
             </h1>
-            <p className="text-gray-400">Complete your order safely and securely</p>
+            <p className="text-muted-foreground">Complete your order safely and securely</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Shipping Information */}
           <div className="space-y-6">
-            <Card className="bg-gray-900/50 border-gray-700">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <MapPin className="h-5 w-5 mr-2 text-red-500" />
+                <CardTitle className="text-foreground flex items-center">
+                  <MapPin className="h-5 w-5 mr-2 text-primary" />
                   Shipping Information
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Full Name *
                     </label>
                     <Input
                       value={shippingAddress.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="bg-background border-border text-foreground"
                       placeholder="Enter your full name"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Email Address
                     </label>
                     <Input
                       value={shippingAddress.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="bg-background border-border text-foreground"
                       placeholder="your@email.com"
                       type="email"
                     />
@@ -210,74 +210,74 @@ const CheckoutPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Phone Number *
                   </label>
                   <Input
                     value={shippingAddress.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-background border-border text-foreground"
                     placeholder="+94 77 123 4567"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Address Line 1 *
                   </label>
                   <Input
                     value={shippingAddress.addressLine1}
                     onChange={(e) => handleInputChange('addressLine1', e.target.value)}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-background border-border text-foreground"
                     placeholder="Street address"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Address Line 2
                   </label>
                   <Input
                     value={shippingAddress.addressLine2}
                     onChange={(e) => handleInputChange('addressLine2', e.target.value)}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-background border-border text-foreground"
                     placeholder="Apartment, suite, etc. (optional)"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       City *
                     </label>
                     <Input
                       value={shippingAddress.city}
                       onChange={(e) => handleInputChange('city', e.target.value)}
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="bg-background border-border text-foreground"
                       placeholder="Colombo"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Postal Code *
                     </label>
                     <Input
                       value={shippingAddress.postalCode}
                       onChange={(e) => handleInputChange('postalCode', e.target.value)}
-                      className="bg-gray-800 border-gray-600 text-white"
+                      className="bg-background border-border text-foreground"
                       placeholder="00100"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Country
                   </label>
                   <Input
                     value={shippingAddress.country}
-                    className="bg-gray-800 border-gray-600 text-white"
+                    className="bg-background border-border text-foreground"
                     disabled
                   />
                 </div>
@@ -288,17 +288,17 @@ const CheckoutPage = () => {
           {/* Order Summary */}
           <div className="space-y-6">
             {/* Order Items */}
-            <Card className="bg-gray-900/50 border-gray-700">
+            <Card className="bg-card/50 border-border">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Package className="h-5 w-5 mr-2 text-red-500" />
+                <CardTitle className="text-foreground flex items-center">
+                  <Package className="h-5 w-5 mr-2 text-primary" />
                   Order Summary
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {cartItems.map((item) => (
                   <div key={item._id} className="flex items-center space-x-3 py-2">
-                    <div className="w-12 h-12 bg-gray-800 rounded overflow-hidden flex-shrink-0">
+                    <div className="w-12 h-12 bg-accent rounded overflow-hidden flex-shrink-0">
                       {item.product?.imageUrl ? (
                         <Image
                           src={item.product.imageUrl}
@@ -309,15 +309,15 @@ const CheckoutPage = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Package className="h-6 w-6 text-gray-600" />
+                          <Package className="h-6 w-6 text-muted-foreground" />
                         </div>
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-white text-sm font-medium">{item.product?.name}</p>
-                      <p className="text-gray-400 text-xs">Qty: {item.quantity}</p>
+                      <p className="text-foreground text-sm font-medium">{item.product?.name}</p>
+                      <p className="text-muted-foreground text-xs">Qty: {item.quantity}</p>
                     </div>
-                    <p className="text-white text-sm font-medium">
+                    <p className="text-foreground text-sm font-medium">
                       {formatPrice(item.priceAtTime * item.quantity)}
                     </p>
                   </div>
@@ -326,18 +326,18 @@ const CheckoutPage = () => {
             </Card>
 
             {/* Price Breakdown */}
-            <Card className="bg-gray-900/50 border-gray-700">
+            <Card className="bg-card/50 border-border">
               <CardContent className="pt-6 space-y-4">
                 {cartSummary && (
                   <>
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Subtotal</span>
-                      <span className="text-white">{formatPrice(cartSummary.totalPrice)}</span>
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="text-foreground">{formatPrice(cartSummary.totalPrice)}</span>
                     </div>
                     
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Shipping</span>
-                      <span className="text-white">
+                      <span className="text-muted-foreground">Shipping</span>
+                      <span className="text-foreground">
                         {calculateShipping(cartSummary.totalPrice) === 0 ? 
                           "Free" : 
                           formatPrice(calculateShipping(cartSummary.totalPrice))
@@ -346,15 +346,15 @@ const CheckoutPage = () => {
                     </div>
                     
                     <div className="flex justify-between">
-                      <span className="text-gray-400">Tax (VAT 18%)</span>
-                      <span className="text-white">{formatPrice(calculateTax(cartSummary.totalPrice))}</span>
+                      <span className="text-muted-foreground">Tax (VAT 18%)</span>
+                      <span className="text-foreground">{formatPrice(calculateTax(cartSummary.totalPrice))}</span>
                     </div>
                     
-                    <hr className="border-gray-700" />
+                    <hr className="border-border" />
                     
                     <div className="flex justify-between text-lg font-bold">
-                      <span className="text-white">Total</span>
-                      <span className="text-white">
+                      <span className="text-foreground">Total</span>
+                      <span className="text-foreground">
                         {formatPrice(
                           cartSummary.totalPrice + 
                           calculateShipping(cartSummary.totalPrice) + 
@@ -373,7 +373,7 @@ const CheckoutPage = () => {
                     <Button
                       onClick={handleCheckout}
                       disabled={isProcessing}
-                      className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-4 text-lg"
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-4 text-lg"
                     >
                       {isProcessing ? (
                         "Processing..."
