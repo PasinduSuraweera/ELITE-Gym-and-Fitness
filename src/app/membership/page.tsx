@@ -37,7 +37,8 @@ const MembershipPage = () => {
 
   const handleSubscribe = async (plan: any) => {
     if (!user) {
-      console.error("User not authenticated");
+      // Redirect to sign-in page if user is not authenticated
+      window.location.href = "/sign-in?redirect_url=" + encodeURIComponent("/membership");
       return;
     }
 
@@ -145,7 +146,8 @@ const MembershipPage = () => {
   };
 
   if (!user) {
-    return null; // Middleware will handle redirect
+    // Allow users to view packages without authentication
+    // Only require auth when purchasing
   }
 
   // Loading state
@@ -218,7 +220,7 @@ const MembershipPage = () => {
           </p>
         </div>
         {/* Current Membership Status */}
-        {currentMembership && (
+        {currentMembership && user && (
           <div className="max-w-7xl mx-auto mb-12" suppressHydrationWarning>
             <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/30 shadow-lg">
               <CardContent className="p-6">
@@ -260,7 +262,7 @@ const MembershipPage = () => {
             membershipPlans.map((plan) => {
               const config = getPlanConfig(plan.type);
               const isCurrentPlan =
-                currentMembership?.membershipType === plan.type;
+                Boolean(currentMembership?.membershipType === plan.type && user);
 
               return (
                 <Card
@@ -388,6 +390,11 @@ const MembershipPage = () => {
                             <Shield className="h-4 w-4" />
                             Active Plan
                           </div>
+                        ) : !user ? (
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="h-4 w-4" />
+                            Sign In to Subscribe
+                          </div>
                         ) : (
                           <div className="flex items-center gap-2">
                             <Sparkles className="h-4 w-4" />
@@ -402,6 +409,8 @@ const MembershipPage = () => {
                       <p className="text-sm text-muted-foreground text-center mt-3">
                         {isCurrentPlan
                           ? "Manage in profile settings"
+                          : !user
+                          ? "Sign in to purchase • No setup fees"
                           : "Cancel anytime • No setup fees"}
                       </p>
                     </div>
