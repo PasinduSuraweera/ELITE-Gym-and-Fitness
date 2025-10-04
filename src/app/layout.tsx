@@ -6,6 +6,7 @@ import ConvexClerkProvider from "@/providers/ConvexClerkProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ChatbaseWidget from "@/components/ChatbaseWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -113,6 +114,7 @@ export default function RootLayout({
 
             <main className="flex-1 relative z-10">{children}</main>
             <Footer />
+            <ChatbaseWidget />
           </ThemeProvider>
           <BrowserExtensionHandler />
         </body>

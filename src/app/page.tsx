@@ -4,15 +4,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, MessageCircle, Brain, Users, ShoppingCart, BookOpen, Heart, Crown, Dumbbell, Calendar, Star, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import GymLocationsSection from "@/components/GymLocationsSection";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-// Dynamic import to prevent hydration issues
-const ChadBot = dynamic(() => import("@/components/ChadBot"), {
-  ssr: false,
-});
 
 const HomePage = () => {
   return (
@@ -755,9 +749,6 @@ const HomePage = () => {
 
       {/* Gym Locations Section */}
       <GymLocationsSection />
-
-      {/* ChadBot - Only on homepage */}
-      <ChadBot />
     </div>
   );
 };

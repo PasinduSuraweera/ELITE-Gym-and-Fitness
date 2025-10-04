@@ -1,0 +1,119 @@
+/* Chatbase Widget Custom Styling for ELITE Gym & Fitness */
+
+/* Style the chat bubble button */
+#chatbase-bubble-button {
+  /* Position and size */
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1000 !important;
+  
+  /* Custom styling to match gym theme */
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%) !important;
+  border: 2px solid hsl(var(--primary)) !important;
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+#chatbase-bubble-button:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 6px 20px hsl(var(--primary) / 0.4) !important;
+}
+
+/* Style the chat window */
+#chatbase-bubble-window {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  z-index: 999 !important;
+}
+
+/* Style the chat header */
+#chatbase-bubble-window .chatbase-header {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.9) 100%) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  font-weight: 600 !important;
+}
+
+/* Style the chat input area */
+#chatbase-bubble-window .chatbase-input {
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-radius: 8px !important;
+}
+
+/* Style chat messages */
+#chatbase-bubble-window .chatbase-message-user {
+  background: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border-radius: 12px 12px 4px 12px !important;
+}
+
+#chatbase-bubble-window .chatbase-message-bot {
+  background: hsl(var(--muted)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-radius: 12px 12px 12px 4px !important;
+}
+
+/* Style the send button */
+#chatbase-bubble-window .chatbase-send-button {
+  background: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border-radius: 6px !important;
+}
+
+#chatbase-bubble-window .chatbase-send-button:hover {
+  background: hsl(var(--primary) / 0.9) !important;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  #chatbase-bubble-button {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 56px !important;
+    height: 56px !important;
+  }
+  
+  #chatbase-bubble-window {
+    width: calc(100vw - 32px) !important;
+    height: calc(100vh - 100px) !important;
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+}
+
+/* Ensure compatibility with dark mode */
+[data-theme="dark"] #chatbase-bubble-window {
+  background: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+}
+
+[data-theme="dark"] #chatbase-bubble-window .chatbase-message-bot {
+  background: hsl(var(--muted)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Loading state styling */
+#chatbase-bubble-window .chatbase-loading {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* Scrollbar styling for chat window */
+#chatbase-bubble-window .chatbase-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+#chatbase-bubble-window .chatbase-messages::-webkit-scrollbar-track {
+  background: hsl(var(--muted) / 0.3);
+  border-radius: 3px;
+}
+
+#chatbase-bubble-window .chatbase-messages::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.5);
+  border-radius: 3px;
+}
+
+#chatbase-bubble-window .chatbase-messages::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.7);
+}
