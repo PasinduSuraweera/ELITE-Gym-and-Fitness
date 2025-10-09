@@ -4,7 +4,7 @@ import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useState, useEffect } from "react";
-import { Crown, Shield, User, Search, Filter, Eye, Calendar, Activity, Users, CreditCard } from "lucide-react";
+import { Crown, Shield, User, Search, Filter, Eye, Calendar, Activity, Users, CreditCard, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@clerk/nextjs";
@@ -205,6 +205,61 @@ export default function AdminUsersPage() {
     }
   };
 
+  // Export users to CSV
+  const handleExportUsers = () => {
+    if (!filteredUsers?.length) {
+      alert("No users to export");
+      return;
+    }
+
+    const headers = [
+      'Name',
+      'Email',
+      'Role',
+      'Clerk ID',
+      'Membership Type',
+      'Membership Status',
+      'Membership End Date',
+      'Days Remaining',
+      'Created Date',
+      'Updated Date'
+    ];
+
+    const csvData = filteredUsers.map((user: any) => {
+      const membership = getUserMembership(user.clerkId);
+      const membershipStatus = getMembershipStatus(membership);
+      const endDate = membership?.currentPeriodEnd;
+      const daysRemaining = endDate ? Math.ceil((endDate - Date.now()) / (1000 * 60 * 60 * 24)) : 0;
+
+      return [
+        user.name,
+        user.email,
+        user.role || 'user',
+        user.clerkId,
+        membership?.membershipType || 'None',
+        membershipStatus.text,
+        endDate ? formatDate(endDate) : 'N/A',
+        endDate && daysRemaining > 0 ? daysRemaining : 0,
+        formatDate(user.createdAt),
+        formatDate(user.updatedAt)
+      ];
+    });
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `members-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <AdminLayout 
       title="Member Management" 
@@ -301,6 +356,19 @@ export default function AdminUsersPage() {
               <option value="none">No Membership</option>
             </select>
           </div>
+        </div>
+        <div className="mt-4 flex justify-between items-center">
+          <div className="text-muted-foreground text-sm">
+            Showing {filteredUsers?.length || 0} members
+          </div>
+          <Button
+            onClick={handleExportUsers}
+            variant="outline"
+            className="border-border text-foreground hover:bg-accent"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Export Members
+          </Button>
         </div>
       </div>
 

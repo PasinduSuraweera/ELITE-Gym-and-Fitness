@@ -22,6 +22,7 @@ import {
   ChefHat,
   X,
   FileText,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import { useQuery, useMutation } from "convex/react";
@@ -434,6 +435,64 @@ const AdminRecipesPage = () => {
     }));
   };
 
+  // Export recipes to CSV
+  const handleExportRecipes = () => {
+    if (!filteredRecipes?.length) {
+      alert("No recipes to export");
+      return;
+    }
+
+    const headers = [
+      'Title',
+      'Description',
+      'Category',
+      'Difficulty',
+      'Cooking Time (min)',
+      'Servings',
+      'Calories',
+      'Protein (g)',
+      'Carbs (g)',
+      'Fats (g)',
+      'Is Recommended',
+      'Created Date',
+      'Ingredients',
+      'Instructions',
+      'Tags'
+    ];
+
+    const csvData = filteredRecipes.map((recipe: any) => [
+      recipe.title,
+      recipe.description,
+      recipe.category,
+      recipe.difficulty,
+      recipe.cookingTime,
+      recipe.servings,
+      recipe.calories,
+      recipe.protein,
+      recipe.carbs,
+      recipe.fats,
+      recipe.isRecommended ? 'Yes' : 'No',
+      new Date(recipe.createdAt).toLocaleDateString(),
+      recipe.ingredients.map((ing: any) => `${ing.amount} ${ing.unit || ''} ${ing.name}`).join('; '),
+      recipe.instructions.join('; '),
+      recipe.tags?.join('; ') || ''
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `recipes-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   // Show loading state
   if (recipes === undefined) {
     return (
@@ -621,13 +680,23 @@ const AdminRecipesPage = () => {
               </p>
             )}
           </div>
-          <Button
-            onClick={() => setShowAddModal(true)}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add New Recipe
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleExportRecipes}
+              variant="outline"
+              className="border-border text-foreground hover:bg-accent"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+            <Button
+              onClick={() => setShowAddModal(true)}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add New Recipe
+            </Button>
+          </div>
         </div>
 
         {/* Recipes Grid */}

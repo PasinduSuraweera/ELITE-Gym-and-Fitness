@@ -3,6 +3,7 @@
 import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { 
   Clock, 
@@ -17,7 +18,8 @@ import {
   FileText,
   TrendingUp,
   Users,
-  CheckSquare
+  CheckSquare,
+  Download
 } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 
@@ -111,6 +113,54 @@ export default function TrainerApplicationsPage() {
     } finally {
       setReviewingApp(null);
     }
+  };
+
+  // Export trainer applications to CSV
+  const handleExportApplications = () => {
+    if (!filteredApplications?.length) {
+      alert("No applications to export");
+      return;
+    }
+
+    const headers = [
+      'Applicant Name',
+      'Email',
+      'Experience',
+      'Certifications',
+      'Motivation',
+      'Status',
+      'Submitted Date',
+      'Reviewed Date',
+      'Reviewed By',
+      'Notes'
+    ];
+
+    const csvData = filteredApplications.map((app: any) => [
+      app.name,
+      app.email,
+      app.experience,
+      app.certifications,
+      app.motivation,
+      app.status,
+      formatDate(app.submittedAt),
+      formatDate(app.reviewedAt),
+      app.reviewedBy || '',
+      app.notes || ''
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `trainer-applications-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   const getStatusBadge = (status: string) => {
@@ -233,8 +283,18 @@ export default function TrainerApplicationsPage() {
             </div>
           </div>
 
-          <div className="text-muted-foreground text-sm">
-            Showing {filteredApplications?.length || 0} of {stats.total} applications
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={handleExportApplications}
+              variant="outline"
+              className="border-border text-foreground hover:bg-accent"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+            <div className="text-muted-foreground text-sm">
+              Showing {filteredApplications?.length || 0} of {stats.total} applications
+            </div>
           </div>
         </div>
       </div>

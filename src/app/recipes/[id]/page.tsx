@@ -40,8 +40,8 @@ const Badge = ({
     "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors";
   const variantClasses =
     variant === "outline"
-      ? "border-gray-600 text-gray-400 bg-transparent"
-      : "border-transparent bg-red-600/20 text-red-400";
+      ? "border-border text-muted-foreground bg-transparent"
+      : "border-transparent bg-primary/20 text-primary";
 
   return (
     <div className={`${baseClasses} ${variantClasses} ${className}`}>
@@ -62,52 +62,53 @@ const RecipeDetailPage = () => {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-green-900/50 text-green-400 border-green-500/30";
+        return "bg-green-500/10 text-green-500 border-green-500/30";
       case "medium":
-        return "bg-yellow-900/50 text-yellow-400 border-yellow-500/30";
+        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/30";
       case "hard":
-        return "bg-red-900/50 text-red-400 border-red-500/30";
+        return "bg-red-500/10 text-red-500 border-red-500/30";
       default:
-        return "bg-gray-900/50 text-gray-400 border-gray-500/30";
+        return "bg-muted/10 text-muted-foreground border-border";
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "breakfast":
-        return "bg-orange-900/50 text-orange-400 border-orange-500/30";
+        return "bg-orange-500/10 text-orange-500 border-orange-500/30";
       case "lunch":
-        return "bg-blue-900/50 text-blue-400 border-blue-500/30";
+        return "bg-blue-500/10 text-blue-500 border-blue-500/30";
       case "dinner":
-        return "bg-purple-900/50 text-purple-400 border-purple-500/30";
+        return "bg-purple-500/10 text-purple-500 border-purple-500/30";
       case "snack":
-        return "bg-pink-900/50 text-pink-400 border-pink-500/30";
+        return "bg-pink-500/10 text-pink-500 border-pink-500/30";
       case "pre-workout":
-        return "bg-green-900/50 text-green-400 border-green-500/30";
+        return "bg-green-500/10 text-green-500 border-green-500/30";
       case "post-workout":
-        return "bg-cyan-900/50 text-cyan-400 border-cyan-500/30";
+        return "bg-cyan-500/10 text-cyan-500 border-cyan-500/30";
       case "protein":
-        return "bg-red-900/50 text-red-400 border-red-500/30";
+        return "bg-red-500/10 text-red-500 border-red-500/30";
       case "healthy":
-        return "bg-emerald-900/50 text-emerald-400 border-emerald-500/30";
+        return "bg-emerald-500/10 text-emerald-500 border-emerald-500/30";
       default:
-        return "bg-gray-900/50 text-gray-400 border-gray-500/30";
+        return "bg-muted/10 text-muted-foreground border-border";
     }
   };
 
   if (!recipe) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-red-900/20">
-        <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/5" />
+        <div className="container mx-auto px-4 py-32 relative z-10">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-white mb-4">
+            <h1 className="text-2xl font-bold text-foreground mb-4">
               Recipe Not Found
             </h1>
-            <p className="text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               Sorry, we couldn't find the recipe you're looking for.
             </p>
             <Link href="/recipes">
-              <Button className="bg-red-600 hover:bg-red-700 text-white">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 Back to Recipes
               </Button>
             </Link>
@@ -118,14 +119,18 @@ const RecipeDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-red-900/20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="flex flex-col min-h-screen text-foreground overflow-hidden relative bg-background">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-accent/5"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]"></div>
+      
+      <div className="container mx-auto px-4 py-32 relative z-10">
         {/* Back Button */}
         <div className="mb-6">
           <Link href="/recipes">
             <Button
               variant="outline"
-              className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+              className="border-primary/30 text-primary hover:bg-primary/10"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Recipes
@@ -176,7 +181,7 @@ const RecipeDetailPage = () => {
           {!recipe.imageUrl && (
             <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-3 mb-4">
-                <h1 className="text-4xl md:text-5xl font-bold text-white">
+                <h1 className="text-4xl md:text-5xl font-bold text-foreground">
                   {recipe.title}
                 </h1>
                 {recipe.isRecommended && (
@@ -184,7 +189,7 @@ const RecipeDetailPage = () => {
                 )}
               </div>
 
-              <p className="text-xl text-gray-300 mb-6 max-w-2xl mx-auto">
+              <p className="text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
                 {recipe.description}
               </p>
 
@@ -199,7 +204,7 @@ const RecipeDetailPage = () => {
                   <Badge
                     key={tag}
                     variant="outline"
-                    className="border-gray-600 text-gray-400"
+                    className="border-border text-muted-foreground"
                   >
                     {tag}
                   </Badge>
@@ -215,7 +220,7 @@ const RecipeDetailPage = () => {
                 <Badge
                   key={tag}
                   variant="outline"
-                  className="border-gray-600 text-gray-400"
+                  className="border-border text-muted-foreground"
                 >
                   {tag}
                 </Badge>
@@ -225,84 +230,84 @@ const RecipeDetailPage = () => {
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Card className="bg-black/90 backdrop-blur-sm border-red-500/30 text-center">
+            <Card className="bg-card/50 backdrop-blur-sm border-primary/30 text-center">
               <CardContent className="p-4">
-                <Clock className="h-6 w-6 text-red-400 mx-auto mb-2" />
-                <div className="text-lg font-semibold text-white">
+                <Clock className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-lg font-semibold text-foreground">
                   {recipe.cookingTime}
                 </div>
-                <div className="text-sm text-gray-400">minutes</div>
+                <div className="text-sm text-muted-foreground">minutes</div>
               </CardContent>
             </Card>
 
-            <Card className="bg-black/90 backdrop-blur-sm border-red-500/30 text-center">
+            <Card className="bg-card/50 backdrop-blur-sm border-primary/30 text-center">
               <CardContent className="p-4">
-                <Users className="h-6 w-6 text-red-400 mx-auto mb-2" />
-                <div className="text-lg font-semibold text-white">
+                <Users className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-lg font-semibold text-foreground">
                   {recipe.servings}
                 </div>
-                <div className="text-sm text-gray-400">servings</div>
+                <div className="text-sm text-muted-foreground">servings</div>
               </CardContent>
             </Card>
 
-            <Card className="bg-black/90 backdrop-blur-sm border-red-500/30 text-center">
+            <Card className="bg-card/50 backdrop-blur-sm border-primary/30 text-center">
               <CardContent className="p-4">
-                <Flame className="h-6 w-6 text-red-400 mx-auto mb-2" />
-                <div className="text-lg font-semibold text-white">
+                <Flame className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-lg font-semibold text-foreground">
                   {recipe.calories}
                 </div>
-                <div className="text-sm text-gray-400">calories</div>
+                <div className="text-sm text-muted-foreground">calories</div>
               </CardContent>
             </Card>
 
-            <Card className="bg-black/90 backdrop-blur-sm border-red-500/30 text-center">
+            <Card className="bg-card/50 backdrop-blur-sm border-primary/30 text-center">
               <CardContent className="p-4">
-                <Zap className="h-6 w-6 text-red-400 mx-auto mb-2" />
-                <div className="text-lg font-semibold text-white">
+                <Zap className="h-6 w-6 text-primary mx-auto mb-2" />
+                <div className="text-lg font-semibold text-foreground">
                   {recipe.protein}g
                 </div>
-                <div className="text-sm text-gray-400">protein</div>
+                <div className="text-sm text-muted-foreground">protein</div>
               </CardContent>
             </Card>
           </div>
 
           {/* Nutrition Overview */}
-          <Card className="bg-black/90 backdrop-blur-sm border-red-500/30 mb-8">
+          <Card className="bg-card/50 backdrop-blur-sm border-primary/30 mb-8">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Activity className="h-5 w-5 text-red-400" />
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary" />
                 Nutrition Facts
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-red-400">
+                  <div className="text-2xl font-bold text-primary">
                     {recipe.protein}g
                   </div>
-                  <div className="text-sm text-gray-400">Protein</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-sm text-muted-foreground">Protein</div>
+                  <div className="text-xs text-muted-foreground/70">
                     (
                     {Math.round(((recipe.protein * 4) / recipe.calories) * 100)}
                     % of calories)
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">
+                  <div className="text-2xl font-bold text-blue-500">
                     {recipe.carbs}g
                   </div>
-                  <div className="text-sm text-gray-400">Carbs</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-sm text-muted-foreground">Carbs</div>
+                  <div className="text-xs text-muted-foreground/70">
                     ({Math.round(((recipe.carbs * 4) / recipe.calories) * 100)}%
                     of calories)
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-yellow-400">
+                  <div className="text-2xl font-bold text-yellow-500">
                     {recipe.fats}g
                   </div>
-                  <div className="text-sm text-gray-400">Fats</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-sm text-muted-foreground">Fats</div>
+                  <div className="text-xs text-muted-foreground/70">
                     ({Math.round(((recipe.fats * 9) / recipe.calories) * 100)}%
                     of calories)
                   </div>
@@ -314,13 +319,13 @@ const RecipeDetailPage = () => {
           {/* Main Content */}
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Ingredients */}
-            <Card className="bg-black/90 backdrop-blur-sm border-red-500/30">
+            <Card className="bg-card/50 backdrop-blur-sm border-primary/30">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <ChefHat className="h-5 w-5 text-red-400" />
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <ChefHat className="h-5 w-5 text-primary" />
                   Ingredients
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Everything you need for {recipe.servings} serving
                   {recipe.servings > 1 ? "s" : ""}
                 </CardDescription>
@@ -330,11 +335,11 @@ const RecipeDetailPage = () => {
                   {recipe.ingredients.map((ingredient: any, index: number) => (
                     <li
                       key={index}
-                      className="flex items-center gap-3 text-gray-300"
+                      className="flex items-center gap-3 text-muted-foreground"
                     >
-                      <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
                       <span>
-                        <strong className="text-white">
+                        <strong className="text-foreground">
                           {ingredient.amount} {ingredient.unit}
                         </strong>{" "}
                         {ingredient.name}
@@ -346,13 +351,13 @@ const RecipeDetailPage = () => {
             </Card>
 
             {/* Instructions */}
-            <Card className="bg-black/90 backdrop-blur-sm border-red-500/30">
+            <Card className="bg-card/50 backdrop-blur-sm border-primary/30">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Target className="h-5 w-5 text-red-400" />
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
                   Instructions
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Step-by-step cooking guide
                 </CardDescription>
               </CardHeader>
@@ -361,10 +366,10 @@ const RecipeDetailPage = () => {
                   {recipe.instructions.map(
                     (instruction: string, index: number) => (
                       <li key={index} className="flex gap-4">
-                        <div className="flex-shrink-0 w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                        <div className="flex-shrink-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-semibold">
                           {index + 1}
                         </div>
-                        <div className="text-gray-300 pt-1">{instruction}</div>
+                        <div className="text-muted-foreground pt-1">{instruction}</div>
                       </li>
                     )
                   )}
@@ -374,20 +379,20 @@ const RecipeDetailPage = () => {
           </div>
 
           {/* Tips Section */}
-          <Card className="bg-black/90 backdrop-blur-sm border-red-500/30 mt-8">
+          <Card className="bg-card/50 backdrop-blur-sm border-primary/30 mt-8">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
-                <Star className="h-5 w-5 text-yellow-400" />
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <Star className="h-5 w-5 text-yellow-500" />
                 Pro Tips
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
-                  <h4 className="text-red-400 font-semibold mb-2">
+                <div className="bg-primary/10 border border-primary/30 rounded-lg p-4">
+                  <h4 className="text-primary font-semibold mb-2">
                     Best Time to Eat
                   </h4>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     {recipe.category === "pre-workout" &&
                       "Consume 30-60 minutes before your workout for optimal energy."}
                     {recipe.category === "post-workout" &&
@@ -405,11 +410,11 @@ const RecipeDetailPage = () => {
                       "Enjoy anytime as part of a balanced diet."}
                   </p>
                 </div>
-                <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4">
-                  <h4 className="text-green-400 font-semibold mb-2">
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
+                  <h4 className="text-green-500 font-semibold mb-2">
                     Meal Prep Friendly
                   </h4>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     This recipe can be prepared in advance and stored in the
                     refrigerator for up to 3-4 days. Perfect for meal prepping
                     your fitness nutrition.
@@ -422,7 +427,7 @@ const RecipeDetailPage = () => {
           {/* Action Buttons */}
           <div className="text-center mt-8">
             <Link href="/recipes">
-              <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300">
                 Explore More Recipes
               </Button>
             </Link>

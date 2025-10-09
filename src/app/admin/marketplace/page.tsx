@@ -15,7 +15,8 @@ import {
   DollarSign,
   TrendingUp,
   X,
-  Plus
+  Plus,
+  Download
 } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
 
@@ -173,6 +174,54 @@ export default function MarketplaceAdminPage() {
     { value: "nutrition", label: "Nutrition" },
   ];
 
+  // Export marketplace items to CSV
+  const handleExportItems = () => {
+    if (!items?.length) {
+      alert("No items to export");
+      return;
+    }
+
+    const headers = [
+      'Product Name',
+      'Description',
+      'Category',
+      'Price (LKR)',
+      'Stock',
+      'Status',
+      'Featured',
+      'Created Date',
+      'Updated Date',
+      'Created By'
+    ];
+
+    const csvData = items.map((item: any) => [
+      item.name,
+      item.description,
+      item.category,
+      item.price,
+      item.stock,
+      item.status,
+      item.featured ? 'Yes' : 'No',
+      new Date(item.createdAt).toLocaleDateString(),
+      new Date(item.updatedAt).toLocaleDateString(),
+      item.createdBy || 'System'
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `marketplace-items-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <AdminLayout 
       title="Marketplace" 
@@ -221,8 +270,16 @@ export default function MarketplaceAdminPage() {
         </div>
       </div>
 
-      {/* Add Product Button */}
-      <div className="mb-8">
+      {/* Add Product and Export Buttons */}
+      <div className="mb-8 flex gap-2">
+        <Button
+          onClick={handleExportItems}
+          variant="outline"
+          className="border-border text-foreground hover:bg-accent"
+        >
+          <Download className="h-5 w-5 mr-2" />
+          Export
+        </Button>
         <Button
           onClick={handleAddProduct}
           className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-6 py-3"

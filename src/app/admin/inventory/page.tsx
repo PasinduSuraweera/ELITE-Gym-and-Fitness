@@ -143,6 +143,80 @@ export default function InventoryPage() {
     }
   };
 
+  // Export inventory to CSV
+  const handleExportInventory = () => {
+    if (!filteredInventory?.length) {
+      alert("No inventory items to export");
+      return;
+    }
+
+    const headers = [
+      'Equipment Name',
+      'Category',
+      'Manufacturer',
+      'Model',
+      'Serial Number',
+      'Total Quantity',
+      'Available Quantity',
+      'In Use Quantity',
+      'Maintenance Quantity',
+      'Condition',
+      'Status',
+      'Purchase Date',
+      'Purchase Price (LKR)',
+      'Vendor',
+      'Warranty Expiry',
+      'Location',
+      'Zone',
+      'Min Quantity Alert',
+      'Max Capacity',
+      'Next Maintenance Date',
+      'Last Maintained',
+      'Tags',
+      'Notes'
+    ];
+
+    const csvData = filteredInventory.map((item: any) => [
+      item.name,
+      item.category,
+      item.manufacturer || '',
+      item.model || '',
+      item.serialNumber || '',
+      item.totalQuantity,
+      item.availableQuantity,
+      item.inUseQuantity,
+      item.maintenanceQuantity,
+      item.condition,
+      item.status,
+      formatDate(item.purchaseDate),
+      item.purchasePrice || '',
+      item.vendor || '',
+      formatDate(item.warrantyExpiry),
+      item.location || '',
+      item.zone || '',
+      item.minQuantityAlert || '',
+      item.maxCapacity || '',
+      formatDate(item.nextMaintenanceDate),
+      formatDate(item.lastMaintained),
+      item.tags?.join('; ') || '',
+      item.notes || ''
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `inventory-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <AdminLayout title="Inventory Management">
       <div className="space-y-6">
@@ -156,6 +230,7 @@ export default function InventoryPage() {
           </div>
           <div className="flex gap-2">
             <Button
+              onClick={handleExportInventory}
               variant="outline"
               className="border-border text-foreground hover:bg-accent"
             >

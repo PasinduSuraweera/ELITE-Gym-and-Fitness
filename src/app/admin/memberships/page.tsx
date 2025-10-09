@@ -6,7 +6,7 @@ import { api } from "../../../../convex/_generated/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Crown, DollarSign, AlertTriangle } from "lucide-react";
+import { Users, Crown, DollarSign, AlertTriangle, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 
@@ -156,11 +156,78 @@ export default function AdminMembershipsPage() {
   
   const activeRevenue = calculateRealRevenue();
 
+  // Export memberships to CSV
+  const handleExportMemberships = () => {
+    if (!allMemberships?.length) {
+      alert("No memberships to export");
+      return;
+    }
+
+    const headers = [
+      'Member Name',
+      'Email',
+      'Membership Type',
+      'Status',
+      'Price (LKR)',
+      'Stripe Customer ID',
+      'Stripe Subscription ID',
+      'Start Date',
+      'End Date',
+      'Cancel At Period End',
+      'Created Date',
+      'Updated Date'
+    ];
+
+    const csvData = allMemberships.map((membership: any) => {
+      const plan = membershipPlans?.find(p => p.type === membership.membershipType);
+      return [
+        membership.userName || 'N/A',
+        membership.userEmail || 'N/A',
+        membership.membershipType,
+        membership.status,
+        plan?.price || 0,
+        membership.stripeCustomerId || '',
+        membership.stripeSubscriptionId || '',
+        formatDate(membership.currentPeriodStart),
+        formatDate(membership.currentPeriodEnd),
+        membership.cancelAtPeriodEnd ? 'Yes' : 'No',
+        formatDate(membership.createdAt),
+        formatDate(membership.updatedAt)
+      ];
+    });
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `memberships-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <AdminLayout 
       title="Membership Management" 
       subtitle="Manage gym membership plans and subscriptions"
     >
+      {/* Export Button */}
+      <div className="mb-6">
+        <Button
+          onClick={handleExportMemberships}
+          variant="outline"
+          className="border-border text-foreground hover:bg-accent"
+        >
+          <Download className="h-4 w-4 mr-2" />
+          Export Memberships
+        </Button>
+      </div>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-card/50 border border-border rounded-lg p-6">

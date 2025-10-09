@@ -3,6 +3,7 @@
 import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { 
   Users, 
@@ -16,7 +17,8 @@ import {
   Activity,
   Clock,
   Star,
-  Package
+  Package,
+  Download
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
@@ -192,11 +194,63 @@ export default function AdminDashboard() {
 
   const recentActivity = getRecentActivity();
 
+  // Export dashboard summary to CSV
+  const handleExportSummary = () => {
+    const summaryData = [
+      ['Metric', 'Value', 'Description'],
+      ['Total Users', totalUsers, 'All registered users'],
+      ['Admins', adminCount, 'Users with admin role'],
+      ['Trainers', trainerCount, 'Users with trainer role'],
+      ['Regular Users', userCount, 'Users with user role'],
+      ['Pending Applications', pendingApplications, 'Trainer applications awaiting review'],
+      ['Active Memberships', activeMemberships, 'Currently active paid memberships'],
+      ['Expired Memberships', expiredMemberships, 'Memberships that have expired'],
+      ['Total Memberships', totalMemberships, 'All memberships (active + expired)'],
+      ['Monthly Revenue (LKR)', monthlyRevenue, 'Revenue from new memberships this month'],
+      ['Total Active Revenue (LKR)', totalRevenue, 'Total revenue from active memberships'],
+      ['Revenue Growth (%)', revenueGrowth, 'Month-over-month revenue growth'],
+      ['Total Recipes', totalRecipes, 'All recipes in the system'],
+      ['Recommended Recipes', recommendedRecipesCount, 'Recipes marked as recommended'],
+      ['Active Trainers', activeTrainerCount, 'Trainers with active profiles'],
+      ['Average Trainer Rating', averageTrainerRating.toFixed(1), 'Average rating across all trainers'],
+      ['Total Marketplace Items', marketplaceStats?.totalItems || 0, 'All marketplace products'],
+      ['Active Marketplace Items', marketplaceStats?.activeItems || 0, 'Active marketplace products'],
+      ['Total Inventory Items', inventoryStats?.totalItems || 0, 'All inventory equipment'],
+      ['Maintenance Alerts', maintenanceAlerts?.overdue?.length || 0, 'Equipment needing maintenance']
+    ];
+
+    const csvContent = summaryData
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-dashboard-summary-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <AdminLayout 
       title="Welcome back, Admin" 
       subtitle="Here's what's happening at Elite Gym today"
     >
+      {/* Export Button */}
+      <div className="mb-6">
+        <Button
+          onClick={handleExportSummary}
+          variant="outline"
+          className="border-border text-foreground hover:bg-accent"
+        >
+          <Download className="h-4 w-4 mr-2" />
+          Export Dashboard Summary
+        </Button>
+      </div>
+
       {/* Enhanced Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-card/50 border border-border rounded-lg p-8 hover:border-primary/30 transition-all duration-300">

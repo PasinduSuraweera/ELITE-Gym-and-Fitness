@@ -18,7 +18,8 @@ import {
   User,
   Search,
   BarChart3,
-  FileText
+  FileText,
+  Download
 } from "lucide-react";
 import Link from "next/link";
 
@@ -110,6 +111,56 @@ const AdminBlogPage = () => {
     { value: "archived", label: "Archived" },
   ];
 
+  // Export blog posts to CSV
+  const handleExportPosts = () => {
+    if (!filteredPosts?.length) {
+      alert("No posts to export");
+      return;
+    }
+
+    const headers = [
+      'Title',
+      'Author',
+      'Category',
+      'Status',
+      'Views',
+      'Likes',
+      'Comments',
+      'Published Date',
+      'Reading Time',
+      'Tags',
+      'Excerpt'
+    ];
+
+    const csvData = filteredPosts.map((post: any) => [
+      post.title,
+      post.authorName,
+      post.category,
+      post.status,
+      post.views || 0,
+      post.likes || 0,
+      post.commentCount || 0,
+      formatDate(post.publishedAt || post.createdAt),
+      `${post.readTime || 0} min`,
+      post.tags?.join('; ') || '',
+      post.excerpt
+    ]);
+
+    const csvContent = [headers, ...csvData]
+      .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `blog-posts-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-8">
@@ -119,12 +170,22 @@ const AdminBlogPage = () => {
             <h1 className="text-3xl font-bold text-foreground">Blog Management</h1>
             <p className="text-muted-foreground">Manage blog posts, view analytics, and create content</p>
           </div>
-          <Link href="/admin/blog/create">
-            <Button className="bg-red-600 hover:bg-red-700 text-white">
-              <Plus className="h-4 w-4 mr-2" />
-              Create Post
+          <div className="flex gap-2">
+            <Button
+              onClick={handleExportPosts}
+              variant="outline"
+              className="border-border text-foreground hover:bg-accent"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
             </Button>
-          </Link>
+            <Link href="/admin/blog/create">
+              <Button className="bg-red-600 hover:bg-red-700 text-white">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Post
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Statistics */}
