@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import { UserLayout } from "@/components/UserLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Package, Truck, Calendar, CreditCard, MapPin, Phone, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Package, Truck, Calendar, CreditCard, MapPin, Phone, Mail, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const OrdersPage = () => {
@@ -72,6 +73,208 @@ const OrdersPage = () => {
       case 'refunded': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
     }
+  };
+
+  // Download individual order receipt
+  const downloadOrderReceipt = (order: any) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 1000;
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) return;
+
+    // Background
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, 'hsl(222.2, 84%, 4.9%)');
+    gradient.addColorStop(1, 'hsl(217.2, 32.6%, 17.5%)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Header
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('ELITE GYM & FITNESS', canvas.width / 2, 50);
+    
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText('ORDER RECEIPT', canvas.width / 2, 80);
+
+    // Order Info
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 18px Arial';
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.fillText(`Order #${order.orderNumber}`, 40, 130);
+    
+    ctx.font = '14px Arial';
+    ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+    ctx.fillText(`Order Date: ${formatDate(order.createdAt)}`, 40, 155);
+    ctx.fillText(`Status: ${order.status.toUpperCase()}`, 40, 175);
+    ctx.fillText(`Payment: ${order.paymentStatus.toUpperCase()}`, 40, 195);
+
+    // Items
+    let yPos = 240;
+    ctx.font = 'bold 16px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText('ORDER ITEMS', 40, yPos);
+    yPos += 30;
+
+    order.items.forEach((item: any, index: number) => {
+      ctx.font = 'bold 14px Arial';
+      ctx.fillStyle = 'hsl(210, 40%, 98%)';
+      ctx.fillText(`${index + 1}. ${item.productName}`, 40, yPos);
+      
+      ctx.font = '12px Arial';
+      ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+      ctx.textAlign = 'right';
+      ctx.fillText(`Qty: ${item.quantity}`, canvas.width - 40, yPos);
+      ctx.fillText(`${formatCurrency(item.totalPrice)}`, canvas.width - 40, yPos + 15);
+      
+      ctx.textAlign = 'left';
+      yPos += 40;
+    });
+
+    // Totals
+    yPos += 20;
+    ctx.font = '12px Arial';
+    ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+    ctx.textAlign = 'right';
+    ctx.fillText(`Subtotal: ${formatCurrency(order.subtotal)}`, canvas.width - 40, yPos);
+    ctx.fillText(`Shipping: ${formatCurrency(order.shippingCost)}`, canvas.width - 40, yPos + 20);
+    ctx.fillText(`Tax: ${formatCurrency(order.tax)}`, canvas.width - 40, yPos + 40);
+    
+    ctx.font = 'bold 16px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText(`Total: ${formatCurrency(order.totalAmount)}`, canvas.width - 40, yPos + 70);
+
+    // Shipping Address
+    yPos += 120;
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 16px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText('SHIPPING ADDRESS', 40, yPos);
+    yPos += 25;
+    
+    ctx.font = '12px Arial';
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.fillText(order.shippingAddress.name, 40, yPos);
+    ctx.fillText(order.shippingAddress.addressLine1, 40, yPos + 15);
+    if (order.shippingAddress.addressLine2) {
+      ctx.fillText(order.shippingAddress.addressLine2, 40, yPos + 30);
+      yPos += 15;
+    }
+    ctx.fillText(`${order.shippingAddress.city}, ${order.shippingAddress.postalCode}`, 40, yPos + 30);
+    ctx.fillText(order.shippingAddress.country, 40, yPos + 45);
+    ctx.fillText(`Phone: ${order.shippingAddress.phone}`, 40, yPos + 65);
+
+    // Footer
+    ctx.font = '10px Arial';
+    ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Generated on ${new Date().toLocaleDateString()}`, canvas.width / 2, 950);
+
+    // Download
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `order-receipt-${order.orderNumber}-${new Date().toISOString().split('T')[0]}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  };
+
+  // Download all orders summary
+  const downloadAllOrdersSummary = () => {
+    if (!userOrders || userOrders.length === 0) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = Math.max(1000, 300 + userOrders.length * 100);
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) return;
+
+    // Background
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, 'hsl(222.2, 84%, 4.9%)');
+    gradient.addColorStop(1, 'hsl(217.2, 32.6%, 17.5%)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Header
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('ELITE GYM & FITNESS', canvas.width / 2, 50);
+    
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText('ORDER HISTORY SUMMARY', canvas.width / 2, 80);
+
+    // Summary Stats
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 16px Arial';
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.fillText(`Total Orders: ${userOrders.length}`, 40, 130);
+    
+    const totalSpent = userOrders.reduce((total, order) => total + order.totalAmount, 0);
+    ctx.fillText(`Total Spent: ${formatCurrency(totalSpent)}`, 40, 155);
+    
+    const deliveredCount = userOrders.filter(order => order.status === 'delivered').length;
+    ctx.fillText(`Delivered Orders: ${deliveredCount}`, 40, 180);
+
+    // Orders List
+    let yPos = 230;
+    ctx.font = 'bold 16px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText('ORDER HISTORY', 40, yPos);
+    yPos += 30;
+
+    userOrders
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .forEach((order, index) => {
+        if (yPos > canvas.height - 100) return; // Prevent overflow
+        
+        ctx.font = 'bold 12px Arial';
+        ctx.fillStyle = 'hsl(210, 40%, 98%)';
+        ctx.fillText(`${index + 1}. Order #${order.orderNumber}`, 40, yPos);
+        
+        ctx.font = '10px Arial';
+        ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+        ctx.fillText(formatDate(order.createdAt), 40, yPos + 15);
+        ctx.fillText(`Status: ${order.status}`, 40, yPos + 30);
+        
+        ctx.textAlign = 'right';
+        ctx.fillText(`${formatCurrency(order.totalAmount)}`, canvas.width - 40, yPos);
+        ctx.fillText(`${order.items.length} items`, canvas.width - 40, yPos + 15);
+        
+        ctx.textAlign = 'left';
+        yPos += 60;
+      });
+
+    // Footer
+    ctx.font = '10px Arial';
+    ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Generated on ${new Date().toLocaleDateString()}`, canvas.width / 2, canvas.height - 30);
+
+    // Download
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `orders-summary-${new Date().toISOString().split('T')[0]}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
   };
 
   // Show loading state during hydration or auth check
@@ -142,6 +345,18 @@ const OrdersPage = () => {
                   </div>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* Download All Orders Button */}
+            <div className="flex justify-end">
+              <Button 
+                onClick={downloadAllOrdersSummary}
+                variant="outline"
+                className="border-primary/30 text-primary hover:bg-primary/10"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download Order History
+              </Button>
             </div>
 
             {/* Orders List */}
@@ -275,6 +490,21 @@ const OrdersPage = () => {
                             </div>
                           )}
                         </div>
+                      </div>
+                    </div>
+
+                    {/* Download Receipt Button */}
+                    <div className="mt-6 pt-4 border-t border-border">
+                      <div className="flex justify-end">
+                        <Button
+                          onClick={() => downloadOrderReceipt(order)}
+                          variant="outline"
+                          size="sm"
+                          className="border-primary/30 text-primary hover:bg-primary/10"
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Download Receipt
+                        </Button>
                       </div>
                     </div>
 
