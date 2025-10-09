@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const MembershipSuccessPage = () => {
+const MembershipSuccessContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { user } = useUser();
@@ -188,6 +188,14 @@ const MembershipSuccessPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const MembershipSuccessPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MembershipSuccessContent />
+    </Suspense>
   );
 };
 

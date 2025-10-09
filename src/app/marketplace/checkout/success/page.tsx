@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Package, ArrowRight, Home } from "lucide-react";
 import Link from "next/link";
 
-const CheckoutSuccessPage = () => {
+const CheckoutSuccessContent = () => {
   const { user } = useUser();
   const searchParams = useSearchParams();
   const [orderDetails, setOrderDetails] = useState<any>(null);
@@ -158,6 +158,14 @@ const CheckoutSuccessPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const CheckoutSuccessPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CheckoutSuccessContent />
+    </Suspense>
   );
 };
 

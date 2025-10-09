@@ -620,7 +620,7 @@ export default function PayrollProcessingPage() {
           <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
           <div className="mb-4 p-3 bg-primary/10 rounded-lg border border-primary/30">
             <p className="text-sm text-primary mb-1">💡 Individual Approval Available</p>
-            <p className="text-xs text-primary/80">Click the check icon next to any pending record to approve individually, or use "Approve All" below.</p>
+            <p className="text-xs text-primary/80">Click the check icon next to any pending record to approve individually, or use &quot;Approve All&quot; below.</p>
           </div>
           <div className="space-y-3">
             <button

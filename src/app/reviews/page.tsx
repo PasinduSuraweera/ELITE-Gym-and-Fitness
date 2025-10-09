@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useQuery, useMutation } from "convex/react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ interface ReviewFormData {
   comment: string;
 }
 
-export default function ReviewsPage() {
+function ReviewsContent() {
   const { user, isLoaded } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -399,5 +399,13 @@ export default function ReviewsPage() {
           </div>
         )}
     </UserLayout>
+  );
+}
+
+export default function ReviewsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ReviewsContent />
+    </Suspense>
   );
 }

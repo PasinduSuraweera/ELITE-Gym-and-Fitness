@@ -632,7 +632,7 @@ const AdminRecipesPage = () => {
               <div className="mt-4 flex flex-wrap gap-2">
                 {searchTerm && (
                   <Badge className="bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/50 dark:text-blue-400 dark:border-blue-500/30">
-                    Search: "{searchTerm}"
+                    Search: &quot;{searchTerm}&quot;
                   </Badge>
                 )}
                 {categoryFilter !== "all" && (
