@@ -11,7 +11,7 @@ import NoFitnessPlan from "@/components/NoFitnessPlan";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Shield, Activity, Target, Clock } from "lucide-react";
+import { Calendar, Shield, Activity, Target, Clock, Download, CreditCard } from "lucide-react";
 import { useMembershipExpiryCheck, getMembershipStatusInfo, formatMembershipDate } from "@/lib/membership-utils";
 
 const ProfilePage = () => {
@@ -97,6 +97,223 @@ const ProfilePage = () => {
       console.error("❌ Error cancelling membership:", error);
       alert("❌ Error cancelling membership. Please contact support if this issue persists.");
     }
+  };
+
+  // Generate and download membership card
+  const downloadMembershipCard = () => {
+    if (!currentMembership || !user) return;
+
+    // Create canvas for membership card
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set card dimensions (standard credit card ratio)
+    canvas.width = 800;
+    canvas.height = 500;
+
+    // Create gradient background using system colors
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, 'hsl(222.2, 84%, 4.9%)'); // background
+    gradient.addColorStop(0.5, 'hsl(217.2, 32.6%, 17.5%)'); // muted
+    gradient.addColorStop(1, 'hsl(222.2, 84%, 4.9%)'); // background
+    
+    // Fill background
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Add outer border using foreground color
+    ctx.strokeStyle = 'hsl(210, 40%, 98%)'; // foreground
+    ctx.lineWidth = 3;
+    ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+
+    // Add inner accent border using primary color
+    ctx.strokeStyle = 'hsl(221.2, 83.2%, 53.3%)'; // primary
+    ctx.lineWidth = 2;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+
+    // Load and draw logo
+    const logoImg = new Image();
+    logoImg.onload = () => {
+      // Draw logo in top left with proper sizing
+      ctx.drawImage(logoImg, 40, 40, 80, 80);
+      generateCardContent();
+    };
+    
+    logoImg.onerror = () => {
+      // If logo fails to load, create a placeholder
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)'; // primary
+      ctx.fillRect(40, 40, 80, 80);
+      ctx.fillStyle = 'hsl(210, 40%, 98%)'; // foreground
+      ctx.font = 'bold 14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('ELITE', 80, 70);
+      ctx.fillText('GYM', 80, 90);
+      generateCardContent();
+    };
+    
+    // Try to load the logo
+    logoImg.src = '/logo.png';
+
+    const generateCardContent = () => {
+      // Add membership title
+      ctx.fillStyle = 'hsl(210, 40%, 98%)'; // foreground
+      ctx.font = 'bold 32px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText('ELITE GYM & FITNESS', 140, 70);
+      
+      ctx.font = '18px Arial';
+      ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)'; // muted-foreground
+      ctx.fillText('MEMBERSHIP CARD', 140, 95);
+
+      // Add member information
+      ctx.font = 'bold 20px Arial';
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)'; // primary
+      ctx.fillText('MEMBER NAME', 40, 160);
+      ctx.font = '18px Arial';
+      ctx.fillStyle = 'hsl(210, 40%, 98%)'; // foreground
+      ctx.fillText(user.fullName || user.firstName || 'Member', 40, 185);
+
+      // Add email
+      ctx.font = '14px Arial';
+      ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)'; // muted-foreground
+      ctx.fillText(`${user.emailAddresses?.[0]?.emailAddress || 'N/A'}`, 40, 205);
+
+      // Add membership type with color coding
+      ctx.font = 'bold 20px Arial';
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)'; // primary
+      ctx.fillText('PLAN TYPE', 40, 250);
+      
+      // Color code different plan types
+      const planColors = {
+        'Premium': 'hsl(142.1, 76.2%, 36.3%)', // success/green
+        'Standard': 'hsl(221.2, 83.2%, 53.3%)', // primary/blue  
+        'Basic': 'hsl(25, 95%, 53%)', // warning/orange
+      };
+      const planType = currentMembership.membershipType || 'Standard';
+      ctx.font = 'bold 18px Arial';
+      ctx.fillStyle = planColors[planType as keyof typeof planColors] || planColors.Standard;
+      ctx.fillText(`${planType.toUpperCase()} PLAN`, 40, 275);
+
+      // Add member ID
+      ctx.font = 'bold 20px Arial';
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)'; // primary
+      ctx.textAlign = 'right';
+      ctx.fillText('MEMBER ID', canvas.width - 40, 160);
+      ctx.font = '16px Arial';
+      ctx.fillStyle = 'hsl(210, 40%, 98%)'; // foreground
+      const memberId = currentMembership.stripeCustomerId?.slice(-8).toUpperCase() || user.id.slice(-8).toUpperCase();
+      ctx.fillText(`#${memberId}`, canvas.width - 40, 185);
+
+      // Add validity dates
+      ctx.font = 'bold 20px Arial';
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)'; // primary
+      ctx.fillText('VALID FROM', canvas.width - 40, 220);
+      ctx.font = '16px Arial';
+      ctx.fillStyle = 'hsl(210, 40%, 98%)'; // foreground
+      ctx.fillText(formatDate(currentMembership.currentPeriodStart), canvas.width - 40, 245);
+
+      ctx.font = 'bold 20px Arial';
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)'; // primary
+      ctx.fillText('VALID UNTIL', canvas.width - 40, 280);
+      ctx.font = '16px Arial';
+      ctx.fillStyle = 'hsl(210, 40%, 98%)'; // foreground
+      ctx.fillText(formatDate(currentMembership.currentPeriodEnd), canvas.width - 40, 305);
+
+      // Add status with system color scheme
+      ctx.font = 'bold 18px Arial';
+      const statusInfo = getMembershipStatusInfo(currentMembership);
+      if (statusInfo) {
+        const statusColors = {
+          'green': 'hsl(142.1, 76.2%, 36.3%)', // success
+          'orange': 'hsl(25, 95%, 53%)', // warning
+          'yellow': 'hsl(47.9, 95.8%, 53.1%)', // warning variant
+          'red': 'hsl(0, 84.2%, 60.2%)', // destructive
+        };
+        ctx.fillStyle = statusColors[statusInfo.color as keyof typeof statusColors] || statusColors.green;
+        ctx.textAlign = 'center';
+        ctx.fillText(`STATUS: ${statusInfo.message.toUpperCase()}`, canvas.width / 2, 350);
+      }
+
+      // Generate and draw barcode in bottom right
+      const generateBarcode = (membershipId: string) => {
+        // Create a simple barcode pattern from membership ID
+        const barcodeData = membershipId.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        const barcodeWidth = 160;
+        const barcodeHeight = 35;
+        const barcodeX = canvas.width - barcodeWidth - 40; // Position from right edge
+        const barcodeY = 380;
+        
+        // Draw barcode background with slight border
+        ctx.fillStyle = 'hsl(210, 40%, 98%)'; // foreground (white background for barcode)
+        ctx.fillRect(barcodeX - 3, barcodeY - 3, barcodeWidth + 6, barcodeHeight + 20);
+        
+        // Add subtle border around barcode
+        ctx.strokeStyle = 'hsl(215, 20.2%, 65.1%)'; // muted-foreground
+        ctx.lineWidth = 1;
+        ctx.strokeRect(barcodeX - 3, barcodeY - 3, barcodeWidth + 6, barcodeHeight + 20);
+        
+        // Draw barcode lines
+        ctx.fillStyle = 'hsl(222.2, 84%, 4.9%)'; // background (black bars)
+        const barWidth = 1.5;
+        const spaceWidth = 1;
+        
+        for (let i = 0; i < barcodeData.length && i * (barWidth + spaceWidth) * 2.5 < barcodeWidth - 10; i++) {
+          const char = barcodeData[i];
+          const charCode = char.charCodeAt(0);
+          
+          // Create pattern based on character code
+          const pattern = [
+            charCode % 2 === 0 ? barWidth : barWidth * 0.7, // Thick or thin bar
+            spaceWidth, // Space
+            charCode % 3 === 0 ? barWidth * 1.3 : barWidth, // Variable width bar
+            spaceWidth, // Space
+            charCode % 4 === 0 ? barWidth : barWidth * 0.8, // Another pattern
+          ];
+          
+          let currentX = barcodeX + 5 + (i * (barWidth + spaceWidth) * 2.5);
+          
+          for (let j = 0; j < pattern.length; j += 2) {
+            if (pattern[j] > 0 && currentX < barcodeX + barcodeWidth - pattern[j] - 5) {
+              ctx.fillRect(currentX, barcodeY, pattern[j], barcodeHeight);
+            }
+            currentX += pattern[j] + (pattern[j + 1] || 0);
+          }
+        }
+        
+        // Add barcode number below in smaller font
+        ctx.font = '8px monospace';
+        ctx.fillStyle = 'hsl(222.2, 84%, 4.9%)'; // background (black text)
+        ctx.textAlign = 'center';
+        ctx.fillText(barcodeData.slice(0, 16), barcodeX + barcodeWidth / 2, barcodeY + barcodeHeight + 12);
+      };
+      
+      // Generate barcode from membership ID
+      const barcodeId = currentMembership._id || currentMembership.stripeCustomerId || user.id;
+      generateBarcode(barcodeId);
+
+      // Add footer text positioned to not conflict with barcode
+      ctx.font = '12px Arial';
+      ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)'; // muted-foreground
+      ctx.textAlign = 'left';
+      ctx.fillText('Elite Gym & Fitness - Your Premium Fitness Partner', 40, 440);
+      ctx.font = '10px Arial';
+      ctx.fillText(`Generated on ${new Date().toLocaleDateString()}`, 40, 460);
+
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `elite-gym-membership-card-${user.firstName || 'member'}-${new Date().toISOString().split('T')[0]}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    };
   };
 
   // Check if membership is expired or expiring soon
@@ -256,11 +473,22 @@ const ProfilePage = () => {
             {/* Cancel Membership Button or Status Info */}
             {currentMembership.status === 'active' && !currentMembership.cancelAtPeriodEnd && (
               <div className="mt-6 pt-4 border-t border-border">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Need to cancel your membership?</p>
-                    <p className="text-xs text-muted-foreground">Your membership will remain active until the end of your billing period</p>
+                    <p className="text-sm text-muted-foreground mb-1">Membership Actions</p>
+                    <p className="text-xs text-muted-foreground">Download your card or manage your membership</p>
                   </div>
+                </div>
+                <div className="flex gap-3 justify-end">
+                  <Button
+                    onClick={downloadMembershipCard}
+                    variant="outline"
+                    size="sm"
+                    className="border-primary/30 text-primary hover:bg-primary/10"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download Card
+                  </Button>
                   <Button
                     variant="destructive"
                     size="sm"
