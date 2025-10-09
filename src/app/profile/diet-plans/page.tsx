@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { UserLayout } from "@/components/UserLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AppleIcon, Target, Utensils, Calculator, Clock } from "lucide-react";
+import { AppleIcon, Target, Utensils, Calculator, Clock, Download } from "lucide-react";
 
 const DietPlansPage = () => {
   const { user, isLoaded } = useUser();
@@ -36,6 +36,94 @@ const DietPlansPage = () => {
   const currentPlan = selectedPlanId
     ? allPlans?.find((plan) => plan._id === selectedPlanId)
     : activePlan;
+
+  // Download diet plan as PDF-style image
+  const downloadDietPlan = (plan: any) => {
+    if (!plan) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 1000;
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) return;
+
+    // Background
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, 'hsl(222.2, 84%, 4.9%)');
+    gradient.addColorStop(1, 'hsl(217.2, 32.6%, 17.5%)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Header
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.font = 'bold 28px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('ELITE GYM & FITNESS', canvas.width / 2, 50);
+    
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText('DIET PLAN', canvas.width / 2, 80);
+    
+    ctx.font = 'bold 24px Arial';
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.fillText(plan.name, canvas.width / 2, 110);
+
+    // Plan info
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 18px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText(`Daily Calories: ${plan.dietPlan.dailyCalories}`, 40, 160);
+    ctx.fillText(`Total Meals: ${plan.dietPlan.meals.length}`, 40, 190);
+
+    // Meals
+    let yPos = 240;
+    ctx.font = 'bold 20px Arial';
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.fillText('MEAL SCHEDULE', 40, yPos);
+    yPos += 40;
+
+    plan.dietPlan.meals.forEach((meal: any, index: number) => {
+      ctx.font = 'bold 16px Arial';
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+      ctx.fillText(`${index + 1}. ${meal.name}`, 40, yPos);
+      yPos += 25;
+      
+      ctx.font = '12px Arial';
+      ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+      const calories = Math.round(plan.dietPlan.dailyCalories / plan.dietPlan.meals.length);
+      ctx.fillText(`Estimated: ${calories} calories`, 60, yPos);
+      yPos += 20;
+
+      ctx.font = '11px Arial';
+      ctx.fillStyle = 'hsl(210, 40%, 98%)';
+      meal.foods.forEach((food: string, foodIndex: number) => {
+        if (yPos > 950) return; // Prevent overflow
+        ctx.fillText(`• ${food}`, 60, yPos);
+        yPos += 15;
+      });
+      yPos += 10;
+    });
+
+    // Footer
+    ctx.font = '10px Arial';
+    ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Generated on ${new Date().toLocaleDateString()}`, canvas.width / 2, 980);
+
+    // Download
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `diet-plan-${plan.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  };
 
   // Show loading state during auth check or hydration
   if (!mounted || !isLoaded) {
@@ -223,6 +311,14 @@ const DietPlansPage = () => {
 
                     {/* Quick Actions */}
                     <div className="flex gap-4">
+                      <Button 
+                        onClick={() => downloadDietPlan(currentPlan)}
+                        variant="outline"
+                        className="border-primary/30 text-primary hover:bg-primary/10"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Plan
+                      </Button>
                       <Button 
                         onClick={() => window.location.href = '/recipes'}
                         className="bg-primary hover:bg-primary/90"

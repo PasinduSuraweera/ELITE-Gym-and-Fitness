@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { UserLayout } from "@/components/UserLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DumbbellIcon, CalendarIcon, Clock, Target, Activity, Calendar } from "lucide-react";
+import { DumbbellIcon, CalendarIcon, Clock, Target, Activity, Calendar, Download } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -42,6 +42,128 @@ const FitnessPlansPage = () => {
   const currentPlan = selectedPlanId
     ? allPlans?.find((plan) => plan._id === selectedPlanId)
     : activePlan;
+
+  // Download fitness plan as PDF-style image
+  const downloadFitnessPlan = (plan: any) => {
+    if (!plan) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 1200;
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) return;
+
+    // Background
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, 'hsl(222.2, 84%, 4.9%)');
+    gradient.addColorStop(1, 'hsl(217.2, 32.6%, 17.5%)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Header
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.font = 'bold 28px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('ELITE GYM & FITNESS', canvas.width / 2, 50);
+    
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText('FITNESS PLAN', canvas.width / 2, 80);
+    
+    ctx.font = 'bold 24px Arial';
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.fillText(plan.name, canvas.width / 2, 110);
+
+    // Plan info
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 16px Arial';
+    ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+    ctx.fillText(`Schedule: ${plan.workoutPlan.schedule.join(', ')}`, 40, 160);
+    
+    const totalExercises = plan.workoutPlan.exercises.reduce((total: number, day: any) => total + day.routines.length, 0);
+    ctx.fillText(`Total Exercises: ${totalExercises}`, 40, 185);
+
+    // Workouts
+    let yPos = 230;
+    ctx.font = 'bold 20px Arial';
+    ctx.fillStyle = 'hsl(210, 40%, 98%)';
+    ctx.fillText('WORKOUT SCHEDULE', 40, yPos);
+    yPos += 40;
+
+    plan.workoutPlan.exercises.forEach((exerciseDay: any, dayIndex: number) => {
+      if (yPos > 1100) return; // Prevent overflow
+      
+      ctx.font = 'bold 18px Arial';
+      ctx.fillStyle = 'hsl(221.2, 83.2%, 53.3%)';
+      ctx.fillText(`${exerciseDay.day} (${exerciseDay.routines.length} exercises)`, 40, yPos);
+      yPos += 30;
+
+      exerciseDay.routines.forEach((routine: any, routineIndex: number) => {
+        if (yPos > 1100) return;
+        
+        ctx.font = 'bold 14px Arial';
+        ctx.fillStyle = 'hsl(210, 40%, 98%)';
+        ctx.fillText(`${routineIndex + 1}. ${routine.name}`, 60, yPos);
+        yPos += 20;
+
+        ctx.font = '11px Arial';
+        ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+        const details = [];
+        if (routine.sets) details.push(`${routine.sets} sets`);
+        if (routine.reps) details.push(`${routine.reps} reps`);
+        if (routine.duration) details.push(routine.duration);
+        
+        if (details.length > 0) {
+          ctx.fillText(`${details.join(' • ')}`, 80, yPos);
+          yPos += 15;
+        }
+
+        if (routine.description) {
+          ctx.font = '10px Arial';
+          ctx.fillStyle = 'hsl(210, 40%, 98%)';
+          const words = routine.description.split(' ');
+          let line = '';
+          for (const word of words) {
+            const testLine = line + word + ' ';
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > 650 && line) {
+              ctx.fillText(line.trim(), 80, yPos);
+              line = word + ' ';
+              yPos += 12;
+            } else {
+              line = testLine;
+            }
+          }
+          if (line.trim()) {
+            ctx.fillText(line.trim(), 80, yPos);
+            yPos += 12;
+          }
+        }
+        yPos += 10;
+      });
+      yPos += 20;
+    });
+
+    // Footer
+    ctx.font = '10px Arial';
+    ctx.fillStyle = 'hsl(215, 20.2%, 65.1%)';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Generated on ${new Date().toLocaleDateString()}`, canvas.width / 2, 1180);
+
+    // Download
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `fitness-plan-${plan.name.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  };
 
   // Show loading state during auth check or hydration
   if (!mounted || !isLoaded) {
@@ -233,6 +355,24 @@ const FitnessPlansPage = () => {
                           </AccordionItem>
                         ))}
                       </Accordion>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="flex gap-4">
+                      <Button 
+                        onClick={() => downloadFitnessPlan(currentPlan)}
+                        variant="outline"
+                        className="border-primary/30 text-primary hover:bg-primary/10"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Plan
+                      </Button>
+                      <Button 
+                        onClick={() => window.location.href = '/generate-program'}
+                        className="bg-primary hover:bg-primary/90"
+                      >
+                        Generate New Plan
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
