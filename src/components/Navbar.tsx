@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useState, useEffect } from "react";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import { ThemeAwareLogo } from "./ThemeAwareLogo";
 
 const Navbar = () => {
@@ -19,6 +19,7 @@ const Navbar = () => {
     user?.id ? { clerkId: user.id } : "skip"
   );
   const [mounted, setMounted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -80,7 +81,7 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* NAVIGATION */}
+        {/* NAVIGATION - Desktop */}
         <nav className="hidden lg:flex items-center gap-8">
           <Link
             href="/"
@@ -207,7 +208,7 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/* AUTH BUTTONS */}
+        {/* AUTH BUTTONS & MOBILE MENU */}
         <div className="flex items-center gap-4" suppressHydrationWarning>
           {/* Shopping Cart Icon */}
           {isSignedIn && (
@@ -227,43 +228,213 @@ const Navbar = () => {
             </Link>
           )}
 
-          {isSignedIn ? (
-            <>
-              <Link
-                href="/profile"
-                className="hidden md:block text-foreground hover:text-primary transition-colors text-sm font-medium"
-              >
-                Profile
-              </Link>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox: "h-10 w-10",
-                  },
-                }}
-              />
-            </>
-          ) : (
-            <>
-              <SignInButton mode="modal">
-                <Button
-                  variant="ghost"
-                  className="text-foreground hover:text-primary border border-border hover:border-primary rounded-full px-6 py-2 transition-all duration-300 bg-transparent hover:bg-accent/10"
+          {/* Desktop Auth */}
+          <div className="hidden lg:flex items-center gap-4">
+            {isSignedIn ? (
+              <>
+                <Link
+                  href="/profile"
+                  className="text-foreground hover:text-primary transition-colors text-sm font-medium"
                 >
-                  Login
-                </Button>
-              </SignInButton>
+                  Profile
+                </Link>
+                <UserButton
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      avatarBox: "h-10 w-10",
+                    },
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                <SignInButton mode="modal">
+                  <Button
+                    variant="ghost"
+                    className="text-foreground hover:text-primary border border-border hover:border-primary rounded-full px-6 py-2 transition-all duration-300 bg-transparent hover:bg-accent/10"
+                  >
+                    Login
+                  </Button>
+                </SignInButton>
 
-              <SignUpButton mode="modal">
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6 py-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-primary/25">
-                  Sign Up
-                </Button>
-              </SignUpButton>
-            </>
-          )}
+                <SignUpButton mode="modal">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6 py-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-primary/25">
+                    Sign Up
+                  </Button>
+                </SignUpButton>
+              </>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="lg:hidden text-foreground hover:text-primary p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
       </div>
+
+      {/* Mobile Navigation Menu */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-background/95 backdrop-blur-md border-b border-border/50">
+          <nav className="container mx-auto px-4 py-3 space-y-2">
+            <Link
+              href="/"
+              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                pathname === "/" ? "text-primary" : ""
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/generate-program"
+              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                pathname === "/generate-program" ? "text-primary" : ""
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              AI Plan Generator
+            </Link>
+            <Link
+              href="/recipes"
+              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                pathname === "/recipes" ? "text-primary" : ""
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Recipes
+            </Link>
+            <Link
+              href="/membership"
+              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                pathname === "/membership" ? "text-primary" : ""
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Membership
+            </Link>
+            <Link
+              href="/trainer-booking"
+              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                pathname === "/trainer-booking" ? "text-primary" : ""
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Trainer Booking
+            </Link>
+            <Link
+              href="/blog"
+              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                pathname.startsWith("/blog") ? "text-primary" : ""
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Blog
+            </Link>
+            <Link
+              href="/marketplace"
+              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                pathname === "/marketplace" ? "text-primary" : ""
+              }`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Marketplace
+            </Link>
+
+            {/* Role-based navigation */}
+            {userRole === "admin" && (
+              <Link
+                href="/admin"
+                className={`block py-1.5 text-sm text-primary hover:text-primary/80 transition-colors font-medium ${
+                  pathname.startsWith("/admin") ? "text-primary" : ""
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Admin Panel
+              </Link>
+            )}
+
+            {(userRole === "trainer" || userRole === "admin") && (
+              <Link
+                href="/trainer"
+                className={`block py-1.5 text-sm text-secondary hover:text-secondary/80 transition-colors font-medium ${
+                  pathname === "/trainer" || pathname.startsWith("/trainer/") ? "text-secondary" : ""
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Trainer Panel
+              </Link>
+            )}
+
+            {userRole === "user" && (
+              <Link
+                href="/become-trainer"
+                className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
+                  pathname === "/become-trainer" ? "text-primary" : ""
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Become Trainer
+              </Link>
+            )}
+
+            {/* Mobile Auth Section */}
+            <div className="pt-3 border-t border-border/50 space-y-2">
+              {isSignedIn ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className="block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <div className="flex items-center gap-2 py-1">
+                    <span className="text-xs text-muted-foreground">Account:</span>
+                    <UserButton
+                      afterSignOutUrl="/"
+                      appearance={{
+                        elements: {
+                          avatarBox: "h-7 w-7",
+                        },
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <SignInButton mode="modal">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-sm text-foreground hover:text-primary border border-border hover:border-primary rounded-lg px-3 py-2 transition-all duration-300 bg-transparent hover:bg-accent/10"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Login
+                    </Button>
+                  </SignInButton>
+
+                  <SignUpButton mode="modal">
+                    <Button
+                      size="sm"
+                      className="w-full text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-3 py-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-primary/25"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Sign Up
+                    </Button>
+                  </SignUpButton>
+                </>
+              )}
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
