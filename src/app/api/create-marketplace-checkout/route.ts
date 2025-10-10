@@ -8,12 +8,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    
+    // Get the base URL from the request headers
+    const protocol = request.headers.get('x-forwarded-proto') || 'http';
+    const host = request.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+    
     const { 
       clerkId, 
       cartItems, 
       shippingAddress,
-      returnUrl = `${process.env.NEXT_PUBLIC_APP_URL}/marketplace/checkout/success`,
-      cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}/marketplace/cart`
+      returnUrl = `${baseUrl}/marketplace/checkout/success`,
+      cancelUrl = `${baseUrl}/marketplace/cart`
     } = body;
 
     console.log("🛒 Creating marketplace checkout session for:", clerkId);

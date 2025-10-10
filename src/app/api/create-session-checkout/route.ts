@@ -26,6 +26,11 @@ export async function POST(req: NextRequest) {
       cancelUrl 
     } = await req.json();
 
+    // Get the base URL from the request headers
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const host = req.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -44,8 +49,8 @@ export async function POST(req: NextRequest) {
         },
       ],
       mode: "payment",
-      success_url: successUrl || `${process.env.NEXT_PUBLIC_APP_URL}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_APP_URL}/book-session/${trainerId}`,
+      success_url: successUrl || `${baseUrl}/booking-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${baseUrl}/book-session/${trainerId}`,
       metadata: {
         userId,
         trainerId,

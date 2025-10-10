@@ -18,6 +18,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get the base URL from the request headers
+    const protocol = request.headers.get('x-forwarded-proto') || 'http';
+    const host = request.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+
     // Create checkout session for subscription mode
     // We'll create or retrieve customer first, then use it in the session
     const session = await stripe.checkout.sessions.create({
@@ -29,8 +34,8 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/membership/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/membership`,
+      success_url: `${baseUrl}/membership/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/membership`,
       metadata: {
         clerkId: clerkId,
         membershipType: membershipType,
