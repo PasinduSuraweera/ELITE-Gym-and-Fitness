@@ -33,10 +33,20 @@ const BlogPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
   const [mounted, setMounted] = useState(false);
+  const [displayLimit, setDisplayLimit] = useState(9);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Reset display limit when category or search term changes
+  useEffect(() => {
+    setDisplayLimit(9);
+  }, [selectedCategory, searchTerm]);
+
+  const loadMore = () => {
+    setDisplayLimit(prev => prev + 9);
+  };
 
   // Get featured posts
   const featuredPosts = useQuery(api.blog.getBlogPosts, {
@@ -45,11 +55,10 @@ const BlogPage = () => {
     limit: 3,
   });
 
-  // Get recent posts
-  const recentPosts = useQuery(api.blog.getBlogPosts, {
+  // Get all posts for the selected category (no limit)
+  const allPosts = useQuery(api.blog.getBlogPosts, {
     status: "published",
     category: selectedCategory,
-    limit: 9,
   });
 
   // Search posts if there's a search term
@@ -58,14 +67,16 @@ const BlogPage = () => {
     searchTerm.trim() ? {
       searchTerm: searchTerm.trim(),
       category: selectedCategory,
-      limit: 12,
     } : "skip"
   );
 
   // Get blog stats
   const blogStats = useQuery(api.blog.getBlogStats, {});
 
-  const displayPosts = searchTerm.trim() ? searchResults : recentPosts;
+  // Determine which posts to display and apply pagination
+  const basePosts = searchTerm.trim() ? searchResults : allPosts;
+  const displayPosts = basePosts?.slice(0, displayLimit);
+  const hasMore = basePosts && basePosts.length > displayLimit;
 
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString("en-US", {
@@ -316,6 +327,21 @@ const BlogPage = () => {
                   Clear Search
                 </button>
               )}
+            </div>
+          )}
+
+          {/* Load More Button */}
+          {hasMore && displayPosts && displayPosts.length > 0 && (
+            <div className="text-center mt-12">
+              <button
+                onClick={loadMore}
+                className="px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-all duration-200 text-lg font-medium shadow-sm hover:shadow-md hover:scale-105"
+              >
+                Load More Articles
+              </button>
+              <p className="text-muted-foreground mt-4 text-sm">
+                Showing {displayPosts.length} of {basePosts?.length || 0} articles
+              </p>
             </div>
           )}
         </div>
