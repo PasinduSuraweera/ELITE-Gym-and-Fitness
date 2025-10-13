@@ -14,6 +14,8 @@ import Image from "next/image";
 const CheckoutPage = () => {
   const { user } = useUser();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [shippingAddress, setShippingAddress] = useState({
     name: user?.fullName || "",
     email: user?.emailAddresses?.[0]?.emailAddress || "",
@@ -35,8 +37,107 @@ const CheckoutPage = () => {
     user?.id ? { clerkId: user.id } : "skip"
   );
 
+  const validateSriLankanPhone = (phone: string) => {
+    // Remove all non-digit characters
+    const cleaned = phone.replace(/\D/g, '');
+    
+    // Check if it's exactly 10 digits and starts with 0, or 9 digits without 0 (mobile)
+    if (cleaned.length === 10 && cleaned.startsWith('0')) {
+      // Valid formats: 070xxxxxxx, 071xxxxxxx, 072xxxxxxx, 074xxxxxxx, 075xxxxxxx, 076xxxxxxx, 077xxxxxxx, 078xxxxxxx
+      const mobileRegex = /^0(70|71|72|74|75|76|77|78)\d{7}$/;
+      // Valid landline formats: 011xxxxxxx (Colombo), 081xxxxxxx (Kandy), etc.
+      const landlineRegex = /^0(11|21|23|24|25|26|27|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|91)\d{7}$/;
+      
+      return mobileRegex.test(cleaned) || landlineRegex.test(cleaned);
+    }
+    
+    return false;
+  };
+
+  const validateEmail = (email: string) => {
+    // Trim whitespace
+    email = email.trim();
+    
+    // Basic format check - must contain @ and at least one dot after @
+    if (!email.includes('@')) return false;
+    
+    const parts = email.split('@');
+    if (parts.length !== 2) return false;
+    
+    const [localPart, domain] = parts;
+    
+    // Local part checks
+    if (localPart.length === 0 || localPart.length > 64) return false;
+    if (localPart.startsWith('.') || localPart.endsWith('.')) return false;
+    if (localPart.includes('..')) return false;
+    
+    // Domain must contain at least one dot (for TLD)
+    if (!domain.includes('.')) return false;
+    
+    // Domain checks
+    if (domain.length === 0 || domain.length > 255) return false;
+    if (domain.startsWith('.') || domain.endsWith('.')) return false;
+    if (domain.startsWith('-') || domain.endsWith('-')) return false;
+    
+    // Check for valid TLD (at least 2 characters after the last dot)
+    const domainParts = domain.split('.');
+    const tld = domainParts[domainParts.length - 1];
+    if (tld.length < 2) return false;
+    
+    // Comprehensive email validation regex
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    
+    return emailRegex.test(email);
+  };
+
   const handleInputChange = (field: string, value: string) => {
-    setShippingAddress(prev => ({ ...prev, [field]: value }));
+    if (field === 'phone') {
+      // Clear previous error when user starts typing
+      setPhoneError("");
+      
+      // Format phone number as user types (add spaces for readability)
+      let formattedValue = value.replace(/\D/g, ''); // Remove non-digits
+      if (formattedValue.length > 0) {
+        if (formattedValue.length <= 3) {
+          formattedValue = formattedValue;
+        } else if (formattedValue.length <= 6) {
+          formattedValue = `${formattedValue.slice(0, 3)} ${formattedValue.slice(3)}`;
+        } else if (formattedValue.length <= 10) {
+          formattedValue = `${formattedValue.slice(0, 3)} ${formattedValue.slice(3, 6)} ${formattedValue.slice(6)}`;
+        } else {
+          formattedValue = `${formattedValue.slice(0, 3)} ${formattedValue.slice(3, 6)} ${formattedValue.slice(6, 10)}`;
+        }
+      }
+      
+      // Validate phone number
+      if (formattedValue.replace(/\s/g, '').length >= 10) {
+        if (!validateSriLankanPhone(formattedValue)) {
+          setPhoneError("Please enter a valid Sri Lankan phone number (10 digits starting with 0)");
+        }
+      }
+      
+      setShippingAddress(prev => ({ ...prev, [field]: formattedValue }));
+    } else if (field === 'email') {
+      // Clear previous error when user starts typing
+      setEmailError("");
+      
+      // Validate email format as user types
+      if (value.length > 0) {
+        if (!value.includes('@')) {
+          setEmailError("Email must contain @");
+        } else if (value.includes('@') && !value.includes('.')) {
+          setEmailError("Email must include a domain (e.g., gmail.com)");
+        } else if (value.includes('@') && value.includes('.')) {
+          if (!validateEmail(value)) {
+            setEmailError("Please enter a valid email address (e.g., name@gmail.com)");
+          }
+        }
+      }
+      
+      setShippingAddress(prev => ({ ...prev, [field]: value }));
+    } else {
+      setShippingAddress(prev => ({ ...prev, [field]: value }));
+    }
   };
 
   const calculateShipping = (subtotal: number) => {
@@ -63,13 +164,25 @@ const CheckoutPage = () => {
     if (!user?.id || !cartItems || cartItems.length === 0) return;
 
     // Validate shipping address
-    const requiredFields = ['name', 'phone', 'addressLine1', 'city', 'postalCode'];
+    const requiredFields = ['name', 'email', 'phone', 'addressLine1', 'city', 'postalCode'];
     const missingFields = requiredFields.filter(field => 
       !shippingAddress[field as keyof typeof shippingAddress]?.trim()
     );
 
     if (missingFields.length > 0) {
       alert(`Please fill in all required fields: ${missingFields.join(', ')}`);
+      return;
+    }
+
+    // Validate email format
+    if (!validateEmail(shippingAddress.email)) {
+      setEmailError("Please enter a valid email address (e.g., name@gmail.com)");
+      return;
+    }
+
+    // Validate phone number format
+    if (!validateSriLankanPhone(shippingAddress.phone)) {
+      setPhoneError("Please enter a valid Sri Lankan phone number (10 digits starting with 0)");
       return;
     }
 
@@ -197,15 +310,19 @@ const CheckoutPage = () => {
                   
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
-                      Email Address
+                      Email Address *
                     </label>
                     <Input
                       value={shippingAddress.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="bg-background border-border text-foreground"
+                      className={`bg-background border-border text-foreground ${emailError ? "border-red-500" : ""}`}
                       placeholder="your@email.com"
                       type="email"
+                      required
                     />
+                    {emailError && (
+                      <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                    )}
                   </div>
                 </div>
 
@@ -216,9 +333,12 @@ const CheckoutPage = () => {
                   <Input
                     value={shippingAddress.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="bg-background border-border text-foreground"
-                    placeholder="+94 77 123 4567"
+                    className={`bg-background border-border text-foreground ${phoneError ? "border-red-500" : ""}`}
+                    placeholder="077 123 4567"
                   />
+                  {phoneError && (
+                    <p className="text-red-500 text-xs mt-1">{phoneError}</p>
+                  )}
                 </div>
 
                 <div>
