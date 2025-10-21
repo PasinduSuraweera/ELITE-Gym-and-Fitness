@@ -281,158 +281,195 @@ const Navbar = () => {
 
       {/* Mobile Navigation Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-background/95 backdrop-blur-md border-b border-border/50">
-          <nav className="container mx-auto px-4 py-3 space-y-2">
-            <Link
-              href="/"
-              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                pathname === "/" ? "text-primary" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              href="/generate-program"
-              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                pathname === "/generate-program" ? "text-primary" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              AI Plan Generator
-            </Link>
-            <Link
-              href="/recipes"
-              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                pathname === "/recipes" ? "text-primary" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Recipes
-            </Link>
-            <Link
-              href="/membership"
-              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                pathname === "/membership" ? "text-primary" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Membership
-            </Link>
-            <Link
-              href="/trainer-booking"
-              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                pathname === "/trainer-booking" ? "text-primary" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Trainer Booking
-            </Link>
-            <Link
-              href="/blog"
-              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                pathname.startsWith("/blog") ? "text-primary" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Blog
-            </Link>
-            <Link
-              href="/marketplace"
-              className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                pathname === "/marketplace" ? "text-primary" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Marketplace
-            </Link>
+        <div className="lg:hidden fixed inset-0 top-16 z-40">
+          <div className="bg-background border-b border-border shadow-lg">
+            <nav className="container mx-auto px-4 py-4 space-y-1 max-h-[calc(100vh-4rem)] overflow-y-auto">
+              {/* Navigation Links */}
+              <div className="space-y-1">
+                <Link
+                  href="/"
+                  className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                    pathname === "/" 
+                      ? "text-primary bg-primary/10 rounded-md" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                
+                <Link
+                  href="/generate-program"
+                  className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                    pathname === "/generate-program" 
+                      ? "text-primary bg-primary/10 rounded-md" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  AI Plan Generator
+                </Link>
+                
+                <Link
+                  href="/recipes"
+                  className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                    pathname === "/recipes" 
+                      ? "text-primary bg-primary/10 rounded-md" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Recipes
+                </Link>
+                
+                <Link
+                  href="/membership"
+                  className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                    pathname === "/membership" 
+                      ? "text-primary bg-primary/10 rounded-md" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Membership
+                </Link>
+                
+                <Link
+                  href="/trainer-booking"
+                  className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                    pathname === "/trainer-booking" 
+                      ? "text-primary bg-primary/10 rounded-md" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Trainer Booking
+                </Link>
+                
+                <Link
+                  href="/blog"
+                  className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                    pathname.startsWith("/blog") 
+                      ? "text-primary bg-primary/10 rounded-md" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Blog
+                </Link>
+                
+                <Link
+                  href="/marketplace"
+                  className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                    pathname === "/marketplace" 
+                      ? "text-primary bg-primary/10 rounded-md" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Marketplace
+                </Link>
+              </div>
 
-            {/* Role-based navigation */}
-            {userRole === "admin" && (
-              <Link
-                href="/admin"
-                className={`block py-1.5 text-sm text-primary hover:text-primary/80 transition-colors font-medium ${
-                  pathname.startsWith("/admin") ? "text-primary" : ""
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Admin Panel
-              </Link>
-            )}
-
-            {(userRole === "trainer" || userRole === "admin") && (
-              <Link
-                href="/trainer"
-                className={`block py-1.5 text-sm text-secondary hover:text-secondary/80 transition-colors font-medium ${
-                  pathname === "/trainer" || pathname.startsWith("/trainer/") ? "text-secondary" : ""
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Trainer Panel
-              </Link>
-            )}
-
-            {userRole === "user" && (
-              <Link
-                href="/become-trainer"
-                className={`block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium ${
-                  pathname === "/become-trainer" ? "text-primary" : ""
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Become Trainer
-              </Link>
-            )}
-
-            {/* Mobile Auth Section */}
-            <div className="pt-3 border-t border-border/50 space-y-2">
-              {isSignedIn ? (
+              {/* Role-based navigation */}
+              {(userRole === "admin" || userRole === "trainer" || userRole === "user") && (
                 <>
-                  <Link
-                    href="/profile"
-                    className="block py-1.5 text-sm text-foreground hover:text-primary transition-colors font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Profile
-                  </Link>
-                  <div className="flex items-center gap-2 py-1">
-                    <span className="text-xs text-muted-foreground">Account:</span>
-                    <UserButton
-                      afterSignOutUrl="/"
-                      appearance={{
-                        elements: {
-                          avatarBox: "h-7 w-7",
-                        },
-                      }}
-                    />
+                  <div className="h-px bg-border my-3"></div>
+                  <div className="space-y-1">
+                    {userRole === "admin" && (
+                      <Link
+                        href="/admin"
+                        className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                          pathname.startsWith("/admin") 
+                            ? "text-primary bg-primary/10 rounded-md" 
+                            : "text-primary hover:bg-primary/5"
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Admin Panel
+                      </Link>
+                    )}
+
+                    {(userRole === "trainer" || userRole === "admin") && (
+                      <Link
+                        href="/trainer"
+                        className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                          pathname === "/trainer" || pathname.startsWith("/trainer/")
+                            ? "text-secondary bg-secondary/10 rounded-md" 
+                            : "text-secondary hover:bg-secondary/5"
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Trainer Panel
+                      </Link>
+                    )}
+
+                    {userRole === "user" && (
+                      <Link
+                        href="/become-trainer"
+                        className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
+                          pathname === "/become-trainer" 
+                            ? "text-primary bg-primary/10 rounded-md" 
+                            : "text-foreground hover:text-primary"
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Become Trainer
+                      </Link>
+                    )}
                   </div>
                 </>
-              ) : (
-                <>
-                  <SignInButton mode="modal">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-foreground hover:text-primary border border-border hover:border-primary rounded-lg px-3 py-2 transition-all duration-300 bg-transparent hover:bg-accent/10"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Login
-                    </Button>
-                  </SignInButton>
-
-                  <SignUpButton mode="modal">
-                    <Button
-                      size="sm"
-                      className="w-full text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-3 py-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-primary/25"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Sign Up
-                    </Button>
-                  </SignUpButton>
-                </>
               )}
-            </div>
-          </nav>
+
+              {/* Mobile Auth Section */}
+              <div className="pt-3 border-t border-border">
+                {isSignedIn ? (
+                  <>
+                    <Link
+                      href="/profile"
+                      className="block py-3 px-4 text-sm font-medium text-foreground hover:text-primary transition-colors duration-200"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                    
+                    <div className="flex items-center gap-3 py-3 px-4">
+                      <UserButton
+                        afterSignOutUrl="/"
+                        appearance={{
+                          elements: {
+                            avatarBox: "h-8 w-8",
+                          },
+                        }}
+                      />
+                      <span className="text-sm text-muted-foreground">Account Settings</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="space-y-2">
+                    <SignInButton mode="modal">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-center text-sm text-foreground hover:text-primary border border-border hover:border-primary rounded-md px-4 py-3 transition-colors duration-200"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Login
+                      </Button>
+                    </SignInButton>
+
+                    <SignUpButton mode="modal">
+                      <Button
+                        className="w-full text-sm bg-primary hover:bg-primary/90 text-primary-foreground rounded-md px-4 py-3 font-medium transition-colors duration-200"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign Up
+                      </Button>
+                    </SignUpButton>
+                  </div>
+                )}
+              </div>
+            </nav>
+          </div>
         </div>
       )}
     </header>
