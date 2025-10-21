@@ -154,21 +154,21 @@ const GenerateProgramPage = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5" suppressHydrationWarning></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1)_0%,transparent_50%)]" suppressHydrationWarning></div>
       
-      <div className="container mx-auto px-4 h-full max-w-5xl relative z-10 py-16 pt-32" suppressHydrationWarning>
+      <div className="container mx-auto px-4 h-full max-w-5xl relative z-10 py-8 pt-24 sm:pt-32" suppressHydrationWarning>
         {/* Title */}
-        <div className="text-center mb-12 space-y-6" suppressHydrationWarning>
-          <div className="space-y-4">
-            <h2 className="text-xl md:text-2xl font-normal text-muted-foreground">
+        <div className="text-center mb-8 sm:mb-12 space-y-4 sm:space-y-6" suppressHydrationWarning>
+          <div className="space-y-3 sm:space-y-4">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-normal text-muted-foreground">
               AI-Powered Fitness Solutions
             </h2>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight leading-tight">
               <span className="text-foreground">Generate Your </span>
               <span className="text-primary">Fitness Program</span>
             </h1>
           </div>
           
-          <div className="max-w-3xl mx-auto">
-            <p className="text-lg text-muted-foreground leading-relaxed">
+          <div className="max-w-3xl mx-auto px-2">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
               Engage in an interactive consultation with our advanced AI fitness coach to develop 
               a comprehensive, personalized training and nutrition program tailored to your specific goals.
             </p>
@@ -176,10 +176,10 @@ const GenerateProgramPage = () => {
         </div>
 
         {/* VIDEO CALL AREA */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div className="flex flex-col sm:grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8">
           {/* AI ASSISTANT CARD */}
-          <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl">
-            <div className="aspect-video flex flex-col items-center justify-center p-6 relative">
+          <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none lg:mx-0">
+            <div className="aspect-video flex flex-col items-center justify-center p-4 sm:p-6 relative">
               {/* AI VOICE ANIMATION */}
               <div
                 className={`absolute inset-0 ${
@@ -204,7 +204,7 @@ const GenerateProgramPage = () => {
               </div>
 
               {/* AI IMAGE */}
-              <div className="relative size-32 mb-4">
+              <div className="relative size-24 sm:size-32 mb-3 sm:mb-4">
                 <div
                   className={`absolute inset-0 bg-primary opacity-20 rounded-full blur-lg ${
                     isSpeaking ? "animate-pulse" : ""
@@ -221,8 +221,8 @@ const GenerateProgramPage = () => {
                 </div>
               </div>
 
-              <h2 className="text-xl font-bold text-foreground">Elite AI</h2>
-              <p className="text-sm text-muted-foreground mt-1">Personal Fitness & Diet Coach</p>
+              <h2 className="text-lg sm:text-xl font-bold text-foreground">Elite AI</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">Personal Fitness & Diet Coach</p>
 
               {/* SPEAKING INDICATOR */}
               <div
@@ -250,10 +250,10 @@ const GenerateProgramPage = () => {
           </Card>
 
           {/* USER CARD */}
-          <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl">
-            <div className="aspect-video flex flex-col items-center justify-center p-6 relative">
+          <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none lg:mx-0">
+            <div className="aspect-video flex flex-col items-center justify-center p-4 sm:p-6 relative">
               {/* User Image */}
-              <div className="relative size-32 mb-4">
+              <div className="relative size-24 sm:size-32 mb-3 sm:mb-4">
                 <div className="absolute inset-0 bg-secondary opacity-20 rounded-full blur-lg"></div>
                 <img
                   src={user?.imageUrl}
@@ -262,8 +262,8 @@ const GenerateProgramPage = () => {
                 />
               </div>
 
-              <h2 className="text-xl font-bold text-foreground">You</h2>
-              <p className="text-sm text-muted-foreground mt-1">
+              <h2 className="text-lg sm:text-xl font-bold text-foreground">You</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                 {user ? (user.firstName + " " + (user.lastName || "")).trim() : "Guest"}
               </p>
 
@@ -280,7 +280,7 @@ const GenerateProgramPage = () => {
         {messages.length > 0 && (
           <div
             ref={messageContainerRef}
-            className="w-full bg-card/90 backdrop-blur-sm border border-border rounded-xl p-6 mb-8 h-64 overflow-y-auto transition-all duration-300 scroll-smooth shadow-2xl"
+            className="w-full bg-card/90 backdrop-blur-sm border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 h-48 sm:h-64 overflow-y-auto transition-all duration-300 scroll-smooth shadow-2xl"
           >
             <div className="space-y-4">
               {messages.map((msg, index) => (
@@ -305,9 +305,9 @@ const GenerateProgramPage = () => {
         )}
 
         {/* CALL CONTROLS */}
-        <div className="w-full flex justify-center gap-4">
+        <div className="w-full flex justify-center gap-4 px-4">
           <Button
-            className={`w-48 text-xl py-6 rounded-full font-semibold transition-all duration-300 shadow-lg ${
+            className={`w-full max-w-xs sm:w-48 text-lg sm:text-xl py-4 sm:py-6 rounded-full font-semibold transition-all duration-300 shadow-lg ${
               callActive
                 ? "bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-destructive/25"
                 : callEnded
