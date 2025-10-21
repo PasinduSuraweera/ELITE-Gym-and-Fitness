@@ -290,7 +290,7 @@ const Navbar = () => {
                   href="/"
                   className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                     pathname === "/" 
-                      ? "text-primary bg-primary/10 rounded-md" 
+                      ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                       : "text-foreground hover:text-primary"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -302,7 +302,7 @@ const Navbar = () => {
                   href="/generate-program"
                   className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                     pathname === "/generate-program" 
-                      ? "text-primary bg-primary/10 rounded-md" 
+                      ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                       : "text-foreground hover:text-primary"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -314,7 +314,7 @@ const Navbar = () => {
                   href="/recipes"
                   className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                     pathname === "/recipes" 
-                      ? "text-primary bg-primary/10 rounded-md" 
+                      ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                       : "text-foreground hover:text-primary"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -326,7 +326,7 @@ const Navbar = () => {
                   href="/membership"
                   className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                     pathname === "/membership" 
-                      ? "text-primary bg-primary/10 rounded-md" 
+                      ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                       : "text-foreground hover:text-primary"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -338,7 +338,7 @@ const Navbar = () => {
                   href="/trainer-booking"
                   className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                     pathname === "/trainer-booking" 
-                      ? "text-primary bg-primary/10 rounded-md" 
+                      ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                       : "text-foreground hover:text-primary"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -350,7 +350,7 @@ const Navbar = () => {
                   href="/blog"
                   className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                     pathname.startsWith("/blog") 
-                      ? "text-primary bg-primary/10 rounded-md" 
+                      ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                       : "text-foreground hover:text-primary"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -362,7 +362,7 @@ const Navbar = () => {
                   href="/marketplace"
                   className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                     pathname === "/marketplace" 
-                      ? "text-primary bg-primary/10 rounded-md" 
+                      ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                       : "text-foreground hover:text-primary"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
@@ -381,8 +381,8 @@ const Navbar = () => {
                         href="/admin"
                         className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                           pathname.startsWith("/admin") 
-                            ? "text-primary bg-primary/10 rounded-md" 
-                            : "text-primary hover:bg-primary/5"
+                            ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
+                            : "text-primary hover:bg-red-50/50 dark:hover:bg-red-950/20"
                         }`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
@@ -395,8 +395,8 @@ const Navbar = () => {
                         href="/trainer"
                         className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                           pathname === "/trainer" || pathname.startsWith("/trainer/")
-                            ? "text-secondary bg-secondary/10 rounded-md" 
-                            : "text-secondary hover:bg-secondary/5"
+                            ? "text-secondary bg-orange-50 dark:bg-orange-950/30 rounded-md" 
+                            : "text-secondary hover:bg-orange-50/50 dark:hover:bg-orange-950/20"
                         }`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
@@ -409,7 +409,7 @@ const Navbar = () => {
                         href="/become-trainer"
                         className={`block py-3 px-4 text-sm font-medium transition-colors duration-200 ${
                           pathname === "/become-trainer" 
-                            ? "text-primary bg-primary/10 rounded-md" 
+                            ? "text-primary bg-red-50 dark:bg-red-950/30 rounded-md" 
                             : "text-foreground hover:text-primary"
                         }`}
                         onClick={() => setMobileMenuOpen(false)}
