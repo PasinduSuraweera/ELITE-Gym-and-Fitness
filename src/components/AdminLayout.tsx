@@ -17,7 +17,9 @@ import {
   DollarSign,
   Package,
   Menu,
-  X
+  X,
+  PanelLeftOpen,
+  PanelLeftClose
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
@@ -94,14 +96,14 @@ export function AdminLayout({
     <RoleGuard allowedRoles={["admin"]}>
       {/* Full Screen Admin Layout - Start below navbar */}
       <div className="fixed inset-0 top-16 bg-background text-foreground z-[60] flex flex-col">
-        {/* Mobile Menu Button - Floating */}
+        {/* Mobile Menu Button - Floating Left */}
         <Button
           variant="ghost"
           size="sm"
-          className="lg:hidden fixed top-20 right-4 z-30 p-2 h-10 w-10 text-foreground hover:text-primary hover:bg-accent/60 border-2 border-transparent hover:border-primary/20 bg-card/80 backdrop-blur-sm shadow-lg"
+          className="lg:hidden fixed top-20 left-4 z-30 p-2 h-10 w-10 text-foreground hover:text-primary hover:bg-accent/60 border-2 border-transparent hover:border-primary/20 bg-card/80 backdrop-blur-sm shadow-lg"
           onClick={() => setSidebarOpen(!sidebarOpen)}
         >
-          {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {sidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
         </Button>
 
         {/* Mobile Sidebar Overlay */}
