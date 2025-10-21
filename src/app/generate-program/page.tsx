@@ -179,7 +179,7 @@ const GenerateProgramPage = () => {
         <div className="flex flex-col sm:grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8">
           {/* AI ASSISTANT CARD */}
           <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none lg:mx-0">
-            <div className="aspect-video flex flex-col items-center justify-center p-4 sm:p-6 relative">
+            <div className="h-64 sm:aspect-video flex flex-col items-center justify-center p-4 sm:p-6 relative">
               {/* AI VOICE ANIMATION */}
               <div
                 className={`absolute inset-0 ${
@@ -221,12 +221,12 @@ const GenerateProgramPage = () => {
                 </div>
               </div>
 
-              <h2 className="text-lg sm:text-xl font-bold text-foreground">Elite AI</h2>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1">Personal Fitness & Diet Coach</p>
+              <h2 className="text-lg sm:text-xl font-bold text-foreground text-center">Elite AI</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 text-center">Personal Fitness & Diet Coach</p>
 
               {/* SPEAKING INDICATOR */}
               <div
-                className={`mt-4 flex items-center gap-2 px-3 py-2 rounded-full bg-card/80 border ${
+                className={`mt-3 sm:mt-4 flex items-center justify-center gap-2 px-3 py-2 rounded-full bg-card/80 border ${
                   isSpeaking ? "border-primary" : "border-border"
                 }`}
               >
@@ -251,7 +251,7 @@ const GenerateProgramPage = () => {
 
           {/* USER CARD */}
           <Card className="bg-card/90 backdrop-blur-sm border border-border overflow-hidden relative rounded-xl shadow-2xl w-full max-w-md mx-auto lg:max-w-none lg:mx-0">
-            <div className="aspect-video flex flex-col items-center justify-center p-4 sm:p-6 relative">
+            <div className="h-64 sm:aspect-video flex flex-col items-center justify-center p-4 sm:p-6 relative">
               {/* User Image */}
               <div className="relative size-24 sm:size-32 mb-3 sm:mb-4">
                 <div className="absolute inset-0 bg-secondary opacity-20 rounded-full blur-lg"></div>
@@ -262,13 +262,13 @@ const GenerateProgramPage = () => {
                 />
               </div>
 
-              <h2 className="text-lg sm:text-xl font-bold text-foreground">You</h2>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              <h2 className="text-lg sm:text-xl font-bold text-foreground text-center">You</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 text-center">
                 {user ? (user.firstName + " " + (user.lastName || "")).trim() : "Guest"}
               </p>
 
               {/* User Ready Text */}
-              <div className="mt-4 flex items-center gap-2 px-3 py-2 rounded-full bg-card/80 border border-border">
+              <div className="mt-3 sm:mt-4 flex items-center justify-center gap-2 px-3 py-2 rounded-full bg-card/80 border border-border">
                 <div className="w-2 h-2 rounded-full bg-green-500" />
                 <span className="text-xs text-muted-foreground font-medium">Ready</span>
               </div>
