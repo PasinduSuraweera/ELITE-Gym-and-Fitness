@@ -191,134 +191,131 @@ const RecipesPage = () => {
       ></div>
 
       <div
-        className="container mx-auto px-4 py-8 pt-24 sm:pt-32 relative z-10 flex-1"
+        className="container mx-auto px-4 py-32 relative z-10 flex-1"
         suppressHydrationWarning
       >
         {/* Header */}
         <div
-          className="max-w-4xl mx-auto text-center mb-8 sm:mb-12"
+          className="max-w-4xl mx-auto text-center mb-12"
           suppressHydrationWarning
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-4 sm:mb-6">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
             <span className="text-primary">Healthy</span> Recipes
           </h1>
-          <p className="text-muted-foreground text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-2">
+          <p className="text-muted-foreground text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
             Fuel your fitness journey with our curated collection of nutritious
             and delicious recipes
           </p>
 
           {/* Search */}
-          <div className="max-w-2xl mx-auto mb-6 sm:mb-10 px-2">
+          <div className="max-w-2xl mx-auto mb-10">
             <div className="relative">
-              <Search className="absolute left-3 sm:left-5 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 sm:h-5 sm:w-5" />
+              <Search className="absolute left-5 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <Input
                 placeholder="Search recipes..."
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchTerm(e.target.value)
                 }
-                className="pl-10 sm:pl-14 pr-4 sm:pr-6 py-3 sm:py-4 bg-background border-border text-foreground placeholder-muted-foreground focus:border-primary focus:ring-primary/20 text-base sm:text-lg shadow-sm"
+                className="pl-14 pr-6 py-4 bg-background border-border text-foreground placeholder-muted-foreground focus:border-primary focus:ring-primary/20 text-lg shadow-sm"
               />
             </div>
           </div>
 
           {/* Filter Controls */}
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-10 px-2">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
-              <span className="text-xs sm:text-sm font-medium text-muted-foreground">Filters:</span>
+          <div className="flex flex-wrap gap-4 justify-center items-center mb-10">
+            <div className="flex items-center gap-3">
+              <Filter className="h-5 w-5 text-muted-foreground" />
+              <span className="text-sm font-medium text-muted-foreground">Filters:</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-background border border-border rounded-lg px-3 sm:px-4 py-2 sm:py-2.5 text-foreground text-sm focus:border-primary focus:ring-primary/20 min-w-[140px] shadow-sm"
-              >
-                {categories.map((cat) => (
-                  <option key={cat.value} value={cat.value} className="bg-background">
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-background border border-border rounded-lg px-4 py-2.5 text-foreground text-sm focus:border-primary focus:ring-primary/20 min-w-[140px] shadow-sm"
+            >
+              {categories.map((cat) => (
+                <option key={cat.value} value={cat.value} className="bg-background">
+                  {cat.label}
+                </option>
+              ))}
+            </select>
 
-              <select
-                value={selectedDifficulty}
-                onChange={(e) => setSelectedDifficulty(e.target.value)}
-                className="bg-background border border-border rounded-lg px-3 sm:px-4 py-2 sm:py-2.5 text-foreground text-sm focus:border-primary focus:ring-primary/20 min-w-[120px] shadow-sm"
-              >
-                {difficulties.map((diff) => (
-                  <option
-                    key={diff.value}
-                    value={diff.value}
-                    className="bg-background"
-                  >
-                    {diff.label}
-                  </option>
-                ))}
-              </select>
-
-              {(selectedCategory !== "all" ||
-                selectedDifficulty !== "all" ||
-                searchTerm) && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setSelectedCategory("all");
-                    setSelectedDifficulty("all");
-                    setSearchTerm("");
-                  }}
-                  className="px-3 sm:px-4 py-2 sm:py-2.5 border-border text-primary hover:bg-primary/10 text-sm font-medium rounded-lg shadow-sm"
+            <select
+              value={selectedDifficulty}
+              onChange={(e) => setSelectedDifficulty(e.target.value)}
+              className="bg-background border border-border rounded-lg px-4 py-2.5 text-foreground text-sm focus:border-primary focus:ring-primary/20 min-w-[120px] shadow-sm"
+            >
+              {difficulties.map((diff) => (
+                <option
+                  key={diff.value}
+                  value={diff.value}
+                  className="bg-background"
                 >
-                  Clear Filters
-                </Button>
-              )}
-            </div>
+                  {diff.label}
+                </option>
+              ))}
+            </select>
+
+            {(selectedCategory !== "all" ||
+              selectedDifficulty !== "all" ||
+              searchTerm) && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setSelectedDifficulty("all");
+                  setSearchTerm("");
+                }}
+                className="px-4 py-2.5 border-border text-primary hover:bg-primary/10 text-sm font-medium rounded-lg shadow-sm"
+              >
+                Clear Filters
+              </Button>
+            )}
           </div>
         </div>
 
         <Tabs defaultValue="personalized" className="max-w-7xl mx-auto">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4 mb-6 sm:mb-8 bg-card/50 border border-border p-1 h-auto lg:h-12 rounded-lg gap-1 lg:gap-0">
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-card/50 border border-border p-1 h-12 rounded-lg">
             <TabsTrigger
               value="personalized"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-xs sm:text-sm font-medium py-2 px-2 rounded-md transition-all duration-200 flex items-center justify-center gap-1"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Brain className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span className="hidden sm:inline">For You</span>
-              <span className="sm:hidden">You</span>
+              <Brain className="h-4 w-4 mr-2" />
+              For You
             </TabsTrigger>
             <TabsTrigger
               value="workout"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-xs sm:text-sm font-medium py-2 px-2 rounded-md transition-all duration-200 flex items-center justify-center gap-1"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Target className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span>Workout</span>
+              <Target className="h-4 w-4 mr-2" />
+              Workout
             </TabsTrigger>
             <TabsTrigger
               value="recommended"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-xs sm:text-sm font-medium py-2 px-2 rounded-md transition-all duration-200 flex items-center justify-center gap-1"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Star className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span>Popular</span>
+              <Star className="h-4 w-4 mr-2" />
+              Popular
             </TabsTrigger>
             <TabsTrigger
               value="all"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-xs sm:text-sm font-medium py-2 px-2 rounded-md transition-all duration-200 flex items-center justify-center gap-1"
+              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary data-[state=active]:border-primary/50 text-sm font-medium py-2 rounded-md transition-all duration-200"
             >
-              <Zap className="h-3 w-3 sm:h-4 sm:w-4" />
-              <span>All</span>
+              <Zap className="h-4 w-4 mr-2" />
+              All
             </TabsTrigger>
           </TabsList>
 
           {/* Personalized Recipes */}
           <TabsContent value="personalized">
-            <div className="text-center mb-6 sm:mb-8 px-2">
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 <span className="text-primary">Personalized</span> for Your
                 Goals
               </h2>
-              <p className="text-muted-foreground text-base sm:text-lg">
+              <p className="text-muted-foreground text-lg">
                 AI-curated recipes based on your fitness plan and dietary needs
               </p>
             </div>
@@ -327,19 +324,17 @@ const RecipesPage = () => {
               <>
                 {/* Meal Prep Section */}
                 {mealPrepRecipes && mealPrepRecipes.length > 0 && (
-                  <div className="mb-8 sm:mb-12">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-4 sm:mb-6 px-2">
-                      <div className="flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                        <h3 className="text-lg sm:text-xl font-semibold text-foreground">
-                          Meal Prep Champions
-                        </h3>
-                      </div>
-                      <span className="text-xs sm:text-sm text-muted-foreground">
+                  <div className="mb-12">
+                    <div className="flex items-center gap-2 mb-6">
+                      <TrendingUp className="h-5 w-5 text-primary" />
+                      <h3 className="text-xl font-semibold text-foreground">
+                        Meal Prep Champions
+                      </h3>
+                      <span className="text-sm text-muted-foreground">
                         Perfect for your workout schedule
                       </span>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 px-2 sm:px-0">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                       {mealPrepRecipes.slice(0, 3).map((recipe: any) => (
                         <div
                           key={recipe._id}
@@ -443,7 +438,7 @@ const RecipesPage = () => {
                 )}
 
                 {/* Personalized Recipes Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-2 sm:px-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {personalizedRecipes?.map((recipe: any) => (
                     <div
                       key={recipe._id}
@@ -561,16 +556,16 @@ const RecipesPage = () => {
                 </div>
               </>
             ) : (
-              <div className="text-center py-12 sm:py-20 px-4">
-                <Brain className="h-16 w-16 sm:h-20 sm:w-20 text-muted-foreground mx-auto mb-4 sm:mb-6" />
-                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3 sm:mb-4">
+              <div className="text-center py-20">
+                <Brain className="h-20 w-20 text-muted-foreground mx-auto mb-6" />
+                <h3 className="text-2xl font-bold text-foreground mb-4">
                   Sign in for Personalized Recipes
                 </h3>
-                <p className="text-muted-foreground mb-6 sm:mb-8 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
+                <p className="text-muted-foreground mb-8 text-lg max-w-md mx-auto leading-relaxed">
                   Get AI-powered recipe recommendations based on your fitness
                   goals and plans
                 </p>
-                <Button asChild className="bg-primary hover:bg-primary/90 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium">
+                <Button asChild className="bg-primary hover:bg-primary/90 px-6 py-3 text-base font-medium">
                   <Link href="/sign-in">Sign In</Link>
                 </Button>
               </div>
@@ -579,17 +574,17 @@ const RecipesPage = () => {
 
           {/* Workout-Based Recipes */}
           <TabsContent value="workout">
-            <div className="text-center mb-6 sm:mb-8 px-2">
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 <span className="text-primary">Workout</span> Optimized
               </h2>
-              <p className="text-muted-foreground text-base sm:text-lg">
+              <p className="text-muted-foreground text-lg">
                 Perfect nutrition timing for your training schedule
               </p>
             </div>
 
             {user?.id ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-2 sm:px-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {workoutBasedRecipes?.map((recipe: any) => (
                   <div
                     key={recipe._id}
@@ -693,15 +688,15 @@ const RecipesPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 sm:py-20 px-4">
-                <Target className="h-16 w-16 sm:h-20 sm:w-20 text-muted-foreground mx-auto mb-4 sm:mb-6" />
-                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3 sm:mb-4">
+              <div className="text-center py-20">
+                <Target className="h-20 w-20 text-muted-foreground mx-auto mb-6" />
+                <h3 className="text-2xl font-bold text-foreground mb-4">
                   Sign in for Workout Recipes
                 </h3>
-                <p className="text-muted-foreground mb-6 sm:mb-8 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
+                <p className="text-muted-foreground mb-8 text-lg max-w-md mx-auto leading-relaxed">
                   Get recipes optimized for your workout schedule and timing
                 </p>
-                <Button asChild className="bg-primary hover:bg-primary/90 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium">
+                <Button asChild className="bg-primary hover:bg-primary/90 px-6 py-3 text-base font-medium">
                   <Link href="/sign-in">Sign In</Link>
                 </Button>
               </div>
@@ -710,16 +705,16 @@ const RecipesPage = () => {
 
           {/* Recommended Recipes */}
           <TabsContent value="recommended">
-            <div className="text-center mb-6 sm:mb-8 px-2">
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 <span className="text-primary">Popular</span> Recipes
               </h2>
-              <p className="text-muted-foreground text-base sm:text-lg">
+              <p className="text-muted-foreground text-lg">
                 Community favorites and most loved recipes
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-2 sm:px-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {recommendedRecipes?.slice(0, 9).map((recipe: any) => (
                 <div
                   key={recipe._id}
@@ -842,22 +837,22 @@ const RecipesPage = () => {
 
           {/* All Recipes */}
           <TabsContent value="all">
-            <div className="text-center mb-6 sm:mb-8 px-2">
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-foreground mb-4">
                 All <span className="text-primary">Recipes</span>
               </h2>
-              <p className="text-muted-foreground text-base sm:text-lg">
+              <p className="text-muted-foreground text-lg">
                 Discover our complete collection of healthy recipes
               </p>
               {displayRecipes && (
-                <p className="text-sm sm:text-base text-gray-500 mt-2 sm:mt-3">
+                <p className="text-base text-gray-500 mt-3">
                   Showing {displayRecipes.length} recipe
                   {displayRecipes.length !== 1 ? "s" : ""}
                 </p>
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-2 sm:px-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {displayRecipes?.map((recipe: any) => (
                 <div
                   key={recipe._id}
@@ -962,10 +957,10 @@ const RecipesPage = () => {
             </div>
 
             {displayRecipes?.length === 0 && (
-              <div className="text-center py-12 sm:py-20 px-4">
-                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-8 sm:p-12 shadow-2xl max-w-lg mx-auto">
-                  <p className="text-muted-foreground text-lg sm:text-xl mb-4 sm:mb-6">No recipes found</p>
-                  <p className="text-muted-foreground/70 text-sm sm:text-base">
+              <div className="text-center py-20">
+                <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-12 shadow-2xl max-w-lg mx-auto">
+                  <p className="text-muted-foreground text-xl mb-6">No recipes found</p>
+                  <p className="text-muted-foreground/70 text-base">
                     Try adjusting your filters or search terms
                   </p>
                 </div>
