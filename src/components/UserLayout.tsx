@@ -17,7 +17,9 @@ import {
   Settings,
   Receipt,
   Menu,
-  X
+  X,
+  PanelLeftOpen,
+  PanelLeftClose
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -95,19 +97,19 @@ export function UserLayout({
       
       {/* Mobile Header with Menu Button */}
       <div className="lg:hidden relative z-20 pt-20 pb-4 px-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-semibold text-foreground">{title}</h2>
-            {subtitle && <p className="text-muted-foreground text-sm mt-1">{subtitle}</p>}
-          </div>
+        <div className="flex items-center gap-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 h-10 w-10"
+            className="p-2 h-10 w-10 flex-shrink-0"
           >
-            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {sidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
           </Button>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-xl font-semibold text-foreground truncate">{title}</h2>
+            {subtitle && <p className="text-muted-foreground text-sm mt-1 truncate">{subtitle}</p>}
+          </div>
         </div>
         {showAddButton && (
           <div className="mt-4">
