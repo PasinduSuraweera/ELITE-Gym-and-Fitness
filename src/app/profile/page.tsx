@@ -31,7 +31,10 @@ const ProfilePage = () => {
     }
   }, [isLoaded, user, router]);
 
-  const allPlans = useQuery(api.plans.getUserPlans, { userId });
+  const allPlans = useQuery(
+    api.plans.getUserPlans, 
+    user?.id ? { userId: user.id } : "skip"
+  );
   const userRole = useQuery(api.users.getCurrentUserRole);
   const currentMembership = useQuery(
     api.memberships.getUserMembershipWithExpiryCheck,

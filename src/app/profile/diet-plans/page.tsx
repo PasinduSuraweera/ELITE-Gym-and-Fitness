@@ -28,7 +28,10 @@ const DietPlansPage = () => {
     setMounted(true);
   }, []);
 
-  const allPlans = useQuery(api.plans.getUserPlans, { userId });
+  const allPlans = useQuery(
+    api.plans.getUserPlans, 
+    user?.id ? { userId: user.id } : "skip"
+  );
   const [selectedPlanId, setSelectedPlanId] = useState<null | string>(null);
 
   const activePlan = allPlans?.find((plan) => plan.isActive);
